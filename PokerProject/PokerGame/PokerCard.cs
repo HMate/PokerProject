@@ -8,14 +8,14 @@ namespace PokerProject.PokerGame
 {
     public class PokerCard
     {
-        private CardSuite cardSuite;
-        private CardRank cardRank;
+        private CardSuite suite;
+        private CardRank rank;
 
 
-        public PokerCard(CardRank rank, CardSuite suite)
+        public PokerCard(CardRank cardRank, CardSuite cardSuite)
         {
-            cardRank = rank;
-            cardSuite = suite;
+            rank = cardRank;
+            suite = cardSuite;
         }
 
         public PokerCard() : this(CardRank.Ace, CardSuite.Spades)
@@ -23,19 +23,19 @@ namespace PokerProject.PokerGame
             
         }
 
-        public CardSuite CardSuite
+        public CardSuite Suite
         {
             get
             {
-                return cardSuite;
+                return suite;
             }
          }
 
-        public CardRank CardRank
+        public CardRank Rank
         {
             get
             {
-                return cardRank;
+                return rank;
             }
 
         }

@@ -20,8 +20,8 @@ namespace PokerUnitTest
         public void PokerCardGetterTest()
         {
             PokerCard card = new PokerCard(CardRank.King, CardSuite.Clubs);
-            CardSuite testedSuite = card.CardSuite;
-            CardRank testedRank = card.CardRank;
+            CardSuite testedSuite = card.Suite;
+            CardRank testedRank = card.Rank;
 
             Assert.AreEqual(testedRank, CardRank.King);
             Assert.AreEqual(testedSuite, CardSuite.Clubs);
