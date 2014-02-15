@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace PokerProject.PokerGame
 {
-    public class PokerCard
+    public class PokerCard : IEquatable<PokerCard>
     {
-        private CardSuite suite;
         private CardRank rank;
-
+        private CardSuite suite;
 
         public PokerCard(CardRank cardRank, CardSuite cardSuite)
         {
@@ -21,6 +20,16 @@ namespace PokerProject.PokerGame
         public PokerCard() : this(CardRank.Ace, CardSuite.Spades)
         {
             
+        }
+
+        public PokerCard(int cardRank, int cardSuite)
+        {
+            if (cardRank < 0 || cardRank > 12)
+                throw new IndexOutOfRangeException("Wrong rank was given for a card.");
+            if (cardSuite < 0 || cardSuite > 3)
+                throw new IndexOutOfRangeException("Wrong suite was given for a card.");
+            rank = (CardRank)cardRank;
+            suite = (CardSuite)cardSuite;
         }
 
         public CardSuite Suite
@@ -38,6 +47,54 @@ namespace PokerProject.PokerGame
                 return rank;
             }
 
+        }
+       
+        public override int GetHashCode()
+        {
+            return ((int)rank << 3) ^ (int)suite;
+        }
+
+        public override bool Equals(object obj)
+        {
+            PokerCard otherCard = obj as PokerCard;
+            if (otherCard == null) return false;
+            return this.Equals(otherCard);
+        }
+
+        public bool Equals(PokerCard otherCard)
+        {
+            if (otherCard == null) return false;
+            if ( !this.HasSameRank(otherCard) )
+                return false;
+            if ( !this.HasSameSuite(otherCard) )
+                return false;
+            return true;
+        }
+
+        public bool HasSameRank(PokerCard otherCard)
+        {
+            if (otherCard == null)
+            {
+                return false;
+            }
+            if (rank.Equals(otherCard.rank))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool HasSameSuite(PokerCard otherCard)
+        {
+            if (otherCard == null)
+            {
+                return false;
+            }
+            if (suite.Equals(otherCard.suite))
+            {
+                return true;
+            }
+            return false;
         }
 
 

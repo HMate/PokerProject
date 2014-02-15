@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace PokerProject.PokerGame
 {
-    public enum CardSuite
+    public enum CardSuite : int
     {
-        Hearths, Spades, Diamonds, Clubs
+        Hearts, Spades, Diamonds, Clubs
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PokerProject.PokerGame
 {
-    public enum CardRank
+    public enum CardRank : int
     {
         Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King
     }
