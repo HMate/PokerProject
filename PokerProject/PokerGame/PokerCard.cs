@@ -22,16 +22,6 @@ namespace PokerProject.PokerGame
             
         }
 
-        public PokerCard(int cardRank, int cardSuite)
-        {
-            if (cardRank < 0 || cardRank > 12)
-                throw new IndexOutOfRangeException("Wrong rank was given for a card.");
-            if (cardSuite < 0 || cardSuite > 3)
-                throw new IndexOutOfRangeException("Wrong suite was given for a card.");
-            rank = (CardRank)cardRank;
-            suite = (CardSuite)cardSuite;
-        }
-
         public CardSuite Suite
         {
             get

@@ -8,15 +8,17 @@ namespace PokerUnitTest
     public class CardDeckTests
     {
         [TestMethod]
-        public void TestDealCardFromDefaultDeck()
+        public void DealOneCardFromDefaultDeckTest()
         {
             CardDeck deck = new CardDeck();
-            PokerCard testCard = deck.DealCard();
-            CardRank actualRank = testCard.Rank;
-            CardSuite actualSuite = testCard.Suite;
-
-            Assert.AreEqual(CardRank.Ace, actualRank);
-            Assert.AreEqual(CardSuite.Hearts, actualSuite);
+            for (int i = 0; i < 26; i++)
+            {
+                PokerCard testCard = deck.DealOneCard();
+                PokerCard testCard2 = deck.DealOneCard();
+                Assert.AreNotEqual(testCard2, testCard,
+                    "results: \ncard1 Rank:{0}, Suite:{1};\n card2 Rank:{2}, Suite:{3}",
+                    testCard.Rank, testCard.Suite, testCard2.Rank, testCard2.Suite);
+            }
         }
     }
 }

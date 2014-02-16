@@ -7,24 +7,35 @@ namespace PokerProject.PokerGame
 {
     public class CardDeck
     {
-        private HashSet<PokerCard> cards;
+        private List<PokerCard> deck;
+        private const int defaultDeckSize = 52;
 
         public CardDeck()
         {
-            cards = new HashSet<PokerCard>();
-            foreach (int suite in Enum.GetValues(typeof(CardSuite)))
+            deck = new List<PokerCard>(52);
+            createNewPokerDeck();
+        }
+
+        public void createNewPokerDeck()
+        {
+            foreach (CardSuite suiteIndex in (CardSuite[])Enum.GetValues(typeof(CardSuite)))
             {
-                foreach (int rank in Enum.GetValues(typeof(CardRank)))
+                foreach (CardRank rankIndex in (CardRank[])Enum.GetValues(typeof(CardRank)))
                 {
-                    PokerCard currentCard = new PokerCard(rank, suite);
-                    cards.Add(currentCard);
+                    PokerCard currentCard = new PokerCard(rankIndex, suiteIndex);
+                    deck.Add(currentCard);
                 }
             }
         }
 
-        public PokerCard DealCard()
+        public PokerCard DealOneCard()
         {
-            return new PokerCard();
+            int deckSize = deck.Count;
+            Random randomGenerator = new Random();
+            int randomNumber = randomGenerator.Next(deckSize);
+            PokerCard card = deck.ElementAt(randomNumber);
+
+            return card;
         }
     }
 }

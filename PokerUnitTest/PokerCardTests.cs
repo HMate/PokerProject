@@ -8,14 +8,12 @@ namespace PokerUnitTest
     public class PokerCardTests
     {
         [TestMethod]
-        public void CreatePokerCard()
+        public void CreatePokerCardTest()
         {
             PokerCard card = new PokerCard(CardRank.Ace, CardSuite.Spades);
             PokerCard card2 = new PokerCard();
-            PokerCard card3 = new PokerCard(5, 3);
             Assert.IsNotNull(card);
             Assert.IsNotNull(card2);
-            Assert.IsNotNull(card3);
         }
 
         [TestMethod]
@@ -37,7 +35,7 @@ namespace PokerUnitTest
         }
 
         [TestMethod]
-        public void testTwoCardsEqual()
+        public void TwoCardsEqualTest()
         {
             PokerCard card1 = new PokerCard();
             PokerCard card2 = new PokerCard();
@@ -46,7 +44,7 @@ namespace PokerUnitTest
         }
 
         [TestMethod]
-        public void testTwoCardsDontEqual()
+        public void TwoCardsDontEqualTest()
         {
             PokerCard card1 = new PokerCard(CardRank.Five, CardSuite.Diamonds);
             PokerCard card2 = new PokerCard(CardRank.Ten, CardSuite.Diamonds);
@@ -55,7 +53,7 @@ namespace PokerUnitTest
         }
 
         [TestMethod]
-        public void testCardsHaveSameRank()
+        public void CardsHaveSameRankTest()
         {
             PokerCard card1 = new PokerCard(CardRank.Ten, CardSuite.Diamonds);
             PokerCard card2 = new PokerCard(CardRank.Ten, CardSuite.Spades);
@@ -66,7 +64,7 @@ namespace PokerUnitTest
         }
 
         [TestMethod]
-        public void testCardsHaveSameSuite()
+        public void CardsHaveSameSuiteTest()
         {
             PokerCard card1 = new PokerCard(CardRank.Ten, CardSuite.Diamonds);
             PokerCard card2 = new PokerCard(CardRank.Ten, CardSuite.Spades);
