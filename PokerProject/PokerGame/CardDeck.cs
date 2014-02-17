@@ -8,6 +8,7 @@ namespace PokerProject.PokerGame
     public class CardDeck
     {
         private List<PokerCard> deck;
+        private Random randomGenerator = new Random();
         private const int defaultDeckSize = 52;
 
         public CardDeck()
@@ -31,7 +32,6 @@ namespace PokerProject.PokerGame
         public PokerCard DealOneCard()
         {
             int deckSize = deck.Count;
-            Random randomGenerator = new Random();
             int randomNumber = randomGenerator.Next(deckSize);
             PokerCard card = deck.ElementAt(randomNumber);
 

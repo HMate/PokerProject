@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 using PokerProject.PokerGame;
 
 namespace PokerUnitTest
@@ -11,14 +12,15 @@ namespace PokerUnitTest
         public void DealOneCardFromDefaultDeckTest()
         {
             CardDeck deck = new CardDeck();
-            for (int i = 0; i < 26; i++)
+            HashSet<PokerCard> dealedCards = new HashSet<PokerCard>();
+            for (int cardIndex = 0; cardIndex < 52; cardIndex++)
             {
                 PokerCard testCard = deck.DealOneCard();
-                PokerCard testCard2 = deck.DealOneCard();
-                Assert.AreNotEqual(testCard2, testCard,
-                    "results: \ncard1 Rank:{0}, Suite:{1};\n card2 Rank:{2}, Suite:{3}",
-                    testCard.Rank, testCard.Suite, testCard2.Rank, testCard2.Suite);
+                bool success = dealedCards.Add(testCard);
+                if (!success) Assert.Fail("Couldn't add card to the set at index {0}", cardIndex);
             }
+            Assert.IsTrue(true);
         }
+
     }
 }
