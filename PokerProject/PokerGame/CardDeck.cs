@@ -7,13 +7,14 @@ namespace PokerProject.PokerGame
 {
     public class CardDeck
     {
+        public const int defaultDeckSize = 52;
+
         private List<PokerCard> deck;
         private Random randomGenerator = new Random();
-        private const int defaultDeckSize = 52;
 
         public CardDeck()
         {
-            deck = new List<PokerCard>(52);
+            deck = new List<PokerCard>(defaultDeckSize);
             createNewPokerDeck();
         }
 
@@ -31,10 +32,16 @@ namespace PokerProject.PokerGame
 
         public PokerCard DealOneCard()
         {
-            int deckSize = deck.Count;
-            int randomNumber = randomGenerator.Next(deckSize);
-            PokerCard card = deck.ElementAt(randomNumber);
+            int currentDeckSize = deck.Count;
 
+            if (currentDeckSize <= 0)
+            {
+                throw new CardDeckEmptyException("Tried to get card from an empty card deck.");
+            }
+
+            int randomNumber = randomGenerator.Next(currentDeckSize);
+            PokerCard card = deck.ElementAt(randomNumber);
+            deck.RemoveAt(randomNumber);
             return card;
         }
     }

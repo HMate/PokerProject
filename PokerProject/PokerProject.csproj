@@ -68,6 +68,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PokerGame\CardDeckEmptyException.cs" />
     <Compile Include="PokerGame\CardRank.cs" />
     <Compile Include="PokerGame\CardSuite.cs" />
     <Compile Include="PokerGame\PokerCard.cs" />

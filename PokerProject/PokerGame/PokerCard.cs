@@ -41,9 +41,8 @@ namespace PokerProject.PokerGame
        
         public override int GetHashCode()
         {
-            //TODO: better Hashcode
-            rank.GetHashCode();
-            return ((int)rank << 3) ^ (int)suite;
+            int rankHash = rank.GetHashCode();
+            return 31*rankHash + suite.GetHashCode();
         }
 
         public override bool Equals(object obj)
