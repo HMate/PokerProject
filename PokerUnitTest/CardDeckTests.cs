@@ -42,12 +42,19 @@ namespace PokerUnitTest
         }
 
         [TestMethod]
-        public void RecreateDeckTest()
+        public void DeckRecreateTest()
         {
             Deal52Cards();
             ClearUniqueCardsSet();
             deck.createNewPokerDeck();
             Deal52Cards();
+        }
+
+        [TestMethod]
+        public void DeckSizeRemainingTest()
+        {
+            Deal52Cards();
+            Assert.AreEqual(0, deck.GetDeckSize());
         }
 
         private void Deal52Cards()

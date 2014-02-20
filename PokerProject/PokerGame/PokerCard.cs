@@ -17,9 +17,10 @@ namespace PokerProject.PokerGame
             suite = cardSuite;
         }
 
-        public PokerCard() : this(CardRank.Ace, CardSuite.Spades)
+        public PokerCard()
+            : this(CardRank.Ace, CardSuite.Spades)
         {
-            
+
         }
 
         public CardSuite Suite

@@ -71,6 +71,8 @@
     <Compile Include="PokerGame\CardDeckEmptyException.cs" />
     <Compile Include="PokerGame\CardRank.cs" />
     <Compile Include="PokerGame\CardSuite.cs" />
+    <Compile Include="PokerGame\HumanPlayer.cs" />
+    <Compile Include="PokerGame\Player.cs" />
     <Compile Include="PokerGame\PokerCard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

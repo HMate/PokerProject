@@ -44,5 +44,10 @@ namespace PokerProject.PokerGame
             deck.RemoveAt(randomNumber);
             return card;
         }
+
+        public int GetDeckSize()
+        {
+            return deck.Count;
+        }
     }
 }
