@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-using PokerProject.PokerGame;
+using PokerProject.PokerGame.CardClasses;
 
 namespace PokerUnitTest
 {
@@ -74,32 +74,6 @@ namespace PokerUnitTest
         private void ClearUniqueCardsSet()
         {
             uniqueCards.Clear();
-        }
-
-        //Statistical test that fails with 10^-7 chance.
-        //[TestMethod]
-        public void CardUniquenessTest()
-        {
-            for (int tries = 0; tries < 1000; tries++)
-            {
-                int testCycles = 52;
-                int failedCycles = 0;
-                for (int index = 0; index < testCycles; index++)
-                {
-                    PokerCard firstCard = deck.DealOneCard();
-                    deck.createNewPokerDeck();
-                    PokerCard secondCard = deck.DealOneCard();
-                    if (firstCard.Equals(secondCard))
-                    {
-                        failedCycles++;
-                    }
-                }
-                if (failedCycles > 10)
-                {
-                    Assert.Fail("Get the same result too much times ({0} times at {1}. try)", failedCycles, tries);
-                }
-            }
-            Assert.IsTrue(true);
         }
 
     }
