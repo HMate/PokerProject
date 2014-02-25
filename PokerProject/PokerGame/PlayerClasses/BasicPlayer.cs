@@ -10,14 +10,14 @@ namespace PokerProject.PokerGame.PlayerClasses
     abstract public class BasicPlayer : Player
     {
 
-        private List<PokerCard> cards = new List<PokerCard>(2);
+        private CardList cards = new CardList();
         private int chips;
         private string name;
 
         public BasicPlayer(Player player)
         {
             chips = player.ChipCount;
-            cards = new List<PokerCard>(player.ShowCards());
+            cards = new CardList(player.ShowCards());
             name = player.Name;
         }
 
@@ -55,7 +55,7 @@ namespace PokerProject.PokerGame.PlayerClasses
             }
         }
 
-        public void GiveChips(int value)
+        public void IncreaseChipCount(int value)
         {
             if (value < 0)
             {
@@ -64,7 +64,7 @@ namespace PokerProject.PokerGame.PlayerClasses
             chips += value;
         }
 
-        public void TakeChips(int value)
+        public void DecreaseChipCount(int value)
         {
             if (value > chips)
             {
@@ -88,7 +88,7 @@ namespace PokerProject.PokerGame.PlayerClasses
             cards.Add(newCard);
         }
 
-        public List<PokerCard> ShowCards()
+        public CardList ShowCards()
         {
             return cards;
         }

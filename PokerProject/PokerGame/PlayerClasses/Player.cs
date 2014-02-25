@@ -18,11 +18,11 @@ namespace PokerProject.PokerGame.PlayerClasses
             get;
             set;
         }
-        void GiveChips(int value);
-        void TakeChips(int value);
+        void IncreaseChipCount(int value);
+        void DecreaseChipCount(int value);
         void DrawCard(CardDeck deck);
         void DrawCard(PokerCard card);
-        List<PokerCard> ShowCards();
+        CardList ShowCards();
         void FoldCards();
         Player Clone();
     }

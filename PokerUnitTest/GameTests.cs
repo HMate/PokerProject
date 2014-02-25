@@ -12,56 +12,51 @@ namespace PokerUnitTest
     //Több int 8 játékos hozzáadása
 
     [TestClass]
-    public class PokerAssetsTests
+    public class GameTests
     {
-        PokerAssets assets;
+        Game assets;
 
         [TestInitialize]
         public void SetUp()
         {
-            assets = new PokerAssets();
+            assets = new Game();
         }
 
         [TestMethod]
-        public void PokerAssetsCommunityCardsTest()
+        public void GameCommunityCardsTest()
         {
-            List<PokerCard> cardList = createCards(5);
+            CardList cardList = createCards();
 
             assets.SetCommunityCards(cardList);
 
-            List<PokerCard> communityCards = assets.ShowCommunityCards();
-            Assert.AreEqual(cardList.ElementAt(0), communityCards.ElementAt(0));
-            Assert.AreEqual(cardList.ElementAt(1), communityCards.ElementAt(1));
-            Assert.AreEqual(cardList.ElementAt(2), communityCards.ElementAt(2));
-            Assert.AreEqual(cardList.ElementAt(3), communityCards.ElementAt(3));
-            Assert.AreEqual(cardList.ElementAt(4), communityCards.ElementAt(4));
-        }
-
-        [TestMethod]
-        public void PokerAssetsCommunityCardsParameterTest()
-        {
-            List<PokerCard> cardList = createCards(5);
-
-            assets.SetCommunityCards(cardList);
-            cardList.Add(new PokerCard());
-
-            List<PokerCard> communityCards = assets.ShowCommunityCards();
-            Assert.AreNotEqual(cardList, communityCards);
-        }
-
-        private List<PokerCard> createCards(int number)
-        {
-            List<PokerCard> cardList = new List<PokerCard>();
-            for (int i = 0; i < number; ++i)
+            CardList communityCards = assets.ShowCommunityCards();
+            for (int index = 0; index < 52; index++)
             {
-                PokerCard card = new PokerCard();
-                cardList.Add(card);
+                Assert.AreEqual(cardList.ElementAt(index), communityCards.ElementAt(index), "Different cards! reference card:{0}, {1} /nlist card: {2}, {3}"
+                    , cardList.ElementAt(index).Rank, cardList.ElementAt(index).Suite, communityCards.ElementAt(index).Rank, communityCards.ElementAt(index).Suite);
+
+                Assert.AreNotSame(cardList.ElementAt(index), communityCards.ElementAt(index), "Cards have the same reference!");
+            }
+        }
+
+        private CardList createCards()
+        {
+            CardList cardList = new CardList();
+            int index = 0;
+            foreach (CardSuite suiteIndex in (CardSuite[])Enum.GetValues(typeof(CardSuite)))
+            {
+                foreach (CardRank rankIndex in (CardRank[])Enum.GetValues(typeof(CardRank)))
+                {
+                    PokerCard referenceCard = new PokerCard(rankIndex, suiteIndex);
+                    cardList.Add(referenceCard);
+                    index++;
+                }
             }
             return cardList;
         }
 
         [TestMethod]
-        public void PokerAssetsConstructorWithPlayersTest()
+        public void GameConstructorWithPlayersTest()
         {
             Player jack = new HumanPlayer("Jack");
             Player jill = new HumanPlayer("Jill");
@@ -69,7 +64,7 @@ namespace PokerUnitTest
             playerList.Add(jack);
             playerList.Add(jill);
 
-            assets = new PokerAssets(playerList);
+            assets = new Game(playerList);
 
             List<Player> testedPlayerList = assets.GetPlayers();
             Assert.AreNotSame(playerList, testedPlayerList);
@@ -80,7 +75,7 @@ namespace PokerUnitTest
         }
 
         [TestMethod]
-        public void PokerAssetsAddingPlayersTest()
+        public void GameAddingPlayersTest()
         {
             Player jack = new HumanPlayer("Jack");
             Player jill = new HumanPlayer("Jill");
@@ -96,7 +91,7 @@ namespace PokerUnitTest
         }
 
         [TestMethod]
-        public void PokerAssetsAddingPlayersInListTest()
+        public void GameAddingPlayersInListTest()
         {
             Player jack = new HumanPlayer("Jack");
             Player jill = new HumanPlayer("Jill");

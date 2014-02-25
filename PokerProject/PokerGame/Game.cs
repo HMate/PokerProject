@@ -7,18 +7,18 @@ using PokerProject.PokerGame.CardClasses;
 
 namespace PokerProject.PokerGame
 {
-    public class PokerAssets
+    public class Game
     {
 
-        List<PokerCard> communityCards = new List<PokerCard>(5);
+        CardList communityCards = new CardList();
         List<Player> players;
 
-        public PokerAssets()
+        public Game()
         {
             this.players = new List<Player>();
         }
 
-        public PokerAssets(List<Player> playerList)
+        public Game(List<Player> playerList)
         {
             this.players = new List<Player>();
             AddPlayers(playerList);
@@ -43,12 +43,12 @@ namespace PokerProject.PokerGame
             return players;
         }
 
-        public void SetCommunityCards(List<PokerCard> cards)
+        public void SetCommunityCards(CardList cards)
         {
-            communityCards = new List<PokerCard>(cards);
+            communityCards = new CardList(cards);
         }
 
-        public List<PokerCard> ShowCommunityCards()
+        public CardList ShowCommunityCards()
         {
             return communityCards;
         }

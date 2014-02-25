@@ -9,12 +9,12 @@ namespace PokerProject.PokerGame.CardClasses
     {
         public const int defaultDeckSize = 52;
 
-        private List<PokerCard> deck;
+        private CardList deck;
         private Random randomGenerator = new Random();
 
         public CardDeck()
         {
-            deck = new List<PokerCard>(defaultDeckSize);
+            deck = new CardList();
             createNewPokerDeck();
         }
 

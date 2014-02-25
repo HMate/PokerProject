@@ -42,8 +42,8 @@ namespace PokerUnitTest
         public void PlayerIsBasicTest()
         {
            BasicPlayer jackCopy = new HumanPlayer(jack);
-           List<PokerCard> jacksCardList = jack.ShowCards();
-           List<PokerCard> jackCopysCardList = jackCopy.ShowCards();
+           CardList jacksCardList = jack.ShowCards();
+           CardList jackCopysCardList = jackCopy.ShowCards();
 
            Assert.AreEqual(jack.Name, jackCopy.Name);
            Assert.AreEqual(jack.ChipCount, jackCopy.ChipCount);
@@ -73,7 +73,7 @@ namespace PokerUnitTest
             jack.DrawCard(deck);
             jack.DrawCard(deck);
 
-            List<PokerCard> cards = jack.ShowCards();
+            CardList cards = jack.ShowCards();
 
             Assert.AreEqual(2, cards.Count);
             Assert.AreNotEqual(cards.ElementAt(0)  , cards.ElementAt(1));
@@ -86,7 +86,7 @@ namespace PokerUnitTest
             PokerCard card2 = new PokerCard(CardRank.Ten, CardSuite.Clubs);
             jack.DrawCard(card1);
             jack.DrawCard(card2);
-            List<PokerCard> cardList= jack.ShowCards();
+            CardList cardList = jack.ShowCards();
 
             Assert.AreEqual(cardList.ElementAt(0), card1);
             Assert.AreEqual(cardList.ElementAt(1), card2);
@@ -101,8 +101,8 @@ namespace PokerUnitTest
             ben.DrawCard(deck);
             ben.DrawCard(deck);
 
-            List<PokerCard> bensCards = ben.ShowCards();
-            List<PokerCard> jacksCards = jack.ShowCards();
+            CardList bensCards = ben.ShowCards();
+            CardList jacksCards = jack.ShowCards();
 
             Assert.AreNotEqual(bensCards.ElementAt(0), jacksCards.ElementAt(0));
             Assert.AreNotEqual(bensCards.ElementAt(0), jacksCards.ElementAt(1));
@@ -117,7 +117,7 @@ namespace PokerUnitTest
             jack.DrawCard(deck);
             jack.FoldCards();
 
-            List<PokerCard> cards = jack.ShowCards();
+            CardList cards = jack.ShowCards();
 
             Assert.AreEqual(0, cards.Count);
         }
@@ -126,7 +126,7 @@ namespace PokerUnitTest
         public void PlayerChipCountTest()
         {
             jack.ChipCount = 1000;
-            jack.GiveChips(500);
+            jack.IncreaseChipCount(500);
             Assert.AreEqual(1500, jack.ChipCount);
         }
 
@@ -139,8 +139,8 @@ namespace PokerUnitTest
         [TestMethod]
         public void PlayerTakeAwayChipsTest()
         {
-            jack.GiveChips(1000);
-            jack.TakeChips(300);
+            jack.IncreaseChipCount(1000);
+            jack.DecreaseChipCount(300);
             Assert.AreEqual(700, jack.ChipCount);
         }
 
@@ -148,8 +148,8 @@ namespace PokerUnitTest
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void PlayerTakeAwayTooMuchChipsTest()
         {
-            jack.GiveChips(500);
-            jack.TakeChips(700);
+            jack.IncreaseChipCount(500);
+            jack.DecreaseChipCount(700);
         }
 
         [TestMethod]
@@ -163,14 +163,14 @@ namespace PokerUnitTest
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void PlayerGetsNegativeChipsTest()
         {
-            jack.GiveChips(-400);
+            jack.IncreaseChipCount(-400);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void PlayerTakeAwayNegativeChipsTest()
         {
-            jack.TakeChips(-400);
+            jack.DecreaseChipCount(-400);
         }
     }
 }
