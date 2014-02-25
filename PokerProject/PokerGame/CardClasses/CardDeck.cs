@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PokerProject.PokerGame
+namespace PokerProject.PokerGame.CardClasses
 {
     public class CardDeck
     {
