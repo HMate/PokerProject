@@ -4,17 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PokerProject.PokerGame.CardClasses
+namespace PokerProject.PokerGame
 {
     public class PokerCard : IEquatable<PokerCard>
     {
         private CardRank rank;
         private CardSuite suite;
-
-        public PokerCard(PokerCard card) : this(card.Rank, card.Suite)
-        {
-
-        }
 
         public PokerCard(CardRank cardRank, CardSuite cardSuite)
         {

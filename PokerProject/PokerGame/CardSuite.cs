@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PokerProject.PokerGame.CardClasses
+namespace PokerProject.PokerGame
 {
     public enum CardSuite : int
     {

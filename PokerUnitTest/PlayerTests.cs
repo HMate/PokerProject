@@ -2,8 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
-using PokerProject.PokerGame.CardClasses;
-using PokerProject.PokerGame.PlayerClasses;
+using PokerProject.PokerGame;
 
 namespace PokerUnitTest
 {
@@ -16,55 +15,15 @@ namespace PokerUnitTest
         [TestInitialize]
         public void SetUp()
         {
-            jack = new HumanPlayer("Jack");
+            jack = new HumanPlayer();
             deck = new CardDeck();
         }
 
         [TestMethod]
         public void PlayerNamingTest()
         {
-            string name = "Jack";
-            jack = new HumanPlayer(name);
-
-            Assert.AreEqual(name, jack.Name);
-        }
-
-        [TestMethod]
-        public void PlayerCopyConstructorTest()
-        {
-            Player jackCopy = new HumanPlayer(jack);
-
-            Assert.AreEqual(jack.Name, jackCopy.Name);
-            Assert.AreNotSame(jack, jackCopy);
-        }
-
-        [TestMethod]
-        public void PlayerIsBasicTest()
-        {
-           BasicPlayer jackCopy = new HumanPlayer(jack);
-           List<PokerCard> jacksCardList = jack.ShowCards();
-           List<PokerCard> jackCopysCardList = jackCopy.ShowCards();
-
-           Assert.AreEqual(jack.Name, jackCopy.Name);
-           Assert.AreEqual(jack.ChipCount, jackCopy.ChipCount);
-        }
-
-        [TestMethod]
-        public void PlayerCopyTest()
-        {
-            Player otherPlayer = jack.Clone();
-
-            Assert.AreEqual(jack.Name, otherPlayer.Name);
-            Assert.AreNotSame(jack, otherPlayer);
-        }
-
-        [TestMethod]
-        public void PlayerHumanCopyTest()
-        {
-            HumanPlayer otherPlayer = (HumanPlayer)jack.Clone();
-
-            Assert.AreEqual(jack.Name, otherPlayer.Name);
-            Assert.AreNotSame(jack, otherPlayer);
+            jack = new HumanPlayer("Jack");
+            Assert.AreEqual("Jack", jack.Name);
         }
 
         [TestMethod]
@@ -77,19 +36,6 @@ namespace PokerUnitTest
 
             Assert.AreEqual(2, cards.Count);
             Assert.AreNotEqual(cards.ElementAt(0)  , cards.ElementAt(1));
-        }
-
-        [TestMethod]
-        public void PlayerDrawPredefinedCardsTest()
-        {
-            PokerCard card1 = new PokerCard(CardRank.Five, CardSuite.Hearts);
-            PokerCard card2 = new PokerCard(CardRank.Ten, CardSuite.Clubs);
-            jack.DrawCard(card1);
-            jack.DrawCard(card2);
-            List<PokerCard> cardList= jack.ShowCards();
-
-            Assert.AreEqual(cardList.ElementAt(0), card1);
-            Assert.AreEqual(cardList.ElementAt(1), card2);
         }
 
         [TestMethod]
@@ -131,7 +77,7 @@ namespace PokerUnitTest
         }
 
         [TestMethod]
-        public void PlayerHasNoChipsTest()
+        public void PlayHasNoChipsTest()
         {
             Assert.AreEqual(0, jack.ChipCount);
         }

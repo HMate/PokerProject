@@ -3,32 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PokerProject.PokerGame.CardClasses;
 
-namespace PokerProject.PokerGame.PlayerClasses
+namespace PokerProject.PokerGame
 {
-    abstract public class BasicPlayer : Player
+    public class HumanPlayer : Player
     {
-
         private List<PokerCard> cards = new List<PokerCard>(2);
         private int chips;
         private string name;
 
-        public BasicPlayer(Player player)
-        {
-            chips = player.ChipCount;
-            cards = new List<PokerCard>(player.ShowCards());
-            name = player.Name;
-        }
-
-        public BasicPlayer(string name)
+        public HumanPlayer(string name)
         {
             this.name = name;
         }
 
-        public BasicPlayer():this("Anonymous")
+        public HumanPlayer():this("Anonymous")
         {
-
         }
 
         public string Name
@@ -82,12 +72,6 @@ namespace PokerProject.PokerGame.PlayerClasses
             cards.Add(deck.DealOneCard());
         }
 
-        public void DrawCard(PokerCard card)
-        {
-            PokerCard newCard = new PokerCard(card);
-            cards.Add(newCard);
-        }
-
         public List<PokerCard> ShowCards()
         {
             return cards;
@@ -97,8 +81,5 @@ namespace PokerProject.PokerGame.PlayerClasses
         {
             cards.Clear();
         }
-
-        public abstract Player Clone();
-
     }
 }

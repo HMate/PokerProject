@@ -61,21 +61,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PokerGame\PlayerClasses\BasicPlayer.cs" />
-    <Compile Include="PokerGame\CardClasses\CardDeck.cs" />
+    <Compile Include="PokerGame\CardDeck.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PokerGame\CardClasses\CardDeckEmptyException.cs" />
-    <Compile Include="PokerGame\CardClasses\CardRank.cs" />
-    <Compile Include="PokerGame\CardClasses\CardSuite.cs" />
-    <Compile Include="PokerGame\PlayerClasses\HumanPlayer.cs" />
-    <Compile Include="PokerGame\PlayerClasses\Player.cs" />
-    <Compile Include="PokerGame\CardClasses\PokerCard.cs" />
-    <Compile Include="PokerGame\PokerAssets.cs" />
+    <Compile Include="PokerGame\CardDeckEmptyException.cs" />
+    <Compile Include="PokerGame\CardRank.cs" />
+    <Compile Include="PokerGame\CardSuite.cs" />
+    <Compile Include="PokerGame\HumanPlayer.cs" />
+    <Compile Include="PokerGame\Player.cs" />
+    <Compile Include="PokerGame\PokerCard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

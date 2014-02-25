@@ -1,11 +1,11 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PokerProject.PokerGame.CardClasses;
+using PokerProject.PokerGame;
 
 namespace PokerUnitTest
 {
     [TestClass]
-    public class CardTests
+    public class PokerCardTests
     {
         [TestMethod]
         public void CardCreateTest()
@@ -72,24 +72,6 @@ namespace PokerUnitTest
 
             Assert.IsTrue(card1.HasSameSuite(card3));
             Assert.IsFalse(card1.HasSameSuite(card2));
-        }
-
-        [TestMethod]
-        public void CardRankSuiteParameterTest()
-        {
-            CardRank rank = CardRank.Ace;
-            CardSuite suite = CardSuite.Clubs;
-
-            PokerCard card = new PokerCard(rank, suite);
-            rank = CardRank.King;
-            suite = CardSuite.Diamonds;
-
-            Assert.AreEqual(CardRank.Ace, card.Rank);
-            Assert.AreEqual(CardSuite.Clubs, card.Suite);
-            Assert.AreNotEqual(CardRank.King, card.Rank);
-            Assert.AreNotEqual(CardSuite.Diamonds, card.Suite);
-
-
         }
     }
 }
