@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PokerProject.PokerGame.CardClasses;
+using System.Linq;
 
 namespace PokerUnitTest
 {

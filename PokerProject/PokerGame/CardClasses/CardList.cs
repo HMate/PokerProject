@@ -6,45 +6,34 @@ using System.Threading.Tasks;
 
 namespace PokerProject.PokerGame.CardClasses
 {
-    public class CardList
+    public class CardList : List<PokerCard>
     {
-        private List<PokerCard> cardList;
 
-        public CardList()
+        public CardList() : base()
         {
-            cardList = new List<PokerCard>(52);
         }
 
-        public CardList(CardList otherList)
+        public CardList(CardList otherList) : base()
         {
-            cardList = new List<PokerCard>(52);
             for (int index = 0; index < otherList.Count; index++)
             {
-                cardList.Add(new PokerCard(otherList.ElementAt(index)));
+                Add(new PokerCard(otherList.ElementAt(index)));
             }
         }
 
-        public int Count
-        {
-            get
-            {
-                return cardList.Count;
-            }
-        }
-
-        public void Add(PokerCard card)
+        public new void Add(PokerCard card)
         {
             if (ContainsThisCard(card))
             {
                 throw new InvalidOperationException();
             }
-            cardList.Add(new PokerCard(card));
+            base.Add(new PokerCard(card));
         }
 
         private bool ContainsThisCard(PokerCard card)
         {
             bool containCard = false;
-            foreach (PokerCard listedCard in cardList)
+            foreach (PokerCard listedCard in this/*cardList*/)
             {
                 if (listedCard.Equals(card))
                 {
@@ -54,19 +43,5 @@ namespace PokerProject.PokerGame.CardClasses
             return containCard;
         }
 
-        public PokerCard ElementAt(int index)
-        {
-            return cardList.ElementAt(index);
-        }
-
-        public void RemoveAt(int index)
-        {
-            cardList.RemoveAt(index);
-        }
-
-        public void Clear()
-        {
-            cardList.Clear();
-        }
     }
 }

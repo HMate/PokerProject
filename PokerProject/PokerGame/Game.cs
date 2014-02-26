@@ -9,18 +9,25 @@ namespace PokerProject.PokerGame
 {
     public class Game
     {
+        //TODO:
+        //több mint 8 játékos
 
-        CardList communityCards = new CardList();
-        List<Player> players;
+        CardList communityCards;
+        List<Player> playerList;
+        Pot mainPot;
+        CardDeck deck;
 
         public Game()
         {
-            this.players = new List<Player>();
+            this.communityCards = new CardList();
+            this.playerList = new List<Player>();
+            this.mainPot = new Pot();
+            this.deck = new CardDeck();
         }
 
         public Game(List<Player> playerList)
         {
-            this.players = new List<Player>();
+            this.playerList = new List<Player>();
             AddPlayers(playerList);
         }
 
@@ -35,12 +42,12 @@ namespace PokerProject.PokerGame
         public void AddPlayer(Player player)
         {
             Player newPlayer = player.Clone();
-            players.Add(newPlayer);
+            playerList.Add(newPlayer);
         }
 
         public List<Player> GetPlayers()
         {
-            return players;
+            return playerList;
         }
 
         public void SetCommunityCards(CardList cards)
@@ -52,6 +59,31 @@ namespace PokerProject.PokerGame
         {
             return communityCards;
         }
+
+
+        public void MainGameLoop()
+        {
+            DealCards();
+            PlaceBlinds();
+        }
+
+
+        public void DealCards()
+        {
+            foreach (Player player in playerList)
+            {
+                player.DrawCard(deck);
+                player.DrawCard(deck);
+            }
+        }
+
+        public void PlaceBlinds()
+        {
+
+        }
+
+
+
 
     }
 }
