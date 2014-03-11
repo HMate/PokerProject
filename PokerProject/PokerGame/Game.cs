@@ -13,21 +13,21 @@ namespace PokerProject.PokerGame
         //több mint 8 játékos
 
         CardList communityCards;
-        List<Player> playerList;
+        List<Player> playerQueue;
         Pot mainPot;
         CardDeck deck;
 
         public Game()
         {
             this.communityCards = new CardList();
-            this.playerList = new List<Player>();
+            this.playerQueue = new List<Player>();
             this.mainPot = new Pot();
             this.deck = new CardDeck();
         }
 
         public Game(List<Player> playerList)
         {
-            this.playerList = new List<Player>();
+            this.playerQueue = new List<Player>();
             AddPlayers(playerList);
         }
 
@@ -42,12 +42,12 @@ namespace PokerProject.PokerGame
         public void AddPlayer(Player player)
         {
             Player newPlayer = player.Clone();
-            playerList.Add(newPlayer);
+            playerQueue.Add(newPlayer);
         }
 
         public List<Player> GetPlayers()
         {
-            return playerList;
+            return playerQueue;
         }
 
         public void SetCommunityCards(CardList cards)
@@ -60,17 +60,32 @@ namespace PokerProject.PokerGame
             return communityCards;
         }
 
-
-        public void MainGameLoop()
+        /*
+         * Main game states hapen here
+         * */
+        public void MainGameTurn()
         {
             DealCards();
             PlaceBlinds();
+            /*
+             * 
+             * 
+             * 
+             * 
+             * 
+             * 
+             * 
+             * 
+             * 
+             * 
+             * 
+             * */
         }
 
 
         public void DealCards()
         {
-            foreach (Player player in playerList)
+            foreach (Player player in playerQueue)
             {
                 player.DrawCard(deck);
                 player.DrawCard(deck);
@@ -79,7 +94,10 @@ namespace PokerProject.PokerGame
 
         public void PlaceBlinds()
         {
-
+            foreach (Player player in playerQueue)
+            {
+                player;
+            }
         }
 
 
