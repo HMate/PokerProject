@@ -8,6 +8,7 @@ namespace PokerProject.PokerGame
     public class Pot
     {
         private int money;
+        private int largestBet;
 
         public int Size
         {
@@ -17,9 +18,27 @@ namespace PokerProject.PokerGame
             }
         }
 
+        public int LargestBet
+        {
+            get
+            {
+                return largestBet;
+            }
+        }
+
         public void PlaceBet(int betSize)
         {
+            if (largestBet < betSize)
+            {
+                largestBet = betSize;
+            }
             money += betSize;
+        }
+
+        public void Empty()
+        {
+            money = 0;
+            largestBet = 0;
         }
     }
 }

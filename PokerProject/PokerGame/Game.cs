@@ -96,7 +96,7 @@ namespace PokerProject.PokerGame
         {
             foreach (Player player in playerQueue)
             {
-                player;
+                //player;
             }
         }
 

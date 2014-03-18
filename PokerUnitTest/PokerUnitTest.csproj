@@ -62,6 +62,7 @@
     <Compile Include="GameTests.cs" />
     <Compile Include="CardListTests.cs" />
     <Compile Include="PotTests.cs" />
+    <Compile Include="PlayerQueueTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PokerProject\PokerProject.csproj">

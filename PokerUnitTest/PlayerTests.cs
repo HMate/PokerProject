@@ -10,13 +10,13 @@ namespace PokerUnitTest
     [TestClass]
     public class PlayerTests
     {
-        Player jack = new HumanPlayer();
+        Player jack = new Player();
         CardDeck deck = new CardDeck();
 
         [TestInitialize]
         public void SetUp()
         {
-            jack = new HumanPlayer("Jack");
+            jack = new Player("Jack");
             deck = new CardDeck();
         }
 
@@ -24,7 +24,6 @@ namespace PokerUnitTest
         public void PlayerNamingTest()
         {
             string name = "Jack";
-            jack = new HumanPlayer(name);
 
             Assert.AreEqual(name, jack.Name);
         }
@@ -32,36 +31,19 @@ namespace PokerUnitTest
         [TestMethod]
         public void PlayerCopyConstructorTest()
         {
-            Player jackCopy = new HumanPlayer(jack);
-
-            Assert.AreEqual(jack.Name, jackCopy.Name);
-            Assert.AreNotSame(jack, jackCopy);
-        }
-
-        [TestMethod]
-        public void PlayerIsBasicTest()
-        {
-           BasicPlayer jackCopy = new HumanPlayer(jack);
+           Player jackCopy = new Player(jack);
            CardList jacksCardList = jack.ShowCards();
            CardList jackCopysCardList = jackCopy.ShowCards();
 
            Assert.AreEqual(jack.Name, jackCopy.Name);
            Assert.AreEqual(jack.ChipCount, jackCopy.ChipCount);
-        }
-
-        [TestMethod]
-        public void PlayerCopyTest()
-        {
-            Player otherPlayer = jack.Clone();
-
-            Assert.AreEqual(jack.Name, otherPlayer.Name);
-            Assert.AreNotSame(jack, otherPlayer);
+           Assert.AreNotSame(jack, jackCopy);
         }
 
         [TestMethod]
         public void PlayerHumanCopyTest()
         {
-            HumanPlayer otherPlayer = (HumanPlayer)jack.Clone();
+            Player otherPlayer = jack.Clone();
 
             Assert.AreEqual(jack.Name, otherPlayer.Name);
             Assert.AreNotSame(jack, otherPlayer);
@@ -95,7 +77,7 @@ namespace PokerUnitTest
         [TestMethod]
         public void PlayersGetDifferentCardsTest()
         {
-            Player ben = new HumanPlayer();
+            Player ben = new Player();
             jack.DrawCard(deck);
             jack.DrawCard(deck);
             ben.DrawCard(deck);

@@ -62,7 +62,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PokerGame\CardClasses\CardList.cs" />
-    <Compile Include="PokerGame\PlayerClasses\BasicPlayer.cs" />
     <Compile Include="PokerGame\CardClasses\CardDeck.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -73,11 +72,12 @@
     <Compile Include="PokerGame\CardClasses\CardDeckEmptyException.cs" />
     <Compile Include="PokerGame\CardClasses\CardRank.cs" />
     <Compile Include="PokerGame\CardClasses\CardSuite.cs" />
-    <Compile Include="PokerGame\PlayerClasses\HumanPlayer.cs" />
     <Compile Include="PokerGame\PlayerClasses\Player.cs" />
     <Compile Include="PokerGame\CardClasses\PokerCard.cs" />
     <Compile Include="PokerGame\Game.cs" />
+    <Compile Include="PokerGame\PlayerClasses\PlayerQueue.cs" />
     <Compile Include="PokerGame\Pot.cs" />
+    <Compile Include="PokerGame\Table.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
