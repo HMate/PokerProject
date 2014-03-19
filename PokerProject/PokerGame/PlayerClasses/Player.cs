@@ -13,20 +13,28 @@ namespace PokerProject.PokerGame.PlayerClasses
         private CardList cards = new CardList();
         private int chips;
         private string name;
+        private PlayerController controller;
 
         public Player(Player player)
         {
             chips = player.ChipCount;
             cards = new CardList(player.ShowCards());
             name = player.Name;
+            this.controller = player.controller;
         }
 
-        public Player(string name)
+        public Player(string name, PlayerController controller)
         {
             this.name = name;
+            this.controller = controller;
         }
 
-        public Player():this("Anonymous")
+        public Player(string name):this(name,new HumanController())
+        {
+
+        }
+
+        public Player():this("Anonymous",new HumanController())
         {
 
         }

@@ -210,5 +210,31 @@ namespace PokerUnitTest
             Assert.AreEqual(4, testIndex);
         }
 
+        [TestMethod]
+        public void PlayerQueueDeletePlayerTest()
+        {
+            playerQueue.AddPlayer(new Player("Jack"));
+            playerQueue.AddPlayer(new Player("Bob"));
+
+            List<Player> list = playerQueue.GetPlayers();
+
+            Assert.AreEqual("Jack",list.ElementAt(0).Name);
+
+            playerQueue.DeletePlayer(list.ElementAt(0));
+
+            Assert.AreEqual("Bob", list.ElementAt(0).Name);
+        }
+
+        [TestMethod]
+        public void PlayerQueueClearTest()
+        {
+            playerQueue.AddPlayers(testPlayers);
+
+            playerQueue.Clear();
+
+            List<Player> list = playerQueue.GetPlayers();
+            Assert.AreEqual(0, list.Count);
+        }
+
     }
 }
