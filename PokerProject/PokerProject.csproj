@@ -79,6 +79,7 @@
     <Compile Include="PokerGame\PlayerClasses\PlayerController.cs" />
     <Compile Include="PokerGame\PlayerClasses\PlayerQueue.cs" />
     <Compile Include="PokerGame\Pot.cs" />
+    <Compile Include="PokerGame\PlayerClasses\PlayerPositions.cs" />
     <Compile Include="PokerGame\Table.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

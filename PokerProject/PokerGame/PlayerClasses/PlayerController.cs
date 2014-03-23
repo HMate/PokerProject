@@ -8,6 +8,6 @@ namespace PokerProject.PokerGame.PlayerClasses
 {
     public interface PlayerController
     {
-        private void MakeDecision();
+        void MakeDecision();
     }
 }

@@ -8,7 +8,7 @@ namespace PokerProject.PokerGame.PlayerClasses
 {
     public class HumanController : PlayerController
     {
-        private void MakeDecision()
+        public void MakeDecision()
         {
 
         }

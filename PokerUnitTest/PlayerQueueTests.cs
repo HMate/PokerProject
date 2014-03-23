@@ -123,36 +123,6 @@ namespace PokerUnitTest
         }
 
         [TestMethod]
-        public void PlayerQueueSetGetDealerTest()
-        {
-            playerQueue.AddPlayers(testPlayers);
-            foreach (Player testPlayer in testPlayers)
-            {
-                Player nextPlayer = playerQueue.GetNextPlayer();
-                playerQueue.SetDealer(nextPlayer);
-                Player dealer = playerQueue.GetDealer();
-                Assert.AreEqual(testPlayer.Name, dealer.Name);
-            }
-        }
-
-        [TestMethod]
-        public void PlayerQueueGetPlayerPositionTest()
-        {
-            playerQueue.AddPlayers(testPlayers);
-            List<Player> queuePlayers = playerQueue.GetPlayers();
-
-            Player dealer = queuePlayers.ElementAt(3);
-            Player smallBlind = queuePlayers.ElementAt(4);
-            Player bigBlind  = queuePlayers.ElementAt(5);
-
-            playerQueue.SetDealer(dealer);
-
-            Assert.AreEqual("Dealer", playerQueue.GetPlayerPosition(dealer));
-            Assert.AreEqual("Small Blind", playerQueue.GetPlayerPosition(smallBlind));
-            Assert.AreEqual("Big Blind", playerQueue.GetPlayerPosition(bigBlind));
-        }
-
-        [TestMethod]
         public void PlayerQueuePreFlopOrderTest()
         {
             playerQueue.AddPlayers(testPlayers);

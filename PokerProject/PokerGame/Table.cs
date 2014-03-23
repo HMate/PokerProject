@@ -8,12 +8,14 @@ using PokerProject.PokerGame.PlayerClasses;
 
 namespace PokerProject.PokerGame
 {
-    class Table
+    public class Table
     {
         private readonly static Table instance = new Table();
         private CardList communityCards;
         private Pot mainPot;
         private PlayerQueue players;
+        private PlayerPositions positions;
+        private int blindAmount;
 
         public static Table Instance
         {
@@ -27,6 +29,8 @@ namespace PokerProject.PokerGame
         {
             communityCards = new CardList();
             mainPot = new Pot();
+            players = new PlayerQueue();
+            positions = new PlayerPositions();
         }
 
         public CardList CommunityCards
@@ -42,6 +46,22 @@ namespace PokerProject.PokerGame
             get
             {
                 return mainPot;
+            }
+        }
+
+        public PlayerQueue Players
+        {
+            get
+            {
+                return players;
+            }
+        }
+
+        public PlayerPositions Positions
+        {
+            get
+            {
+                return positions;
             }
         }
 
@@ -65,6 +85,26 @@ namespace PokerProject.PokerGame
         public void DealRiverCard(CardDeck deck)
         {
             communityCards.Add(deck.DealOneCard());
+        }
+
+
+        public void SetBlind(int amount)
+        {
+            if (amount < 0)
+            {
+                throw new ArgumentOutOfRangeException("amount", amount, "Blind cannot be negative.");
+            }
+            blindAmount = amount;
+        }
+
+        public int GetBlind()
+        {
+            return blindAmount;
+        }
+
+        public void Reset()
+        {
+            blindAmount = 0;
         }
     }
 }

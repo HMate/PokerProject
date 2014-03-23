@@ -10,10 +10,11 @@ namespace PokerProject.PokerGame.PlayerClasses
     public class Player
     {
         
-        private CardList cards = new CardList();
+        private CardList cards;
         private int chips;
         private string name;
         private PlayerController controller;
+        private bool ingame = false;
 
         public Player(Player player)
         {
@@ -27,14 +28,20 @@ namespace PokerProject.PokerGame.PlayerClasses
         {
             this.name = name;
             this.controller = controller;
+            this.cards = new CardList();
         }
 
-        public Player(string name):this(name,new HumanController())
+        public Player(PlayerController controller) :this("Anonymous", controller)
         {
 
         }
 
-        public Player():this("Anonymous",new HumanController())
+        public Player(string name) :this(name,new HumanController())
+        {
+
+        }
+
+        public Player() :this("Anonymous",new HumanController())
         {
 
         }
@@ -57,32 +64,68 @@ namespace PokerProject.PokerGame.PlayerClasses
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException("value", "Negative value cannot be given to a player.");
+                    throw new ArgumentOutOfRangeException("value",
+                        "Negative value cannot be given to a player.");
                 }
                 chips = value;
             }
         }
 
-        public void IncreaseChipCount(int value)
+        /*Method for posting the blind at the start of a turn.
+         * First the player checks whether he is the small or the big blind.
+         * Then the palyer posts the correct amount to the main pot.
+         * 
+         * */
+        public void PostBlind()
         {
-            if (value < 0)
+            Table table = Table.Instance;
+            int blindAmount = table.GetBlind();
+
+            Pot mainPot = Table.Instance.MainPot;
+            if (chips < blindAmount)
             {
-                throw new ArgumentOutOfRangeException("value", "Negative value cannot be given to a player.");
+                blindAmount = chips;
             }
-            chips += value;
+            mainPot.PlaceBet(blindAmount);
+            DecreaseChipCount(blindAmount);
+        }
+
+        /*
+         * Method used to Bet an amount to the main pot.
+         * If the player dont have enough chips,
+         * then he doesn't add any chips to the pot.
+         * */
+        public void Bet(int amount)
+        {
+            Pot mainPot = Table.Instance.MainPot;
+            DecreaseChipCount(amount);
+            mainPot.PlaceBet(amount);
         }
 
         public void DecreaseChipCount(int value)
         {
             if (value > chips)
             {
-                throw new ArgumentOutOfRangeException("value", "Player has less chips then the amount passed to take away.");
+                throw new ArgumentOutOfRangeException("value",
+                    "Player has less chips then the amount passed to take away.");
             }
             if (value < 0)
             {
-                throw new ArgumentOutOfRangeException("value", "Negative value cannot be taken away from a player.");
+                throw new ArgumentOutOfRangeException("value",
+                    "Negative value cannot be taken away from a player.");
             }
             chips -= value;
+        }
+
+
+        public void IncreaseChipCount(int value)
+        {
+            if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException("value",
+                    "Negative value cannot be given to a player.");
+            }
+            chips += value;
         }
 
         public void DrawCard(CardDeck deck)
@@ -109,6 +152,16 @@ namespace PokerProject.PokerGame.PlayerClasses
         public Player Clone()
         {
             return new Player(this);
+        }
+
+        public void SetIngame(bool ingame)
+        {
+            this.ingame = ingame;
+        }
+
+        public bool IsIngame()
+        {
+            return ingame;
         }
     }
 }

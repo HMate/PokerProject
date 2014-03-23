@@ -9,59 +9,18 @@ namespace PokerProject.PokerGame
 {
     public class Game
     {
-        //TODO:
-        //több mint 8 játékos
 
-        CardList communityCards;
-        List<Player> playerQueue;
-        Pot mainPot;
+        Table table;
         CardDeck deck;
 
         public Game()
         {
-            this.communityCards = new CardList();
-            this.playerQueue = new List<Player>();
-            this.mainPot = new Pot();
+            table = Table.Instance;
             this.deck = new CardDeck();
         }
 
-        public Game(List<Player> playerList)
-        {
-            this.playerQueue = new List<Player>();
-            AddPlayers(playerList);
-        }
-
-        public void AddPlayers(List<Player> playerList)
-        {
-            foreach (Player player in playerList)
-            {
-                AddPlayer(player);
-            }
-        }
-
-        public void AddPlayer(Player player)
-        {
-            Player newPlayer = player.Clone();
-            playerQueue.Add(newPlayer);
-        }
-
-        public List<Player> GetPlayers()
-        {
-            return playerQueue;
-        }
-
-        public void SetCommunityCards(CardList cards)
-        {
-            communityCards = new CardList(cards);
-        }
-
-        public CardList ShowCommunityCards()
-        {
-            return communityCards;
-        }
-
         /*
-         * Main game states hapen here
+         * Main game states happen here
          * */
         public void MainGameTurn()
         {
@@ -72,21 +31,17 @@ namespace PokerProject.PokerGame
              * 
              * 
              * 
-             * 
-             * 
-             * 
-             * 
-             * 
-             * 
-             * 
              * */
         }
 
 
         public void DealCards()
         {
-            foreach (Player player in playerQueue)
+            PlayerQueue players = table.Players;
+            players.SetBettingOrder();
+            while (players.HasNextPlayer())
             {
+                Player player = players.GetNextPlayer();
                 player.DrawCard(deck);
                 player.DrawCard(deck);
             }
@@ -94,9 +49,17 @@ namespace PokerProject.PokerGame
 
         public void PlaceBlinds()
         {
-            foreach (Player player in playerQueue)
+            PlayerQueue players = table.Players;
+            players.SetBettingOrder();
+
+            if (players.HasNextPlayer())
             {
-                //player;
+                Player smallBlind = players.GetNextPlayer();
+                /*smallBlind.*/
+            }
+            while (players.HasNextPlayer())
+            {
+                Player player = players.GetNextPlayer();
             }
         }
 

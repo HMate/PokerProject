@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
+using PokerProject.PokerGame;
 using PokerProject.PokerGame.CardClasses;
 using PokerProject.PokerGame.PlayerClasses;
 
@@ -10,8 +11,8 @@ namespace PokerUnitTest
     [TestClass]
     public class PlayerTests
     {
-        Player jack = new Player();
-        CardDeck deck = new CardDeck();
+        Player jack;
+        CardDeck deck;
 
         [TestInitialize]
         public void SetUp()
@@ -153,6 +154,105 @@ namespace PokerUnitTest
         public void PlayerTakeAwayNegativeChipsTest()
         {
             jack.DecreaseChipCount(-400);
+        }
+
+        [TestMethod]
+        public void PlayerPostBlindTest()
+        {
+            Table table = Table.Instance;
+            PlayerPositions rule = table.Rules;
+            Pot mainPot = table.MainPot;
+            rule.Reset();
+            mainPot.Empty();
+            rule.SetBigBlindPlayer(jack);
+
+            rule.SetBlind(50);
+            jack.ChipCount = 100;
+            jack.PostBlind();
+            Assert.AreEqual(50, mainPot.Size);
+        }
+
+        [TestMethod]
+        public void PlayerHaveLessThanBlindTest()
+        {
+            Table table = Table.Instance;
+            PlayerPositions rule = table.Rules;
+            Pot mainPot = table.MainPot;
+            rule.Reset();
+            mainPot.Empty();
+
+            rule.SetBlind(100);
+            jack.ChipCount = 80;
+            jack.PostBlind();
+            Assert.AreEqual(80, mainPot.Size);
+        }
+
+        [TestMethod]
+        public void PlayerLoseChipsForPostingBlindTest()
+        {
+            Table table = Table.Instance;
+            PlayerPositions rule = table.Rules;
+            Pot mainPot = table.MainPot;
+            rule.Reset();
+            mainPot.Empty();
+
+            rule.SetBlind(150);
+            jack.ChipCount = 90;
+            jack.PostBlind();
+            Assert.AreEqual(90, mainPot.Size);
+            jack.PostBlind();
+            Assert.AreEqual(90, mainPot.Size,"PostBlind should have done nothing here");
+        }
+
+        [TestMethod]
+        public void PlayerSetIngameTest()
+        {
+            jack.SetIngame(true);
+            Assert.AreEqual(true, jack.IsIngame());
+            jack.SetIngame(false);
+            Assert.AreEqual(false, jack.IsIngame());
+        }
+
+        [TestMethod]
+        public void PlayerBetTest()
+        {
+            Table table = Table.Instance;
+            Pot mainPot = table.MainPot;
+
+            int startingChipCount = 100;
+            for (int betAmount = 0; betAmount < startingChipCount; betAmount += 10)
+            {
+                mainPot.Empty();
+                jack.ChipCount = startingChipCount;
+                jack.Bet(betAmount);
+                Assert.AreEqual(betAmount, mainPot.Size);
+                Assert.AreEqual(startingChipCount - betAmount, jack.ChipCount);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void PlayerBetTooMuchTest()
+        {
+            Table table = Table.Instance;
+            Pot mainPot = table.MainPot;
+            mainPot.Empty();
+
+            int startingChipCount = 100;
+            int betAmount = 150;
+            jack.ChipCount = startingChipCount;
+            try
+            {
+                jack.Bet(betAmount);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                //If player didn't have enough chips then the Pot size shouldn't change.
+                Assert.AreEqual(0, mainPot.Size);
+                Assert.AreEqual(100, jack.ChipCount);
+                throw e;
+            }
+            
         }
     }
 }

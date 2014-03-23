@@ -21,8 +21,30 @@ namespace PokerUnitTest
         [TestMethod]
         public void DealOneCardMethodTest()
         {
-            Deal52Cards();
+            Deal52CardsOneByOne();
             Assert.IsTrue(true);
+        }
+
+        private void Deal52CardsOneByOne()
+        {
+            for (int cardIndex = 0; cardIndex < CardDeck.defaultDeckSize; cardIndex++)
+            {
+                PokerCard testCard = deck.DealOneCard();
+                bool success = uniqueCards.Add(testCard);
+
+                if (!success)
+                {
+                    Assert.Fail("Couldn't add card ({0} of {1}) to the set at index {2}", testCard.Rank, testCard.Suite, cardIndex);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void DeckDealFullDeckTest()
+        {
+            CardList list = deck.DealCards(52);
+            uniqueCards.UnionWith(list);
+            Assert.AreEqual(52, uniqueCards.Count);
         }
 
         [TestMethod]
@@ -30,9 +52,7 @@ namespace PokerUnitTest
         {
             try
             {
-                Deal52Cards();
-                ClearUniqueCardsSet();
-                Deal52Cards();
+                deck.DealCards(53);
             }
             catch(CardDeckEmptyException)
             {
@@ -42,39 +62,19 @@ namespace PokerUnitTest
         }
 
         [TestMethod]
-        public void DeckRecreateTest()
-        {
-            Deal52Cards();
-            ClearUniqueCardsSet();
-            deck.createNewPokerDeck();
-            Deal52Cards();
-        }
-
-        [TestMethod]
         public void DeckSizeRemainingTest()
         {
-            Deal52Cards();
+            deck.DealCards(52);
             Assert.AreEqual(0, deck.GetDeckSize());
         }
 
-        private void Deal52Cards()
+        [TestMethod]
+        public void DeckRecreateTest()
         {
-            for (int cardIndex = 0; cardIndex < CardDeck.defaultDeckSize; cardIndex++)
-            {
-                PokerCard testCard = deck.DealOneCard();
-                bool success = uniqueCards.Add(testCard);
-
-                if (!success)
-                {
-                    Assert.Fail("Couldn't add card ({0} of {1}) to the set at index {2}",  testCard.Rank, testCard.Suite, cardIndex);
-                }
-            }
+            deck.DealCards(52);
+            Assert.AreEqual(0, deck.GetDeckSize());
+            deck.createNewPokerDeck();
+            Assert.AreEqual(52, deck.GetDeckSize());
         }
-
-        private void ClearUniqueCardsSet()
-        {
-            uniqueCards.Clear();
-        }
-
     }
 }

@@ -12,9 +12,6 @@ namespace PokerProject.PokerGame.PlayerClasses
         // DeletePlayers - dealer  changing?
         private List<Player> list = new List<Player>();
         private Queue<Player> queue = new Queue<Player>();
-        Player dealer = null;
-        Player smallBlind = null;
-        Player bigBlind = null;
 
         public void AddPlayers(ICollection<Player> players)
         {
@@ -38,7 +35,8 @@ namespace PokerProject.PokerGame.PlayerClasses
                 throw new ArgumentException("Player doesn't exist!");
             }
 
-            String position = GetPlayerPosition(player);
+            PlayerPositions positions = Table.Instance.Positions;
+            String position = positions.GetPlayerPosition(player);
             int listIndex = list.IndexOf(player);
 
             list.Remove(player);
@@ -59,33 +57,25 @@ namespace PokerProject.PokerGame.PlayerClasses
 
             if (list.Count == 0)
             {
-                dealer = null;
-                smallBlind = null;
-                bigBlind = null;
                 return;
             }
 
             if (position.Equals("Dealer"))
             {
-                SetDealer(list.ElementAt(listIndex));
+                positions.SetDealer(list.ElementAt(listIndex));
             }
             else if (position.Equals("Small Blind"))
             {
-                smallBlind = list.ElementAt(listIndex);
-                bigBlind = list.ElementAt(IncrementIndex(listIndex));
+                positions.SetSmallBlind(list.ElementAt(listIndex));
             }
             else if (position.Equals("Big Blind"))
             {
-                bigBlind = list.ElementAt(listIndex);
+                positions.SetBigBlind(list.ElementAt(listIndex));
             }
         }
 
         public void Clear()
         {
-            dealer = null;
-            smallBlind = null;
-            bigBlind = null;
-
             queue.Clear();
             list.Clear();
         }
@@ -134,67 +124,16 @@ namespace PokerProject.PokerGame.PlayerClasses
             return (index == list.Count - 1) ? 0 : index + 1;
         }
 
-        public String GetPlayerPosition(Player player)
-        {
-            if (!list.Contains(player))
-            {
-                throw new ArgumentException("Player doesn't exist!");
-            }
-
-            if (player.Equals(dealer))
-            {
-                return "Dealer";
-            }
-            if (player.Equals(smallBlind))
-            {
-                return "Small Blind";
-            }
-            if (player.Equals(bigBlind))
-            {
-                return "Big Blind";
-            }
-            return "Default";
-
-        }
-
-        public void SetDealer(Player player)
-        {
-            if (!list.Contains(player))
-            {
-                throw new ArgumentException("Player doesn't exist!");
-            }
-            dealer = player;
-            smallBlind = GetNextPlayerAfterPlayer(dealer);
-            bigBlind = GetNextPlayerAfterPlayer(smallBlind);
-        }
-
-        public Player GetDealer()
-        {
-            if (dealer == null)
-            {
-                throw new ArgumentException("There is no dealer.");
-            }
-            return dealer;
-        }
-
         public void SetBettingOrder()
         {
-            if (dealer == null)
-            {
-                throw new ArgumentException("There is no dealer.");
-            }
-            SetPlayerFirstInOrder(smallBlind);
+            SetPlayerFirstInOrder(Table.Instance.Positions.GetSmallBlind());
         }
 
         public void SetNextHandOrder()
         {
-            if (dealer == null)
-            {
-                throw new ArgumentException("There is no dealer.");
-            }
-
-            SetDealer(smallBlind);
-            SetPlayerFirstInOrder(smallBlind);
+            PlayerPositions positions = Table.Instance.Positions;
+            positions.SetDealer(positions.GetSmallBlind());
+            SetPlayerFirstInOrder(positions.GetSmallBlind());
         }
 
     }

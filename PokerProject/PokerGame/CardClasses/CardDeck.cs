@@ -45,6 +45,17 @@ namespace PokerProject.PokerGame.CardClasses
             return card;
         }
 
+        public CardList DealCards(int amount)
+        {
+            CardList list = new CardList();
+            for (int cardIndex = 0; cardIndex < amount; cardIndex++)
+            {
+                PokerCard card = DealOneCard();
+                list.Add(card);
+            }
+            return list;
+        }
+
         public int GetDeckSize()
         {
             return deck.Count;
