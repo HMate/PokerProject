@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PokerProject.PokerGame.PlayerClasses;
 using System.Collections.Generic;
 using System.Linq;
+using PokerProject.PokerGame;
 
 namespace PokerUnitTest
 {
@@ -14,9 +15,15 @@ namespace PokerUnitTest
         PlayerPositions positions;
 
         [TestInitialize]
+        /*
+         * Put test players in the queue.
+         * */
         public void SetUp()
         {
-            positions = new PlayerPositions();
+            positions = Table.Instance.Positions;
+            positions.ResetPositions();
+            testQueue = Table.Instance.Players;
+            testQueue.Clear();
 
             testPlayers = new List<Player>();
             testPlayers.Add(new Player("Jack"));
@@ -32,8 +39,9 @@ namespace PokerUnitTest
         [TestMethod]
         public void PlayerPositionSetGetDealerTest()
         {
-            foreach (Player testPlayer in testPlayers)
+            while (testQueue.HasNextPlayer())
             {
+                Player testPlayer = testQueue.GetNextPlayer();
                 positions.SetDealer(testPlayer);
                 Player dealer = positions.GetDealer();
                 Assert.AreEqual(testPlayer.Name, dealer.Name);
@@ -43,8 +51,9 @@ namespace PokerUnitTest
         [TestMethod]
         public void PlayerPositionSetGetSmallBlindTest()
         {
-            foreach (Player testPlayer in testPlayers)
+            while (testQueue.HasNextPlayer())
             {
+                Player testPlayer = testQueue.GetNextPlayer();
                 positions.SetSmallBlind(testPlayer);
                 Player dealer = positions.GetSmallBlind();
                 Assert.AreEqual(testPlayer.Name, dealer.Name);
@@ -52,17 +61,42 @@ namespace PokerUnitTest
         }
 
         [TestMethod]
+        /*
+         * Test for asking for the players' positions
+         * Only works well with at least 3 people in the game!
+         * */
         public void PlayerPositionGetPlayerPositionTest()
         {
-            Player dealer = testPlayers.ElementAt(3);
-            Player smallBlind = testPlayers.ElementAt(4);
-            Player bigBlind = testPlayers.ElementAt(5);
+            Player dealer = testQueue.GetNextPlayer();
+            Player smallBlind = testQueue.GetNextPlayerAfterPlayer(dealer);
+            Player bigBlind = testQueue.GetNextPlayerAfterPlayer(smallBlind);
 
             positions.SetDealer(dealer);
 
             Assert.AreEqual("Dealer", positions.GetPlayerPosition(dealer));
             Assert.AreEqual("Small Blind", positions.GetPlayerPosition(smallBlind));
             Assert.AreEqual("Big Blind", positions.GetPlayerPosition(bigBlind));
+        }
+
+        [TestMethod]
+        /*
+         * Test for setting the players' positions for the next hand
+         * Only works well with at least 3 people in the game!
+         * */
+        public void PlayerPositionSetNextHandPositionsTest()
+        {
+            Player dealer = testQueue.GetNextPlayer();
+            Player smallBlind = testQueue.GetNextPlayerAfterPlayer(dealer);
+            Player bigBlind = testQueue.GetNextPlayerAfterPlayer(smallBlind);
+            Player nextBigBlind = testQueue.GetNextPlayerAfterPlayer(bigBlind);
+
+            positions.SetDealer(dealer);
+            Assert.AreEqual("Small Blind", positions.GetPlayerPosition(smallBlind));
+
+            positions.SetNextHandPositions();
+            Assert.AreEqual("Dealer", positions.GetPlayerPosition(smallBlind));
+            Assert.AreEqual("Small Blind", positions.GetPlayerPosition(bigBlind));
+            Assert.AreEqual("Big Blind", positions.GetPlayerPosition(nextBigBlind));
         }
     }
 }

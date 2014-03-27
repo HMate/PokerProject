@@ -63,6 +63,9 @@ namespace PokerUnitTest
         }
 
         [TestMethod]
+        /*
+         * Test for checking players get those cards what they've been dealt.
+         * */
         public void PlayerDrawPredefinedCardsTest()
         {
             PokerCard card1 = new PokerCard(CardRank.Five, CardSuite.Hearts);
@@ -157,51 +160,73 @@ namespace PokerUnitTest
         }
 
         [TestMethod]
-        public void PlayerPostBlindTest()
+        public void PlayerPostBigBlindTest()
         {
             Table table = Table.Instance;
-            PlayerPositions rule = table.Rules;
-            Pot mainPot = table.MainPot;
-            rule.Reset();
-            mainPot.Empty();
-            rule.SetBigBlindPlayer(jack);
+            SetTableForTest();
+            Player testPlayer = table.Players.GetNextPlayer();
+            table.Positions.SetBigBlind(testPlayer);
 
-            rule.SetBlind(50);
-            jack.ChipCount = 100;
-            jack.PostBlind();
-            Assert.AreEqual(50, mainPot.Size);
+            table.SetBlind(50);
+            testPlayer.ChipCount = 100;
+            testPlayer.PostBlind();
+            Assert.AreEqual(50, table.MainPot.Size);
+        }
+
+        [TestMethod]
+        public void PlayerPostSmallBlindTest()
+        {
+            Table table = Table.Instance;
+            SetTableForTest();
+            Player testPlayer = table.Players.GetNextPlayer();
+            table.Positions.SetSmallBlind(testPlayer);
+
+            table.SetBlind(200);
+            testPlayer.ChipCount = 1000;
+            testPlayer.PostBlind();
+            Assert.AreEqual(100, table.MainPot.Size);
         }
 
         [TestMethod]
         public void PlayerHaveLessThanBlindTest()
         {
             Table table = Table.Instance;
-            PlayerPositions rule = table.Rules;
-            Pot mainPot = table.MainPot;
-            rule.Reset();
-            mainPot.Empty();
+            SetTableForTest();
+            Player testPlayer = table.Players.GetNextPlayer();
+            table.Positions.SetBigBlind(testPlayer);
 
-            rule.SetBlind(100);
-            jack.ChipCount = 80;
-            jack.PostBlind();
-            Assert.AreEqual(80, mainPot.Size);
+            table.SetBlind(100);
+            testPlayer.ChipCount = 80;
+            testPlayer.PostBlind();
+            Assert.AreEqual(80, table.MainPot.Size);
         }
 
         [TestMethod]
         public void PlayerLoseChipsForPostingBlindTest()
         {
             Table table = Table.Instance;
-            PlayerPositions rule = table.Rules;
-            Pot mainPot = table.MainPot;
-            rule.Reset();
-            mainPot.Empty();
+            SetTableForTest();
+            Player testPlayer = table.Players.GetNextPlayer();
+            table.Positions.SetBigBlind(testPlayer);
 
-            rule.SetBlind(150);
+            table.SetBlind(150);
             jack.ChipCount = 90;
             jack.PostBlind();
-            Assert.AreEqual(90, mainPot.Size);
+            Assert.AreEqual(90, table.MainPot.Size);
             jack.PostBlind();
-            Assert.AreEqual(90, mainPot.Size,"PostBlind should have done nothing here");
+            Assert.AreEqual(90, table.MainPot.Size, "PostBlind should have done nothing here");
+        }
+
+        private void SetTableForTest()
+        {
+            Table table = Table.Instance;
+            PlayerPositions positions = table.Positions;
+            PlayerQueue queue = table.Players;
+            Pot mainPot = table.MainPot;
+            positions.ResetPositions();
+            mainPot.Empty();
+            queue.Clear();
+            queue.AddPlayer(jack);
         }
 
         [TestMethod]

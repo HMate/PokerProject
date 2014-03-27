@@ -79,7 +79,13 @@ namespace PokerProject.PokerGame.PlayerClasses
         public void PostBlind()
         {
             Table table = Table.Instance;
+            string position = table.Positions.GetPlayerPosition(this);
             int blindAmount = table.GetBlind();
+
+            if (position.Equals("Small Blind"))
+            {
+                blindAmount /= 2;
+            }
 
             Pot mainPot = Table.Instance.MainPot;
             if (chips < blindAmount)

@@ -10,7 +10,7 @@ namespace PokerUnitTest
         Table table = Table.Instance;
 
         [TestMethod]
-        public void RuleSetBlindTest()
+        public void TableSetBlindTest()
         {
             for (int i = 0; i < 500; i += 50)
             {
@@ -21,13 +21,13 @@ namespace PokerUnitTest
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void RuleSetInvalidBlindTest()
+        public void TableSetInvalidBlindTest()
         {
             table.SetBlind(-20);
         }
 
         [TestMethod]
-        public void RulesResetTest()
+        public void TableResetBlindTest()
         {
             table.SetBlind(50);
             table.Reset();

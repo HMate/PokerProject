@@ -12,6 +12,21 @@ namespace PokerProject.PokerGame.PlayerClasses
         Player smallBlind = null;
         Player bigBlind = null;
 
+        public void ResetPositions()
+        {
+            dealer = null;
+            smallBlind = null;
+            bigBlind = null;
+        }
+
+        /*
+         * Method for setting the positions for playing the next hand
+         * */
+        public void SetNextHandPositions()
+        {
+            SetDealer(smallBlind);
+        }
+
         public void SetDealer(Player player)
         {
             PlayerQueue players = Table.Instance.Players;
@@ -26,12 +41,23 @@ namespace PokerProject.PokerGame.PlayerClasses
 
         public void SetSmallBlind(Player player)
         {
-
+            PlayerQueue players = Table.Instance.Players;
+            if (!players.GetPlayers().Contains(player))
+            {
+                throw new ArgumentException("Player doesn't exist in the player list!");
+            }
+            smallBlind = player;
+            bigBlind = players.GetNextPlayerAfterPlayer(smallBlind);
         }
 
         public void SetBigBlind(Player player)
         {
-
+            PlayerQueue players = Table.Instance.Players;
+            if (!players.GetPlayers().Contains(player))
+            {
+                throw new ArgumentException("Player doesn't exist in the player list!");
+            }
+            bigBlind = player;
         }
 
         public Player GetDealer()
@@ -77,5 +103,6 @@ namespace PokerProject.PokerGame.PlayerClasses
             }
             return "Default";
         }
+
     }
 }

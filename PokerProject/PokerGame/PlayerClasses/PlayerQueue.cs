@@ -128,13 +128,5 @@ namespace PokerProject.PokerGame.PlayerClasses
         {
             SetPlayerFirstInOrder(Table.Instance.Positions.GetSmallBlind());
         }
-
-        public void SetNextHandOrder()
-        {
-            PlayerPositions positions = Table.Instance.Positions;
-            positions.SetDealer(positions.GetSmallBlind());
-            SetPlayerFirstInOrder(positions.GetSmallBlind());
-        }
-
     }
 }
