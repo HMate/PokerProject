@@ -38,8 +38,7 @@ namespace PokerUnitTest
         {
             playerQueue.Clear();
 
-            List<Player> list = playerQueue.GetPlayers();
-            Assert.AreEqual(0, list.Count);
+            Assert.AreEqual(0, playerQueue.Count());
         }
 
         [TestMethod]
@@ -78,17 +77,23 @@ namespace PokerUnitTest
             }
         }
 
+        /*
+         * Tests getNextPlayer method for playerQueue
+         * */
         [TestMethod]
         public void PlayerQueueGetNextPlayerTest()
         {
-            Player nextPlayer;
             foreach (Player player in testPlayers)
             {
-                nextPlayer = playerQueue.GetNextPlayer();
+                Player nextPlayer = playerQueue.GetNextPlayer();
                 Assert.AreEqual(player.Name, nextPlayer.Name);
             }
         }
 
+        /*
+         * If you try to set a player the first in the who isn't in the queue,
+         * the queue will throw an exception.
+         * */
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void PlayerQueueSetFirstPlayerWrongTest()

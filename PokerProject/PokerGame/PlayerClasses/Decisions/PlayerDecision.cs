@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PokerProject.PokerGame.PlayerClasses
+namespace PokerProject.PokerGame.PlayerClasses.Decisions
 {
-    public interface PlayerController
+    public interface PlayerDecision
     {
-        void MakeDecision();
+        void ExecuteDecision();
     }
 }

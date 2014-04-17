@@ -97,10 +97,16 @@ namespace PokerProject.PokerGame
             blindAmount = amount;
         }
 
-        public int GetBlind()
+        public int GetBigBlind()
         {
             return blindAmount;
         }
+
+        public int GetSmallBlind()
+        {
+            return blindAmount / 2;
+        }
+
 
         public void Reset()
         {

@@ -14,6 +14,9 @@ namespace PokerUnitTest
         Player jack;
         CardDeck deck;
 
+        /*
+         * Initializes before every test.
+         * */
         [TestInitialize]
         public void SetUp()
         {
@@ -21,6 +24,9 @@ namespace PokerUnitTest
             deck = new CardDeck();
         }
 
+        /*
+         * Test if the Players name matches what he was given.
+         * */
         [TestMethod]
         public void PlayerNamingTest()
         {
@@ -29,27 +35,42 @@ namespace PokerUnitTest
             Assert.AreEqual(name, jack.Name);
         }
 
+        /*
+         * Test for copying a player with constructor.
+         * A copy of a palyer should have the same name and chips, and have the same cards.
+         * */
         [TestMethod]
         public void PlayerCopyConstructorTest()
         {
-           Player jackCopy = new Player(jack);
-           CardList jacksCardList = jack.ShowCards();
-           CardList jackCopysCardList = jackCopy.ShowCards();
+            jack.DrawCard(deck.DealOneCard());
+            Player jackCopy = new Player(jack);
 
-           Assert.AreEqual(jack.Name, jackCopy.Name);
-           Assert.AreEqual(jack.ChipCount, jackCopy.ChipCount);
-           Assert.AreNotSame(jack, jackCopy);
+            AssertTwoPlayersAreEqual(jack, jackCopy);
         }
 
+        /*
+         * Test for copying a player with Clone method
+         * */
         [TestMethod]
-        public void PlayerHumanCopyTest()
+        public void PlayerCopyWithCloneMethodTest()
         {
-            Player otherPlayer = jack.Clone();
+            jack.DrawCard(deck.DealOneCard());
+            Player jackCopy = jack.Clone();
 
-            Assert.AreEqual(jack.Name, otherPlayer.Name);
-            Assert.AreNotSame(jack, otherPlayer);
+            AssertTwoPlayersAreEqual(jack, jackCopy);
         }
 
+        private void AssertTwoPlayersAreEqual(Player player, Player playerCopy)
+        {
+            Assert.AreEqual(player.Name, playerCopy.Name);
+            Assert.AreEqual(player.ChipCount, playerCopy.ChipCount);
+            Assert.AreEqual(player.ShowCards(), playerCopy.ShowCards());
+            Assert.AreNotSame(player, playerCopy);
+        }
+
+        /*
+         * Tests the players draw card method in general.
+         * */
         [TestMethod]
         public void PlayerDrawCardsTest()
         {
@@ -62,10 +83,10 @@ namespace PokerUnitTest
             Assert.AreNotEqual(cards.ElementAt(0)  , cards.ElementAt(1));
         }
 
-        [TestMethod]
         /*
          * Test for checking players get those cards what they've been dealt.
          * */
+        [TestMethod]
         public void PlayerDrawPredefinedCardsTest()
         {
             PokerCard card1 = new PokerCard(CardRank.Five, CardSuite.Hearts);
@@ -78,6 +99,9 @@ namespace PokerUnitTest
             Assert.AreEqual(cardList.ElementAt(1), card2);
         }
 
+        /*
+         * Tests that players get different cards from a deck.
+         * */
         [TestMethod]
         public void PlayersGetDifferentCardsTest()
         {
@@ -96,6 +120,9 @@ namespace PokerUnitTest
             Assert.AreNotEqual(bensCards.ElementAt(1), jacksCards.ElementAt(1));
         }
 
+        /*
+         * Tests that a player folds his cards.
+         * */
         [TestMethod]
         public void PlayerFoldCardsTest()
         {
@@ -108,6 +135,9 @@ namespace PokerUnitTest
             Assert.AreEqual(0, cards.Count);
         }
 
+        /*
+         * Test if a player has the right amount of chips, after increasing it.
+         * */
         [TestMethod]
         public void PlayerChipCountTest()
         {
@@ -130,6 +160,9 @@ namespace PokerUnitTest
             Assert.AreEqual(700, jack.ChipCount);
         }
 
+        /*
+         * Player throws an exception if you try to take away more chips from him than the amount he has.
+         * */
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void PlayerTakeAwayTooMuchChipsTest()
@@ -159,13 +192,15 @@ namespace PokerUnitTest
             jack.DecreaseChipCount(-400);
         }
 
+        /*
+         * Tests if the player can post a blind.
+         * */
         [TestMethod]
         public void PlayerPostBigBlindTest()
         {
             Table table = Table.Instance;
             SetTableForTest();
-            Player testPlayer = table.Players.GetNextPlayer();
-            table.Positions.SetBigBlind(testPlayer);
+            Player testPlayer = GetPlayerAtPosition("Big Blind");
 
             table.SetBlind(50);
             testPlayer.ChipCount = 100;
@@ -173,13 +208,15 @@ namespace PokerUnitTest
             Assert.AreEqual(50, table.MainPot.Size);
         }
 
+        /*
+         * Tests if palyer posts small blind if he is the small blind.
+         * */
         [TestMethod]
         public void PlayerPostSmallBlindTest()
         {
             Table table = Table.Instance;
             SetTableForTest();
-            Player testPlayer = table.Players.GetNextPlayer();
-            table.Positions.SetSmallBlind(testPlayer);
+            Player testPlayer = GetPlayerAtPosition("Small Blind");
 
             table.SetBlind(200);
             testPlayer.ChipCount = 1000;
@@ -187,13 +224,15 @@ namespace PokerUnitTest
             Assert.AreEqual(100, table.MainPot.Size);
         }
 
+        /*
+         * If player have less chips than the blind, he posts all of his chips.
+         * */
         [TestMethod]
         public void PlayerHaveLessThanBlindTest()
         {
             Table table = Table.Instance;
             SetTableForTest();
-            Player testPlayer = table.Players.GetNextPlayer();
-            table.Positions.SetBigBlind(testPlayer);
+            Player testPlayer = GetPlayerAtPosition("Big Blind");
 
             table.SetBlind(100);
             testPlayer.ChipCount = 80;
@@ -201,13 +240,15 @@ namespace PokerUnitTest
             Assert.AreEqual(80, table.MainPot.Size);
         }
 
+        /*
+         * A player should lose chips when he posts a blind.
+         * */
         [TestMethod]
         public void PlayerLoseChipsForPostingBlindTest()
         {
             Table table = Table.Instance;
             SetTableForTest();
-            Player testPlayer = table.Players.GetNextPlayer();
-            table.Positions.SetBigBlind(testPlayer);
+            Player testPlayer = GetPlayerAtPosition("Big Blind");
 
             table.SetBlind(150);
             jack.ChipCount = 90;
@@ -217,6 +258,9 @@ namespace PokerUnitTest
             Assert.AreEqual(90, table.MainPot.Size, "PostBlind should have done nothing here");
         }
 
+        /*
+         * Resets the table for other test methods, and puts the default test player among the players.
+         * */
         private void SetTableForTest()
         {
             Table table = Table.Instance;
@@ -229,6 +273,22 @@ namespace PokerUnitTest
             queue.AddPlayer(jack);
         }
 
+        private Player GetPlayerAtPosition(String blindPosition)
+        {
+            Table table = Table.Instance;
+
+            Player testPlayer = table.Players.GetNextPlayer();
+            if (blindPosition.Equals("Big Blind"))
+            {
+                table.Positions.SetBigBlind(testPlayer);
+            }
+            else
+            {
+                table.Positions.SetSmallBlind(testPlayer);
+            }
+            return testPlayer;
+        }
+
         [TestMethod]
         public void PlayerSetIngameTest()
         {
@@ -238,6 +298,9 @@ namespace PokerUnitTest
             Assert.AreEqual(false, jack.IsIngame());
         }
 
+        /*
+         * Testing player's Bet() method
+         * */
         [TestMethod]
         public void PlayerBetTest()
         {
@@ -255,6 +318,10 @@ namespace PokerUnitTest
             }
         }
 
+        /*
+         * Testing if a player bets too much.
+         * Should throw an exception.
+         * */
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void PlayerBetTooMuchTest()
@@ -270,12 +337,13 @@ namespace PokerUnitTest
             {
                 jack.Bet(betAmount);
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException)
             {
                 //If player didn't have enough chips then the Pot size shouldn't change.
                 Assert.AreEqual(0, mainPot.Size);
                 Assert.AreEqual(100, jack.ChipCount);
-                throw e;
+                //throw again as we shouldn't reach the part after the catch block
+                throw;
             }
             
         }

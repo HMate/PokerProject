@@ -72,11 +72,13 @@
     <Compile Include="PokerGame\CardClasses\CardDeckEmptyException.cs" />
     <Compile Include="PokerGame\CardClasses\CardRank.cs" />
     <Compile Include="PokerGame\CardClasses\CardSuite.cs" />
-    <Compile Include="PokerGame\PlayerClasses\HumanController.cs" />
+    <Compile Include="PokerGame\PlayerClasses\Decisions\BetDecision.cs" />
+    <Compile Include="PokerGame\PlayerClasses\PlayerAIs\HumanController.cs" />
     <Compile Include="PokerGame\PlayerClasses\Player.cs" />
     <Compile Include="PokerGame\CardClasses\PokerCard.cs" />
     <Compile Include="PokerGame\Game.cs" />
-    <Compile Include="PokerGame\PlayerClasses\PlayerController.cs" />
+    <Compile Include="PokerGame\PlayerClasses\PlayerAIs\PlayerController.cs" />
+    <Compile Include="PokerGame\PlayerClasses\Decisions\PlayerDecision.cs" />
     <Compile Include="PokerGame\PlayerClasses\PlayerQueue.cs" />
     <Compile Include="PokerGame\Pot.cs" />
     <Compile Include="PokerGame\PlayerClasses\PlayerPositions.cs" />

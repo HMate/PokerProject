@@ -14,10 +14,10 @@ namespace PokerUnitTest
         List<Player> testPlayers;
         PlayerPositions positions;
 
-        [TestInitialize]
         /*
          * Put test players in the queue.
          * */
+        [TestInitialize]
         public void SetUp()
         {
             positions = Table.Instance.Positions;
@@ -25,6 +25,7 @@ namespace PokerUnitTest
             testQueue = Table.Instance.Players;
             testQueue.Clear();
 
+            //Adding the players to the game
             testPlayers = new List<Player>();
             testPlayers.Add(new Player("Jack"));
             testPlayers.Add(new Player("Jill"));
@@ -36,6 +37,9 @@ namespace PokerUnitTest
             testQueue.AddPlayers(testPlayers);
         }
 
+        /*
+         * Tests for setting somebody as a dealer.
+         * */
         [TestMethod]
         public void PlayerPositionSetGetDealerTest()
         {
@@ -60,11 +64,11 @@ namespace PokerUnitTest
             }
         }
 
-        [TestMethod]
         /*
          * Test for asking for the players' positions
          * Only works well with at least 3 people in the game!
          * */
+        [TestMethod]
         public void PlayerPositionGetPlayerPositionTest()
         {
             Player dealer = testQueue.GetNextPlayer();
@@ -73,16 +77,43 @@ namespace PokerUnitTest
 
             positions.SetDealer(dealer);
 
-            Assert.AreEqual("Dealer", positions.GetPlayerPosition(dealer));
-            Assert.AreEqual("Small Blind", positions.GetPlayerPosition(smallBlind));
-            Assert.AreEqual("Big Blind", positions.GetPlayerPosition(bigBlind));
+            Assert.AreEqual("Dealer", positions.GetPlayerPosition(dealer), "Dealers has wrong position");
+            Assert.AreEqual("Small Blind", positions.GetPlayerPosition(smallBlind), "Small Blind has wrong position");
+            Assert.AreEqual("Big Blind", positions.GetPlayerPosition(bigBlind), "Big Blind has wrong position");
         }
 
+        /*
+         * Test for getting positions if there are only 2 players in game.
+         * */
         [TestMethod]
+        public void PlayerPositionGetPlayerPositionForTwoPlayersTest()
+        {
+            SetQueueForTwoPlayers();
+
+            Player dealer = testQueue.GetNextPlayer();
+            Player smallBlind = testQueue.GetNextPlayerAfterPlayer(dealer);
+            Player bigBlind = testQueue.GetNextPlayerAfterPlayer(smallBlind);
+
+            positions.SetDealer(dealer);
+
+            Assert.AreEqual("Dealer", positions.GetPlayerPosition(dealer), "Dealers has wrong position");
+            Assert.AreEqual("Small Blind", positions.GetPlayerPosition(smallBlind), "Small Blind has wrong position");
+            Assert.AreEqual("Dealer", positions.GetPlayerPosition(bigBlind), "Big Blind has wrong position");
+            Assert.AreSame(dealer, bigBlind);
+        }
+
+        private void SetQueueForTwoPlayers()
+        {
+            testQueue.Clear();
+            testQueue.AddPlayer(testPlayers[0]);
+            testQueue.AddPlayer(testPlayers[1]);
+        }
+
         /*
          * Test for setting the players' positions for the next hand
          * Only works well with at least 3 people in the game!
          * */
+        [TestMethod]
         public void PlayerPositionSetNextHandPositionsTest()
         {
             Player dealer = testQueue.GetNextPlayer();
@@ -94,9 +125,10 @@ namespace PokerUnitTest
             Assert.AreEqual("Small Blind", positions.GetPlayerPosition(smallBlind));
 
             positions.SetNextHandPositions();
-            Assert.AreEqual("Dealer", positions.GetPlayerPosition(smallBlind));
-            Assert.AreEqual("Small Blind", positions.GetPlayerPosition(bigBlind));
-            Assert.AreEqual("Big Blind", positions.GetPlayerPosition(nextBigBlind));
+            Assert.AreEqual("Dealer", positions.GetPlayerPosition(smallBlind), "Dealers has wrong position");
+            Assert.AreEqual("Small Blind", positions.GetPlayerPosition(bigBlind), "Small Blind has wrong position");
+            Assert.AreEqual("Big Blind", positions.GetPlayerPosition(nextBigBlind), "Big Blind has wrong position");
         }
+
     }
 }

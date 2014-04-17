@@ -35,6 +35,10 @@ namespace PokerProject.PokerGame.PlayerClasses
                 throw new ArgumentException("Player doesn't exist in the player list!");
             }
             dealer = player;
+            if (IsThereOnlyOnePlayer())
+            {
+                return;
+            }
             smallBlind = players.GetNextPlayerAfterPlayer(dealer);
             bigBlind = players.GetNextPlayerAfterPlayer(smallBlind);
         }
@@ -47,6 +51,10 @@ namespace PokerProject.PokerGame.PlayerClasses
                 throw new ArgumentException("Player doesn't exist in the player list!");
             }
             smallBlind = player;
+            if (IsThereOnlyOnePlayer())
+            {
+                return;
+            }
             bigBlind = players.GetNextPlayerAfterPlayer(smallBlind);
         }
 
@@ -58,6 +66,11 @@ namespace PokerProject.PokerGame.PlayerClasses
                 throw new ArgumentException("Player doesn't exist in the player list!");
             }
             bigBlind = player;
+        }
+
+        private bool IsThereOnlyOnePlayer()
+        {
+            return (Table.Instance.Players.Count() == 1);
         }
 
         public Player GetDealer()
@@ -89,10 +102,12 @@ namespace PokerProject.PokerGame.PlayerClasses
 
         public String GetPlayerPosition(Player player)
         {
+            
+            
             if (player.Equals(dealer))
             {
                 return "Dealer";
-            }
+            } 
             if (player.Equals(smallBlind))
             {
                 return "Small Blind";

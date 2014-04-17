@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PokerProject.PokerGame.CardClasses;
+using PokerProject.PokerGame.PlayerClasses.Decisions;
+using PokerProject.PokerGame.PlayerClasses.PlayerAIs;
 
 namespace PokerProject.PokerGame.PlayerClasses
 {
@@ -12,23 +14,19 @@ namespace PokerProject.PokerGame.PlayerClasses
         
         private CardList cards;
         private int chips;
+        private int betThisPhase;
         private string name;
         private PlayerController controller;
         private bool ingame = false;
-
-        public Player(Player player)
-        {
-            chips = player.ChipCount;
-            cards = new CardList(player.ShowCards());
-            name = player.Name;
-            this.controller = player.controller;
-        }
 
         public Player(string name, PlayerController controller)
         {
             this.name = name;
             this.controller = controller;
+            this.controller.SetPlayer(this);
             this.cards = new CardList();
+            this.chips = 0;
+            this.betThisPhase = 0;
         }
 
         public Player(PlayerController controller) :this("Anonymous", controller)
@@ -44,6 +42,16 @@ namespace PokerProject.PokerGame.PlayerClasses
         public Player() :this("Anonymous",new HumanController())
         {
 
+        }
+
+        public Player(Player player)
+        {
+            name = player.Name;
+            this.controller = player.controller.Clone();
+            this.controller.SetPlayer(this);
+            cards = new CardList(player.ShowCards());
+            chips = player.ChipCount;
+            betThisPhase = player.betThisPhase;
         }
 
         public string Name
@@ -71,29 +79,60 @@ namespace PokerProject.PokerGame.PlayerClasses
             }
         }
 
+        /*
+         * This is the method where the palyer decides what to do when he comes in the game.
+         * The PlayerController's job, to decide this, here we just make sure that its a legal move.
+         * */
+        public void MakeDecision()
+        {
+            bool legalMove = false;
+
+            while (!legalMove)
+            {
+                try
+                {
+                    PlayerDecision decision = controller.MakeDecision();
+                    decision.ExecuteDecision();
+                    if (IsLegalMove())
+                    {
+                        legalMove = true;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Problem during player " + name + "'s move!");
+                    Console.WriteLine(e.Message+ " - " + e.Data);
+                    Console.WriteLine(e.StackTrace);
+                }
+            }
+        }
+
+        private bool IsLegalMove()
+        {
+            return (betThisPhase == Table.Instance.MainPot.LargestBet || IsIngame() == false);
+        }
+
         /*Method for posting the blind at the start of a turn.
          * First the player checks whether he is the small or the big blind.
-         * Then the palyer posts the correct amount to the main pot.
-         * 
+         * Then the player posts the correct amount to the main pot.
          * */
         public void PostBlind()
         {
             Table table = Table.Instance;
             string position = table.Positions.GetPlayerPosition(this);
-            int blindAmount = table.GetBlind();
+            int blindAmount = table.GetBigBlind();
 
             if (position.Equals("Small Blind"))
             {
                 blindAmount /= 2;
             }
-
-            Pot mainPot = Table.Instance.MainPot;
+            
             if (chips < blindAmount)
             {
                 blindAmount = chips;
             }
-            mainPot.PlaceBet(blindAmount);
-            DecreaseChipCount(blindAmount);
+
+            Bet(blindAmount);
         }
 
         /*
@@ -105,6 +144,7 @@ namespace PokerProject.PokerGame.PlayerClasses
         {
             Pot mainPot = Table.Instance.MainPot;
             DecreaseChipCount(amount);
+            betThisPhase += amount;
             mainPot.PlaceBet(amount);
         }
 
@@ -122,7 +162,6 @@ namespace PokerProject.PokerGame.PlayerClasses
             }
             chips -= value;
         }
-
 
         public void IncreaseChipCount(int value)
         {
@@ -153,6 +192,9 @@ namespace PokerProject.PokerGame.PlayerClasses
         public void FoldCards()
         {
             cards.Clear();
+            //When player folds, he also leaves the game, so forget his bets for this turn.
+            betThisPhase = 0;
+            SetIngame(false);
         }
 
         public Player Clone()
@@ -169,5 +211,6 @@ namespace PokerProject.PokerGame.PlayerClasses
         {
             return ingame;
         }
+
     }
 }

@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace PokerProject.PokerGame.CardClasses
 {
-    public class CardList : List<PokerCard>
+    /*
+     * Clas for containing Cards in a Collection.
+     * Cannot contain the same card twice.
+     * */
+    public class CardList : List<PokerCard>, IEquatable<CardList>
     {
 
         public CardList() : base()
@@ -41,6 +45,29 @@ namespace PokerProject.PokerGame.CardClasses
                 }
             }
             return containCard;
+        }
+
+        public override bool Equals(object obj)
+        {
+            CardList otherList = obj as CardList;
+            if (otherList == null) return false;
+            return this.Equals(otherList);
+        }
+
+        public bool Equals(CardList otherList)
+        {
+            bool equal = true;
+            int index = 0;
+            while (equal && index < Count)
+            {
+                if (! otherList.ElementAt(index).Equals(this.ElementAt(index)))
+                {
+                    equal = false;
+                }
+                index++;
+            }
+
+            return equal;
         }
 
     }

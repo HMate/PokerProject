@@ -16,6 +16,9 @@ namespace PokerUnitTest
             list = new CardList();
         }
 
+        /*
+         * A cardList can't contain the same card twice or more.
+         * */
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void ListContainsUniqueCardsTest()
@@ -24,6 +27,9 @@ namespace PokerUnitTest
             list.Add(new PokerCard());
         }
 
+        /*
+         * A cardList contains the cards in the same order as they are given to it.
+         * */
         [TestMethod]
         public void ListContainsCardsTest()
         {
@@ -37,6 +43,9 @@ namespace PokerUnitTest
             }
         }
 
+        /*
+         * Only the copy of the cards are given to the list, not the card itself.
+         * */
         [TestMethod]
         public void ListDontContainReference()
         {
@@ -52,6 +61,10 @@ namespace PokerUnitTest
             }
         }
 
+        /*
+         * Copy constructor test.
+         * Only the copy of the cards are given to the copied list.
+         * */
         [TestMethod]
         public void ListCreateFromAnotherList()
         {
@@ -68,6 +81,22 @@ namespace PokerUnitTest
             }
         }
 
+        /*
+         * The two lists should be equal if they contain the same cards.
+         * */
+        [TestMethod]
+        public void ListEqualTest()
+        {
+            CreateReferenceCardsAndAddThemToList(new PokerCard[52]);
+            CardList secondList = new CardList(list);
+
+            Assert.AreEqual(list, secondList);
+        }
+
+        /*
+         * Helper method for tests.
+         * Fills up a card array with cards.
+         * */
         private void CreateReferenceCardsAndAddThemToList(PokerCard[] referenceCards)
         {
             int index = 0;
