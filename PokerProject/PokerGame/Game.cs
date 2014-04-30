@@ -90,7 +90,7 @@ namespace PokerProject.PokerGame
         private void SetupTurn()
         {
             //Put everybody back to the game
-            foreach (Player player in players.GetPlayers())
+            foreach (Player player in players.GetPlayersList())
             {
                 player.SetIngame(true);
             }
@@ -161,7 +161,7 @@ namespace PokerProject.PokerGame
         private bool IsTurnEnd()
         {
             int activePlayers = 0;
-            foreach (Player player in players.GetPlayers())
+            foreach (Player player in players.GetPlayersList())
             {
                 if (player.IsIngame())
                 {
@@ -176,6 +176,7 @@ namespace PokerProject.PokerGame
             /*
              * TODO
              * */
+            
         }
 
 

@@ -30,7 +30,7 @@ namespace PokerProject.PokerGame.PlayerClasses
         public void SetDealer(Player player)
         {
             PlayerQueue players = Table.Instance.Players;
-            if (!players.GetPlayers().Contains(player))
+            if (!players.GetPlayersList().Contains(player))
             {
                 throw new ArgumentException("Player doesn't exist in the player list!");
             }
@@ -46,7 +46,7 @@ namespace PokerProject.PokerGame.PlayerClasses
         public void SetSmallBlind(Player player)
         {
             PlayerQueue players = Table.Instance.Players;
-            if (!players.GetPlayers().Contains(player))
+            if (!players.GetPlayersList().Contains(player))
             {
                 throw new ArgumentException("Player doesn't exist in the player list!");
             }
@@ -61,7 +61,7 @@ namespace PokerProject.PokerGame.PlayerClasses
         public void SetBigBlind(Player player)
         {
             PlayerQueue players = Table.Instance.Players;
-            if (!players.GetPlayers().Contains(player))
+            if (!players.GetPlayersList().Contains(player))
             {
                 throw new ArgumentException("Player doesn't exist in the player list!");
             }

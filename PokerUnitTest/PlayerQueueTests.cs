@@ -51,7 +51,7 @@ namespace PokerUnitTest
             Player jack = new Player("Jack");
 
             playerQueue.AddPlayer(jack);
-            ICollection<Player> testedPlayerList = playerQueue.GetPlayers();
+            ICollection<Player> testedPlayerList = playerQueue.GetPlayersList();
 
             Assert.AreEqual(1, testedPlayerList.Count);
             Assert.AreEqual(jack.Name, testedPlayerList.ElementAt(0).Name);
@@ -65,7 +65,7 @@ namespace PokerUnitTest
          * */
         public void PlayerQueueAddPlayerListTest()
         {
-            ICollection<Player> testedPlayerList = playerQueue.GetPlayers();
+            ICollection<Player> testedPlayerList = playerQueue.GetPlayersList();
 
             Assert.AreEqual(testPlayers.Count, testedPlayerList.Count);
             int index = 0;
@@ -104,7 +104,7 @@ namespace PokerUnitTest
         [TestMethod]
         public void PlayerQueueGetNextPlayerAfterPlayerTest()
         {
-            ICollection<Player> testPlayerList = playerQueue.GetPlayers();
+            ICollection<Player> testPlayerList = playerQueue.GetPlayersList();
 
             for (int testIndex = 0; testIndex < testPlayers.Count - 1; testIndex++)
             {
@@ -127,7 +127,7 @@ namespace PokerUnitTest
             const int beginningIndex = 3;
             int testIndex = beginningIndex;
 
-            playerQueue.SetPlayerFirstInOrder(playerQueue.GetPlayers().ElementAt(testIndex));
+            playerQueue.SetPlayerFirstInOrder(playerQueue.GetPlayersList().ElementAt(testIndex));
             int finalIndex = IterateThroughQueueAndAssertIndexes(testIndex);
 
             Assert.AreEqual(beginningIndex, finalIndex);
@@ -162,7 +162,7 @@ namespace PokerUnitTest
          * */
         private void SetDealerByIndex(int testIndex)
         {
-            Player firstDealer = playerQueue.GetPlayers().ElementAt(testIndex);
+            Player firstDealer = playerQueue.GetPlayersList().ElementAt(testIndex);
             Table.Instance.Positions.ResetPositions();
             Table.Instance.Positions.SetDealer(firstDealer);
         }
@@ -204,7 +204,7 @@ namespace PokerUnitTest
             playerQueue.AddPlayer(new Player("Jack"));
             playerQueue.AddPlayer(new Player("Bob"));
 
-            List<Player> list = playerQueue.GetPlayers();
+            List<Player> list = playerQueue.GetPlayersList();
 
             Assert.AreEqual("Jack",list.ElementAt(0).Name);
 

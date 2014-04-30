@@ -146,7 +146,7 @@ namespace PokerProject.PokerGame.PlayerClasses
             return list.Count;
         }
 
-        public List<Player> GetPlayers()
+        public List<Player> GetPlayersList()
         {
             return list;
         }

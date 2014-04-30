@@ -26,12 +26,6 @@ namespace PokerUnitTest
             Assert.AreEqual(CardRank.King, testedRank );
             Assert.AreEqual(CardSuite.Clubs, testedSuite);
 
-            PokerCard card2 = new PokerCard(0, 0);
-            testedSuite = card2.Suite;
-            testedRank = card2.Rank;
-
-            Assert.AreEqual(CardRank.Ace, testedRank);
-            Assert.AreEqual(CardSuite.Hearts, testedSuite);
         }
 
         [TestMethod]
