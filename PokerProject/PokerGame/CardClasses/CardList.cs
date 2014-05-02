@@ -29,7 +29,7 @@ namespace PokerProject.PokerGame.CardClasses
         {
             if (ContainsThisCard(card))
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException(String.Format("Card list already contains this card: {0}, {1}",card.Rank, card.Suite));
             }
             base.Add(new PokerCard(card));
         }
@@ -68,6 +68,37 @@ namespace PokerProject.PokerGame.CardClasses
             }
 
             return equal;
+        }
+
+
+        public CardRank GetBiggestRank()
+        {
+            CardRank biggestRank = CardRank.Two;
+
+            foreach (PokerCard card in this)
+            {
+                if (biggestRank < card.Rank)
+                {
+                    biggestRank = card.Rank;
+                }
+            }
+
+            return biggestRank;
+        }
+
+        public CardRank GetSmallestRank()
+        {
+            CardRank smallestRank = CardRank.Ace;
+
+            foreach (PokerCard card in this)
+            {
+                if (smallestRank > card.Rank)
+                {
+                    smallestRank = card.Rank;
+                }
+            }
+
+            return smallestRank;
         }
 
     }

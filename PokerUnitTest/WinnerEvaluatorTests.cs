@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PokerProject.PokerGame;
-using PokerProject.PokerGame.PlayerClasses;
 using System.Collections.Generic;
 using System.Linq;
+using PokerProject.PokerGame;
+using PokerProject.PokerGame.PlayerClasses;
 using PokerProject.PokerGame.CardClasses;
 
 namespace PokerUnitTest

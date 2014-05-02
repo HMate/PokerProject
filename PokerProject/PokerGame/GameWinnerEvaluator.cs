@@ -18,7 +18,7 @@ namespace PokerProject.PokerGame
                 CardList playerCards = player.ShowCards();
             }
 
-            return new Player(new Player("Jack"));
+            return new Player("Jack");
         }
 
     }

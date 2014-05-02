@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PokerProject.PokerGame.CardClasses
 {
-    public class PokerCard : IEquatable<PokerCard>
+    public class PokerCard : IEquatable<PokerCard>, IComparable<PokerCard>
     {
         private CardRank rank;
         private CardSuite suite;
@@ -68,6 +68,16 @@ namespace PokerProject.PokerGame.CardClasses
             return true;
         }
 
+        public int CompareTo(PokerCard otherCard)
+        {
+            if (otherCard == null)
+            {
+                return 1;
+            }
+
+            return (this.HasSameRank(otherCard) ? 0 : ( (this.Rank > otherCard.Rank) ? 1 : -1) );
+        }
+
         public bool HasSameRank(PokerCard otherCard)
         {
             if (otherCard == null)
@@ -94,6 +104,28 @@ namespace PokerProject.PokerGame.CardClasses
             return false;
         }
 
+        public static IComparer<PokerCard> GetCardComparer()
+        {
+            return (IComparer<PokerCard>) new PokerCardComparer();
+        }
+
+        private class PokerCardComparer : IComparer<PokerCard>
+        {
+            int IComparer<PokerCard>.Compare(PokerCard first, PokerCard second)
+            {
+                if (first == null)
+                {
+                    if (second == null)
+                    {
+                        return 0;
+                    }
+
+                    return -1;
+                }
+
+                return first.CompareTo(second);
+            }
+        }
 
     }
 }

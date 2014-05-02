@@ -110,5 +110,29 @@ namespace PokerUnitTest
                 }
             }
         }
+
+        [TestMethod]
+        public void ListSortTest()
+        {
+            CardList list = new CardList();
+            PokerCard card1 = new PokerCard(CardRank.Three, CardSuite.Diamonds);
+            PokerCard card2 = new PokerCard(CardRank.Six, CardSuite.Diamonds);
+            PokerCard card3 = new PokerCard(CardRank.Seven, CardSuite.Spades);
+            PokerCard card4 = new PokerCard(CardRank.Ten, CardSuite.Hearts);
+            PokerCard card5 = new PokerCard(CardRank.Queen, CardSuite.Diamonds);
+            list.Add(card3);
+            list.Add(card2);
+            list.Add(card4);
+            list.Add(card5);
+            list.Add(card1);
+
+            list.Sort(PokerCard.GetCardComparer());
+
+            Assert.AreEqual(card1, list[0], "Cards don't match at index 0: {0}, {1}", list[0].Rank, list[0].Suite);
+            Assert.AreEqual(card2, list[1], "Cards don't match at index 1: {0}, {1}", list[1].Rank, list[1].Suite);
+            Assert.AreEqual(card3, list[2], "Cards don't match at index 2: {0}, {1}", list[2].Rank, list[2].Suite);
+            Assert.AreEqual(card4, list[3], "Cards don't match at index 3: {0}, {1}", list[3].Rank, list[3].Suite);
+            Assert.AreEqual(card5, list[4], "Cards don't match at index 4: {0}, {1}", list[4].Rank, list[4].Suite);
+        }
     }
 }

@@ -24,8 +24,6 @@ namespace PokerUnitTest
             cards.Add(new PokerCard(CardRank.Eight, CardSuite.Spades));
             cards.Add(new PokerCard(CardRank.King, CardSuite.Clubs));
 
-            CardList bestHand = evaluator.DetermineBestHand(cards);
-
             //best hand: 2C, 2H, 7S, 8S, KC
             CardList expectedBestHand = new CardList();
             expectedBestHand.Add(new PokerCard(CardRank.Two, CardSuite.Clubs));
@@ -33,6 +31,8 @@ namespace PokerUnitTest
             expectedBestHand.Add(new PokerCard(CardRank.Seven, CardSuite.Spades));
             expectedBestHand.Add(new PokerCard(CardRank.Eight, CardSuite.Spades));
             expectedBestHand.Add(new PokerCard(CardRank.King, CardSuite.Clubs));
+
+            CardList bestHand = evaluator.DetermineBestHand(cards);
 
             Assert.AreEqual(expectedBestHand, bestHand);
 
