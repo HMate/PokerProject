@@ -65,6 +65,9 @@ namespace PokerProject.PokerGame
             }
         }
 
+        /// <summary>
+        /// Clears the community card pool.
+        /// </summary>
         public void ResetCommunityCards()
         {
             communityCards.Clear();
@@ -107,8 +110,10 @@ namespace PokerProject.PokerGame
             return blindAmount / 2;
         }
 
-
-        public void Reset()
+        /// <summary>
+        /// Resets the Blind to 0.
+        /// </summary>
+        public void ResetBlind()
         {
             blindAmount = 0;
         }

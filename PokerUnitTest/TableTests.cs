@@ -53,7 +53,7 @@ namespace PokerUnitTest
         public void TableResetBlindTest()
         {
             table.SetBlind(50);
-            table.Reset();
+            table.ResetBlind();
             Assert.AreEqual(0, table.GetBigBlind());
         }
     }

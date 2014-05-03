@@ -173,10 +173,30 @@ namespace PokerProject.PokerGame
 
         private void EndTurn()
         {
-            /*
-             * TODO
-             * */
-            
+            GameWinnerEvaluator gwEvaluator = new GameWinnerEvaluator();
+            gwEvaluator.DetermineWinner();
+
+            //Pay out the winner
+            Player winner = gwEvaluator.Winner;
+            Pot mainPot = table.MainPot;
+
+            winner.IncreaseChipCount(mainPot.Size);
+
+            //Delete players who doesnt have money left
+
+            List<Player> playersToRemove = new List<Player>();
+            foreach (Player player in players.GetPlayersList())
+            {
+                if (player.ChipCount <= 0)
+                {
+                    playersToRemove.Add(player);
+                }
+            }
+
+            foreach (Player player in playersToRemove)
+            {
+                players.DeletePlayer(player);
+            }
         }
 
 

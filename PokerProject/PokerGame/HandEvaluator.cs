@@ -9,29 +9,61 @@ namespace PokerProject.PokerGame
 {
     public class HandEvaluator
     {
-        IList<PokerCard> savedCards;
+        private CardList savedCards;
+        private PokerHand savedHand;
 
-        public CardList DetermineBestHand(CardList list)
+        public HandEvaluator()
         {
-            Action<IList<PokerCard>> saveBestHand = SaveHand;
-            CombinatoricsUtilities.GetCombinations<PokerCard>(list, saveBestHand, 5, false); 
-            return list;
+            savedCards = null;
+            savedHand = null;
+        }
+
+        public void DetermineBestHand(CardList list)
+        {
+            savedCards = null;
+            savedHand = null;
+            CombinatoricsUtilities.GetCombinations<PokerCard>(list, SaveHand, 5, false); 
         }
         
-        public void SaveHand(IList<PokerCard> cards)
+        private void SaveHand(IList<PokerCard> cards)
         {
-            if (SavedCardsAreWorseThan(cards))
+            CardList checkedCards = new CardList(cards);
+
+            if (SavedCardsAreWorseThan(checkedCards))
             {
-                savedCards = cards;
+                savedCards = checkedCards;
+                savedHand = new PokerHand(checkedCards);
             }
         }
 
-        private bool SavedCardsAreWorseThan(IList<PokerCard> otherCards)
+        private bool SavedCardsAreWorseThan(CardList otherCards)
         {
+            if (otherCards == null)
+            {
+                return false;
+            }
+            if (savedCards == null)
+            {
+                return true;
+            }
 
-
+            PokerHand otherHand = new PokerHand((CardList)otherCards);
+            if (savedHand < otherHand)
+            {
+                return true;
+            }
 
             return false;
+        }
+
+        public PokerHand GetBestHand()
+        {
+            return savedHand;
+        }
+
+        public CardList GetBestCards()
+        {
+            return savedCards;
         }
     }
 }

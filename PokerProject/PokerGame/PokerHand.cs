@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PokerProject.PokerGame
 {
-    public class PokerHand : IComparable<PokerHand>
+    public class PokerHand : IComparable<PokerHand>, IEquatable<PokerHand>
     {
         private HandCategory category;
         private CardRank rank;
@@ -107,7 +107,10 @@ namespace PokerProject.PokerGame
             }
         }
 
-        private bool IsStraightFlush(CardList cards)
+        /// <summary>
+        /// Checks wether the given card list matches the hand category: Straightflush
+        /// </summary>
+        public static bool IsStraightFlush(CardList cards)
         {
             bool isStraightFlush = false;
             if (IsFlush(cards))
@@ -132,7 +135,10 @@ namespace PokerProject.PokerGame
             //no kicker needed, handcategory already tells hand strenght.
         }
 
-        private bool IsPoker(CardList cards)
+        /// <summary>
+        /// Checks wether the given card list matches the hand category: Poker
+        /// </summary>
+        public static bool IsPoker(CardList cards)
         {
             bool isPoker = false;
 
@@ -169,10 +175,15 @@ namespace PokerProject.PokerGame
             FillKickersFrom(cards);
         }
 
-        private bool IsFullHouse(CardList cards)
+        /// <summary>
+        /// Checks wether the given card list matches the hand category: Full House
+        /// </summary>
+        public static bool IsFullHouse(CardList cards)
         {
             bool isFullHouse = true;
 
+            //Check for full house: Every card should have at least one pair.
+            //If a card dont have a pair, its not full house.
             foreach (PokerCard card in cards)
             {
                 bool foundPair = false;
@@ -192,8 +203,6 @@ namespace PokerProject.PokerGame
                     isFullHouse = false;
                 }
             }
-
-            kickers.Clear();
 
             return isFullHouse;
         }
@@ -230,7 +239,10 @@ namespace PokerProject.PokerGame
             //no kickers needed, ranks already tells hand strenght.
         }
 
-        private bool IsFlush(CardList cards)
+        /// <summary>
+        /// Checks wether the given card list matches the hand category: Flush
+        /// </summary>
+        public static bool IsFlush(CardList cards)
         {
             CardSuite suite = cards.ElementAt(0).Suite;
 
@@ -252,7 +264,10 @@ namespace PokerProject.PokerGame
             rank = cards.GetBiggestRank();
         }
 
-        private bool IsStraight(CardList cards)
+        /// <summary>
+        /// Checks wether the given card list matches the hand category: Straight
+        /// </summary>
+        public static bool IsStraight(CardList cards)
         {
             CardRank smallestRank = cards.GetSmallestRank();
 
@@ -285,7 +300,10 @@ namespace PokerProject.PokerGame
             //no kicker needed, handcategory already tells hand strenght.
         }
 
-        private bool IsThreeOfAKind(CardList cards)
+        /// <summary>
+        /// Checks wether the given card list matches the hand category: Three of a kind
+        /// </summary>
+        public static bool IsThreeOfAKind(CardList cards)
         {
             bool isThreeOfAKind = false;
 
@@ -326,7 +344,10 @@ namespace PokerProject.PokerGame
             FillKickersFrom(cards);
         }
 
-        private bool IsTwoPair(CardList cards)
+        /// <summary>
+        /// Checks wether the given card list matches the hand category: Two pairs
+        /// </summary>
+        public static bool IsTwoPair(CardList cards)
         {
             bool isPair = false;
             bool isTwoPair = false;
@@ -395,7 +416,10 @@ namespace PokerProject.PokerGame
 
         }
 
-        private bool IsPair(CardList cards)
+        /// <summary>
+        /// Checks wether the given card list matches the hand category: One pair
+        /// </summary>
+        public static bool IsPair(CardList cards)
         {
             bool isPair = false;
 
@@ -452,7 +476,7 @@ namespace PokerProject.PokerGame
          * */
         public int CompareTo(PokerHand other)
         {
-            if (other == null)
+            if ((object)other == null)
             {
                 return 1;
             }
@@ -506,6 +530,74 @@ namespace PokerProject.PokerGame
             }
 
             return 0;
+        }
+
+        //Operator overloading
+        public static bool operator >(PokerHand firstHand, PokerHand secondHand)
+        {
+            if ((object)firstHand == null)
+            {
+                return false;
+            }
+            if ((object)secondHand == null)
+            {
+                return true;
+            }
+            return firstHand.CompareTo(secondHand) > 0;
+        }
+
+        public static bool operator <(PokerHand firstHand, PokerHand secondHand)
+        {
+            if ((object)firstHand == null)
+            {
+                return true;
+            }
+            if ((object)secondHand == null)
+            {
+                return false;
+            }
+            return firstHand.CompareTo(secondHand) < 0;
+        }
+
+        public static bool operator ==(PokerHand firstHand, PokerHand secondHand)
+        {
+            if ((object)firstHand == null)
+            {
+                return false;
+            }
+            if ((object)secondHand == null)
+            {
+                return false;
+            }
+            return firstHand.CompareTo(secondHand) == 0;
+        }
+
+        public static bool operator !=(PokerHand firstHand, PokerHand secondHand)
+        {
+            return !(firstHand == secondHand);
+        }
+
+        public override bool Equals(object obj)
+        {
+            PokerHand otherHand = obj as PokerHand;
+            if (otherHand == null)
+            {
+                return false;
+            }
+            return this == otherHand;
+        }
+
+        public bool Equals(PokerHand otherHand)
+        {
+            return this == otherHand;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = rank.GetHashCode();
+            hash = 31 * hash + secondRank.GetHashCode();
+            hash = 31 * hash + category.GetHashCode();
+            return hash;
         }
 
 

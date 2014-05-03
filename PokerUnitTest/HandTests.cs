@@ -69,6 +69,7 @@ namespace PokerUnitTest
 
             Assert.AreEqual(PokerHand.HandCategory.TwoPair, hand.Category);
             Assert.AreEqual(CardRank.Seven, hand.Rank, "Wrong hand rank!");
+            Assert.AreEqual(CardRank.Three, hand.SecondRank, "Wrong secondary rank!");
             CollectionAssert.Contains(kickers, new PokerCard(CardRank.Ace, CardSuite.Spades));
             CollectionAssert.DoesNotContain(kickers, new PokerCard(CardRank.Three, CardSuite.Spades), "There's a card from the smaller pair among the kickers.");
             CollectionAssert.DoesNotContain(kickers, new PokerCard(CardRank.Seven, CardSuite.Diamonds), "There's a card from the bigger pair among the kickers.");
@@ -124,6 +125,7 @@ namespace PokerUnitTest
 
             Assert.AreEqual(PokerHand.HandCategory.FullHouse, hand.Category);
             Assert.AreEqual(CardRank.King, hand.Rank, "Wrong hand rank!");
+            Assert.AreEqual(CardRank.Four, hand.SecondRank, "Wrong secondary rank!");
             Assert.IsTrue(kickers.Count == 0);
         }
 
@@ -167,16 +169,21 @@ namespace PokerUnitTest
         }
 
         [TestMethod]
-        public void HandCompareTest()
+        public void HandCompareGeneralHandsTest()
         {
             CardList winnerCards = MakeCardList("TD,JD,QD,KD,AD");
             CardList loserCards = MakeCardList("3C,3D,3H,TS,TD");
 
-            PokerHand winnerHand = new PokerHand(winnerCards);
-            PokerHand loserHand = new PokerHand(loserCards);
+            AssertWinnerAndLoserHands(winnerCards, loserCards);
+        }
 
-            Assert.IsTrue(winnerHand.CompareTo(loserHand) == 1, "Winner hand didn't won!");
-            Assert.IsTrue(loserHand.CompareTo(winnerHand) == -1, "Loser hand didn't lost!");
+        [TestMethod]
+        public void HandCompareGeneralHands2Test()
+        {
+            CardList winnerCards = MakeCardList("TD,6D,QD,8D,4D");
+            CardList loserCards = MakeCardList("JC,KD,QH,AS,TS");
+
+            AssertWinnerAndLoserHands(winnerCards, loserCards);
         }
 
         [TestMethod]
@@ -185,11 +192,34 @@ namespace PokerUnitTest
             CardList winnerCards = MakeCardList("3H,2C,2S,QD,QH");
             CardList loserCards = MakeCardList("6D,6C,4S,2H,2D");
 
-            PokerHand winnerHand = new PokerHand(winnerCards);
-            PokerHand loserHand = new PokerHand(loserCards);
+            AssertWinnerAndLoserHands(winnerCards, loserCards);
+        }
 
-            Assert.IsTrue(winnerHand.CompareTo(loserHand) == 1, "Winner hand didn't won!");
-            Assert.IsTrue(loserHand.CompareTo(winnerHand) == -1, "Loser hand didn't lost!");
+        [TestMethod]
+        public void HandCompareFullHouseTest()
+        {
+            CardList winnerCards = MakeCardList("6D,6C,6S,3H,3D");
+            CardList loserCards = MakeCardList("AS,2H,AH,2C,2S");
+
+            AssertWinnerAndLoserHands(winnerCards, loserCards);
+        }
+
+        [TestMethod]
+        public void HandCompareFlushKickersTest()
+        {
+            CardList winnerCards = MakeCardList("6D,8D,4D,3D,QD");
+            CardList loserCards = MakeCardList("4H,2H,QH,8H,6H");
+
+            AssertWinnerAndLoserHands(winnerCards, loserCards);
+        }
+
+        [TestMethod]
+        public void HandCompareTwoPairSecondRankTest()
+        {
+            CardList winnerCards = MakeCardList("6D,6C,3S,2H,3D");
+            CardList loserCards = MakeCardList("6S,6H,AH,2C,2S");
+
+            AssertWinnerAndLoserHands(winnerCards, loserCards);
         }
 
         [TestMethod]
@@ -198,11 +228,7 @@ namespace PokerUnitTest
             CardList winnerCards = MakeCardList("6D,6C,4S,2H,2D");
             CardList loserCards = MakeCardList("6S,6H,3H,2C,2S");
 
-            PokerHand winnerHand = new PokerHand(winnerCards);
-            PokerHand loserHand = new PokerHand(loserCards);
-
-            Assert.IsTrue(winnerHand.CompareTo(loserHand) == 1, "Winner hand didn't won!");
-            Assert.IsTrue(loserHand.CompareTo(winnerHand) == -1, "Loser hand didn't lost!");
+            AssertWinnerAndLoserHands(winnerCards, loserCards);
         }
 
         [TestMethod]
@@ -211,22 +237,15 @@ namespace PokerUnitTest
             CardList winnerCards = MakeCardList("6D,6C,4S,2H,TD");
             CardList loserCards = MakeCardList("6S,6H,5H,7C,8S");
 
-            PokerHand winnerHand = new PokerHand(winnerCards);
-            PokerHand loserHand = new PokerHand(loserCards);
-
-            Assert.IsTrue(winnerHand.CompareTo(loserHand) == 1, "Winner hand didn't won!");
-            Assert.IsTrue(loserHand.CompareTo(winnerHand) == -1, "Loser hand didn't lost!");
+            AssertWinnerAndLoserHands(winnerCards, loserCards);
         }
 
-        [TestMethod]
-        public void HandCompareTwoPairSecondPairTest()
+        private void AssertWinnerAndLoserHands(CardList winnerCards, CardList loserCards)
         {
-            CardList winnerCards = MakeCardList("6D,6C,3S,2H,3D");
-            CardList loserCards = MakeCardList("6S,6H,AH,2C,2S");
-
             PokerHand winnerHand = new PokerHand(winnerCards);
             PokerHand loserHand = new PokerHand(loserCards);
 
+            Assert.IsTrue(winnerHand > loserHand, "Winner hand didn't won!");
             Assert.IsTrue(winnerHand.CompareTo(loserHand) == 1, "Winner hand didn't won!");
             Assert.IsTrue(loserHand.CompareTo(winnerHand) == -1, "Loser hand didn't lost!");
         }
@@ -244,8 +263,7 @@ namespace PokerUnitTest
             Assert.IsTrue(tieHand2.CompareTo(tieHand) == 0, "Tie hand 2 won during tie!");
         }
 
-
-        //Helper method for adding cards to tests
+        //Helper method for adding cards to tests by string
         private CardList MakeCardList(string cards)
         {
             CardList list = new CardList();

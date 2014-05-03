@@ -17,6 +17,14 @@ namespace PokerProject.PokerGame.CardClasses
         {
         }
 
+        public CardList(IList<PokerCard> otherList) : base()
+        {
+            foreach (PokerCard card in otherList)
+            {
+                Add(new PokerCard(card));
+            }
+        }
+
         public CardList(CardList otherList) : base()
         {
             for (int index = 0; index < otherList.Count; index++)
@@ -42,6 +50,7 @@ namespace PokerProject.PokerGame.CardClasses
                 if (listedCard.Equals(card))
                 {
                     containCard = true;
+                    break;
                 }
             }
             return containCard;
@@ -56,11 +65,23 @@ namespace PokerProject.PokerGame.CardClasses
 
         public bool Equals(CardList otherList)
         {
+            if (Count != otherList.Count)
+            {
+                return false;
+            }
             bool equal = true;
             int index = 0;
             while (equal && index < Count)
             {
-                if (! otherList.ElementAt(index).Equals(this.ElementAt(index)))
+                //if (! otherList.ElementAt(index).Equals(this.ElementAt(index)))
+                //{
+                //    equal = false;
+                //}
+                if (!this.ContainsThisCard(otherList.ElementAt(index)))
+                {
+                    equal = false;
+                }
+                if (!otherList.ContainsThisCard(this.ElementAt(index)))
                 {
                     equal = false;
                 }

@@ -35,6 +35,9 @@ namespace PokerProject.PokerGame
             money += betSize;
         }
 
+        /// <summary>
+        /// Empties out the pot.
+        /// </summary>
         public void Empty()
         {
             money = 0;

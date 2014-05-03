@@ -180,8 +180,7 @@ namespace PokerProject.PokerGame.PlayerClasses
 
         public void DrawCard(PokerCard card)
         {
-            PokerCard newCard = new PokerCard(card);
-            cards.Add(newCard);
+            cards.Add(card);
         }
 
         public CardList ShowCards()
