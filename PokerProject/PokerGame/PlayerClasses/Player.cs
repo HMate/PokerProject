@@ -79,6 +79,18 @@ namespace PokerProject.PokerGame.PlayerClasses
             }
         }
 
+        public PlayerController Controller
+        {
+            get
+            {
+                return controller;
+            }
+            set
+            {
+                controller = value;
+            }
+        }
+
         /*
          * This is the method where the palyer decides what to do when he comes in the game.
          * The PlayerController's job, to decide this, here we just make sure that its a legal move.

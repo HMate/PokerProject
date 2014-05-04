@@ -172,7 +172,7 @@ namespace PokerProject.PokerGame
                 rank = cards[1].Rank;
             }
 
-            FillKickersFrom(cards);
+            FillKickersByRankFromList(cards);
         }
 
         /// <summary>
@@ -341,7 +341,7 @@ namespace PokerProject.PokerGame
             //if loop ended with break lastRank will be correct
             rank = lastRank;
 
-            FillKickersFrom(cards);
+            FillKickersByRankFromList(cards);
         }
 
         /// <summary>
@@ -447,7 +447,7 @@ namespace PokerProject.PokerGame
                 }
             }, 2, false);
             //set kickers
-            FillKickersFrom(cards);
+            FillKickersByRankFromList(cards);
         }
 
         private void SetHighCardFields(CardList cards)
@@ -457,7 +457,7 @@ namespace PokerProject.PokerGame
             kickers = new CardList(cards);
         }
 
-        private void FillKickersFrom(CardList cards)
+        private void FillKickersByRankFromList(CardList cards)
         {
             foreach (PokerCard card in cards)
             {

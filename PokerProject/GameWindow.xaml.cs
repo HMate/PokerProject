@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using PokerProject.PokerGame;
 
 namespace PokerProject
 {
@@ -19,9 +20,12 @@ namespace PokerProject
     /// </summary>
     public partial class GameWindow : Window
     {
-        public GameWindow()
+        Game game;
+
+        public GameWindow(Game game)
         {
             InitializeComponent();
+            this.game = game;
         }
     }
 }

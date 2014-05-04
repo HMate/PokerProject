@@ -3,14 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="36.735" d:DesignWidth="300">
-    <Grid Margin="0,0,0,263">
-        <CheckBox Name="playerCheckBox" Content="1" TextOptions.TextFormattingMode="Ideal"  ContentStringFormat="Player {0}:" Height="19" Margin="4,10,245,-29" VerticalAlignment="Top">
-
-        </CheckBox>
-        <ComboBox Height="19" Margin="83,10,144,-29" VerticalAlignment="Top"/>
-        <TextBox Height="19" Margin="200,10,40,-29" TextWrapping="Wrap" Text="Anonymous" VerticalAlignment="Top"/>
+             mc:Ignorable="d" d:DesignWidth="300"
+             MinHeight="36.735" MinWidth="300" MaxHeight="50" MaxWidth="300" Height="46">
+    <Grid MinHeight="50" MinWidth="300" Margin="0">
+        <CheckBox Name="playerCheckBox" Content="1" TextOptions.TextFormattingMode="Ideal"  ContentStringFormat="Player {0}:" Height="30" Margin="0,13,226,0" VerticalAlignment="Top" RenderTransformOrigin="0.473,0.533"/>
+        <ComboBox Name="playerControllerComboBox" Height="25" Margin="79,10,121,0" VerticalAlignment="Top"/>
+        <TextBox Name="playerNameBox" Height="25" Margin="200,10,10,0" TextWrapping="Wrap" Text="Anonymous" VerticalAlignment="Top"/>
 
     </Grid>
 </UserControl>

@@ -8,6 +8,9 @@ namespace PokerProject.PokerGame.CardClasses
 {
     public enum CardSuite : int
     {
-        Hearts, Spades, Diamonds, Clubs
+        Hearts = 0,
+        Spades = 1,
+        Diamonds = 2,
+        Clubs = 3
     }
 }

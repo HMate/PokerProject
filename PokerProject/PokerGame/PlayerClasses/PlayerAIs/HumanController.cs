@@ -10,6 +10,13 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
     public class HumanController : PlayerController
     {
         Player player;
+        PlayerDecision decision;
+        System.Threading.Semaphore semaphore;
+
+        public HumanController()
+        {
+            semaphore = new System.Threading.Semaphore(1,1);
+        }
 
         public void SetPlayer(Player player)
         {
@@ -23,7 +30,20 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
 
         public PlayerDecision MakeDecision()
         {
-            return new BetDecision(player, 100);
+            decision = null;
+            semaphore.WaitOne();
+            return decision;
+        }
+
+        public void MakeBetDecision(int value)
+        {
+            decision = new BetDecision(player, value);
+            semaphore.Release();
+        }
+
+        public override string ToString()
+        {
+            return "Human Player";
         }
 
     }
