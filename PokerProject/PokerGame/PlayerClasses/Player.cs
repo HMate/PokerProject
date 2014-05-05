@@ -14,7 +14,7 @@ namespace PokerProject.PokerGame.PlayerClasses
         
         private CardList cards;
         private int chips;
-        private int betThisPhase;
+        private int lastBet;
         private string name;
         private PlayerController controller;
         private bool ingame = false;
@@ -26,7 +26,6 @@ namespace PokerProject.PokerGame.PlayerClasses
             this.controller.SetPlayer(this);
             this.cards = new CardList();
             this.chips = 0;
-            this.betThisPhase = 0;
         }
 
         public Player(PlayerController controller) :this("Anonymous", controller)
@@ -51,7 +50,6 @@ namespace PokerProject.PokerGame.PlayerClasses
             this.controller.SetPlayer(this);
             cards = new CardList(player.ShowCards());
             chips = player.ChipCount;
-            betThisPhase = player.betThisPhase;
         }
 
         public string Name
@@ -78,7 +76,7 @@ namespace PokerProject.PokerGame.PlayerClasses
                 chips = value;
             }
         }
-
+        
         public PlayerController Controller
         {
             get
@@ -109,6 +107,10 @@ namespace PokerProject.PokerGame.PlayerClasses
                     {
                         legalMove = true;
                     }
+                    else
+                    {
+                        RedoLastBet();
+                    }
                 }
                 catch (Exception e)
                 {
@@ -121,7 +123,8 @@ namespace PokerProject.PokerGame.PlayerClasses
 
         private bool IsLegalMove()
         {
-            return (betThisPhase == Table.Instance.MainPot.LargestBet || IsIngame() == false);
+            Pot mainPot = Table.Instance.MainPot;
+            return (mainPot.BetThisTurn(this) == mainPot.LargestBet || ChipCount == 0 || IsIngame() == false);
         }
 
         /*Method for posting the blind at the start of a turn.
@@ -156,8 +159,21 @@ namespace PokerProject.PokerGame.PlayerClasses
         {
             Pot mainPot = Table.Instance.MainPot;
             DecreaseChipCount(amount);
-            betThisPhase += amount;
-            mainPot.PlaceBet(amount);
+            mainPot.PlaceBet(this, amount);
+            lastBet = amount;
+        }
+
+        public void BetUntil(int amount)
+        {
+
+        }
+
+        public void RedoLastBet()
+        {
+            Pot mainPot = Table.Instance.MainPot;
+            mainPot.RemoveBet(this, lastBet);
+            IncreaseChipCount(lastBet);
+            lastBet = 0;
         }
 
         public void DecreaseChipCount(int value)
@@ -204,7 +220,6 @@ namespace PokerProject.PokerGame.PlayerClasses
         {
             cards.Clear();
             //When player folds, he also leaves the game, so forget his bets for this turn.
-            betThisPhase = 0;
             SetIngame(false);
         }
 

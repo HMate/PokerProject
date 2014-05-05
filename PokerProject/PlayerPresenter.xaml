@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="PokerProject.PlayerPresenter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PokerProject"
+             mc:Ignorable="d" 
+             d:DesignHeight="120" d:DesignWidth="100" Visibility="Hidden">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25*" MaxHeight="25"/>
+            <RowDefinition Height="25*" MaxHeight="25"/>
+            <RowDefinition Height="70*" MaxHeight="70"/>
+        </Grid.RowDefinitions>
+
+        <Label Name="PlayerName" Content="" Grid.Row="0" ClipToBounds="True" FontSize="14" FontFamily="Rockwell Extra Bold" HorizontalContentAlignment="Center"/>
+        <Label Name="Chips" Content="" Grid.Row="1" ClipToBounds="True" FontSize="14" FontFamily="Rockwell Extra Bold" HorizontalContentAlignment="Center"/>
+        <WrapPanel Name="Cards" HorizontalAlignment="Left" Height="70" Grid.Row="2" VerticalAlignment="Top" Width="100">
+            <local:CardImage Width="50"/>
+            <local:CardImage Width="50"/>
+        </WrapPanel>
+
+
+    </Grid>
+</UserControl>

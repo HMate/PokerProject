@@ -24,5 +24,13 @@ namespace PokerProject
         {
             InitializeComponent();
         }
+
+        private void ResetDefaultName(object sender, RoutedEventArgs e)
+        {
+            if (playerNameBox.Text =="Anonymous")
+            {
+                playerNameBox.Text = "";
+            }
+        }
     }
 }

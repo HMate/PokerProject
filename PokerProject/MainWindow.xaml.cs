@@ -52,6 +52,7 @@ namespace PokerProject
                 {
                     Player player = new Player(pAdder.playerNameBox.Text);
                     player.Controller = (PlayerController)pAdder.playerControllerComboBox.SelectedItem;
+                    player.ChipCount = 2000;
 
                     players.AddPlayer(player);
                 }
@@ -61,7 +62,10 @@ namespace PokerProject
             PokerGame.Game game = new PokerGame.Game();
 
             GameWindow gWindow = new GameWindow(game);
-            gWindow.Visibility = System.Windows.Visibility.Visible;
+
+            game.BindGameWindow(gWindow);
+
+            gWindow.StartGame();
 
             gWindow.Closed += ReappearMainWindow;
         }

@@ -6,9 +6,9 @@
              mc:Ignorable="d" d:DesignWidth="300"
              MinHeight="36.735" MinWidth="300" MaxHeight="50" MaxWidth="300" Height="46">
     <Grid MinHeight="50" MinWidth="300" Margin="0">
-        <CheckBox Name="playerCheckBox" Content="1" TextOptions.TextFormattingMode="Ideal"  ContentStringFormat="Player {0}:" Height="30" Margin="0,13,226,0" VerticalAlignment="Top" RenderTransformOrigin="0.473,0.533"/>
-        <ComboBox Name="playerControllerComboBox" Height="25" Margin="79,10,121,0" VerticalAlignment="Top"/>
-        <TextBox Name="playerNameBox" Height="25" Margin="200,10,10,0" TextWrapping="Wrap" Text="Anonymous" VerticalAlignment="Top"/>
+        <CheckBox Name="playerCheckBox" Content="1" ContentStringFormat="Player {0}:" Height="30" Margin="0,13,226,0" VerticalAlignment="Top" KeyboardNavigation.IsTabStop="False"/>
+        <ComboBox Name="playerControllerComboBox" Height="25" Margin="79,10,121,0" VerticalAlignment="Top" KeyboardNavigation.IsTabStop="False"/>
+        <TextBox Name="playerNameBox" Height="25" Margin="200,10,10,0" TextWrapping="Wrap" Text="Anonymous" VerticalAlignment="Top" GotFocus="ResetDefaultName"/>
 
     </Grid>
 </UserControl>

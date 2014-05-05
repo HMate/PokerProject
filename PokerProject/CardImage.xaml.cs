@@ -24,44 +24,59 @@ namespace PokerProject
 
         private const int cardWidth = 225;
         private const int cardHeight = 315;
-        private BitmapImage deckImage;
-        private BitmapImage backImage;
 
         public CardImage()
         {
             InitializeComponent();
-            Uri deckUri = new Uri("Media/pokercards.png", UriKind.RelativeOrAbsolute);
-            deckImage = new BitmapImage(deckUri);
-
-            Uri backUri = new Uri("Media/cardback.jpg", UriKind.RelativeOrAbsolute);
-            backImage = new BitmapImage(backUri);
-            backImage.DecodePixelHeight = 315;
 
             SetCardBack();
         }
 
         public void SetCard(PokerCard card)
         {
-            int cardPosHorizontalIndex = 0;
-            int cardPosVerticalIndex = 0;
-
-            if (card.Rank != CardRank.Ace)
+            this.Dispatcher.Invoke((Action)(() =>
             {
-                cardPosHorizontalIndex = (int)card.Rank - 1;
-            }
-            cardPosVerticalIndex = (int)card.Suite;
+                Uri deckUri = new Uri("Media/pokercards.png", UriKind.RelativeOrAbsolute);
+                BitmapImage deckImage = new BitmapImage(deckUri);
+                int cardPosHorizontalIndex = 0;
+                int cardPosVerticalIndex = 0;
 
-            deckImage.DecodePixelHeight = (int)ActualHeight;
+                if (card.Rank != CardRank.Ace)
+                {
+                    cardPosHorizontalIndex = (int)card.Rank - 1;
+                }
+                cardPosVerticalIndex = (int)card.Suite;
 
-            CroppedBitmap cardImage = new CroppedBitmap(deckImage, new Int32Rect(cardPosHorizontalIndex * cardWidth, cardPosVerticalIndex * cardHeight, 225, 315));
+                //deckImage.DecodePixelHeight = (int)ActualHeight;
+
+                CroppedBitmap cardImage = new CroppedBitmap(deckImage, new Int32Rect(cardPosHorizontalIndex * cardWidth, cardPosVerticalIndex * cardHeight, 225, 315));
             
-            image.Source = cardImage;
+                image.Source = cardImage;
+            }
+            ));
+
         }
 
         public void SetCardBack()
         {
-            CroppedBitmap cardImage = new CroppedBitmap(backImage, new Int32Rect(0, 0, 225, 315));
-            image.Source = backImage;
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                Uri backUri = new Uri("Media/cardback.jpg", UriKind.RelativeOrAbsolute);
+                BitmapImage backImage = new BitmapImage(backUri);
+                backImage.DecodePixelHeight = 315;
+                CroppedBitmap cardImage = new CroppedBitmap(backImage, new Int32Rect(0, 0, 225, 315));
+                image.Source = backImage;
+            }
+            ));
+        }
+
+        public void SetEmptyCard()
+        {
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                image.Source = null;
+            }
+            ));
         }
     }
 }

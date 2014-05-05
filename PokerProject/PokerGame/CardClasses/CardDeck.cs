@@ -20,6 +20,7 @@ namespace PokerProject.PokerGame.CardClasses
 
         public void createNewPokerDeck()
         {
+            deck.Clear();
             foreach (CardSuite suiteIndex in (CardSuite[])Enum.GetValues(typeof(CardSuite)))
             {
                 foreach (CardRank rankIndex in (CardRank[])Enum.GetValues(typeof(CardRank)))

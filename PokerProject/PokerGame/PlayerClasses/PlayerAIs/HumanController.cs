@@ -41,6 +41,18 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             semaphore.Release();
         }
 
+        public void MakeFoldDecision()
+        {
+            decision = new FoldDecision(player);
+            semaphore.Release();
+        }
+
+        public void MakeCallDecision()
+        {
+            decision = new CallDecision(player);
+            semaphore.Release();
+        }
+
         public override string ToString()
         {
             return "Human Player";

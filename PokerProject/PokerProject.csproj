@@ -61,6 +61,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="PlayerControllerUIElement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -75,10 +79,16 @@
     <Compile Include="GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PlayerControllerUIElement.xaml.cs">
+      <DependentUpon>PlayerControllerUIElement.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PlayerAdder.xaml.cs">
       <DependentUpon>PlayerAdder.xaml</DependentUpon>
     </Compile>
     <Compile Include="PlayerControllerFactory.cs" />
+    <Compile Include="PlayerPresenter.xaml.cs">
+      <DependentUpon>PlayerPresenter.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PokerGame\CardClasses\CardList.cs" />
     <Compile Include="PokerGame\CardClasses\CardDeck.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -86,6 +96,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="PlayerAdder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PlayerPresenter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -98,6 +112,8 @@
     <Compile Include="PokerGame\GameWinnerEvaluator.cs" />
     <Compile Include="PokerGame\HandEvaluator.cs" />
     <Compile Include="PokerGame\PlayerClasses\Decisions\BetDecision.cs" />
+    <Compile Include="PokerGame\PlayerClasses\Decisions\CallDecision.cs" />
+    <Compile Include="PokerGame\PlayerClasses\Decisions\FoldDecision.cs" />
     <Compile Include="PokerGame\PlayerClasses\PlayerAIs\HumanController.cs" />
     <Compile Include="PokerGame\PlayerClasses\Player.cs" />
     <Compile Include="PokerGame\CardClasses\PokerCard.cs" />

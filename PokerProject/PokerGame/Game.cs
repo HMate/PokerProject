@@ -9,7 +9,7 @@ namespace PokerProject.PokerGame
 {
     public class Game
     {
-
+        GameWindow window;
         Table table;
         CardDeck deck;
         PlayerQueue players;
@@ -19,6 +19,11 @@ namespace PokerProject.PokerGame
             table = Table.Instance;
             this.deck = new CardDeck();
             players = table.Players;
+        }
+
+        public void BindGameWindow(GameWindow window)
+        {
+            this.window = window;
         }
 
         /*
@@ -39,6 +44,8 @@ namespace PokerProject.PokerGame
             //Have to decide who is the first dealer.
             Player firstPlayer = players.GetFirstPlayer();
             table.Positions.SetDealer(firstPlayer);
+
+            table.SetBlind(50);
         }
 
         /*
@@ -96,6 +103,8 @@ namespace PokerProject.PokerGame
             }
 
             table.MainPot.Empty();
+            deck.createNewPokerDeck();
+            table.ResetCommunityCards();
 
             //Set the next dealer for the turn.
             table.Positions.SetNextHandPositions();
@@ -142,13 +151,16 @@ namespace PokerProject.PokerGame
                 Player player = players.GetNextPlayer();
                 if (player.IsIngame())
                 {
+                    window.SetActivePlayer(player);
+                    window.RefreshGameView();
+
                     player.MakeDecision();
                 }
 
                 int afterPlayerBet = table.MainPot.LargestBet;
                 if (afterPlayerBet > currentBet)
                 {
-                    //the current player will become the first in the order, but he shoulnd't come again.
+                    //the current player will become the first in the order, but he shouldn't come again.
                     players.SetPlayerFirstInOrder(player);
                     players.GetNextPlayer();
                 }
@@ -181,6 +193,12 @@ namespace PokerProject.PokerGame
             Pot mainPot = table.MainPot;
 
             winner.IncreaseChipCount(mainPot.Size);
+
+            //Fold all cards
+            foreach (Player player in players.GetPlayersList())
+            {
+                player.FoldCards();
+            }
 
             //Delete players who doesnt have money left
 
