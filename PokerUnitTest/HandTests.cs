@@ -103,6 +103,28 @@ namespace PokerUnitTest
         }
 
         [TestMethod]
+        public void HandFindStraightSpecialTest()
+        {
+            CardList cards = MakeCardList("AH,2S,3S,4S,5C");
+
+            PokerHand hand = new PokerHand(cards);
+            CardList kickers = hand.Kickers;
+
+            Assert.AreEqual(PokerHand.HandCategory.Straight, hand.Category);
+            Assert.AreEqual(CardRank.Five, hand.Rank, "Wrong hand rank!");
+            Assert.IsTrue(kickers.Count == 0);
+
+            CardList cards2 = MakeCardList("AH,2S,3S,4S,KC");
+
+            PokerHand hand2 = new PokerHand(cards2);
+            CardList kickers2 = hand2.Kickers;
+
+            Assert.AreEqual(PokerHand.HandCategory.HighCard, hand2.Category);
+            Assert.AreEqual(CardRank.Ace, hand2.Rank, "Wrong hand rank!");
+            Assert.IsTrue(kickers2.Count == 5);
+        }
+
+        [TestMethod]
         public void HandFindFlushTest()
         {
             CardList cards = MakeCardList("4H,5H,7H,9H,QH");
@@ -152,6 +174,20 @@ namespace PokerUnitTest
 
             Assert.AreEqual(PokerHand.HandCategory.StraightFlush, hand.Category);
             Assert.AreEqual(CardRank.Seven, hand.Rank);
+            Assert.IsTrue(kickers.Count == 0);
+        }
+
+
+        [TestMethod]
+        public void HandFindStraightFlushSpecialTest()
+        {
+            CardList cards = MakeCardList("AH,2H,3H,4H,5H");
+
+            PokerHand hand = new PokerHand(cards);
+            CardList kickers = hand.Kickers;
+
+            Assert.AreEqual(PokerHand.HandCategory.StraightFlush, hand.Category);
+            Assert.AreEqual(CardRank.Five, hand.Rank, "Wrong hand rank!");
             Assert.IsTrue(kickers.Count == 0);
         }
 

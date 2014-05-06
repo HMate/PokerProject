@@ -126,7 +126,8 @@ namespace PokerProject.PokerGame
 
         private void SetStraightFlushFields(CardList cards)
         {
-            rank = cards.GetBiggestRank();
+            SetStraightFields(cards);
+
             category = HandCategory.StraightFlush;
             if (rank == CardRank.Ace)
             {
@@ -270,9 +271,14 @@ namespace PokerProject.PokerGame
         public static bool IsStraight(CardList cards)
         {
             CardRank smallestRank = cards.GetSmallestRank();
+            int cardsCheckedForStraight = 5;
+            if (smallestRank == CardRank.Two && cards.GetBiggestRank() == CardRank.Ace)
+            {
+                cardsCheckedForStraight = 4;
+            }
 
             for (CardRank nextRank = smallestRank;
-                nextRank < (CardRank)(smallestRank + 5);
+                nextRank < (CardRank)(smallestRank + cardsCheckedForStraight);
                 nextRank = (CardRank)(nextRank + 1))
             {
                 bool hasRank = false;
@@ -296,7 +302,15 @@ namespace PokerProject.PokerGame
         private void SetStraightFields(CardList cards)
         {
             category = HandCategory.Straight;
-            rank = cards.GetBiggestRank();
+            if (cards.GetSmallestRank() == CardRank.Two && cards.GetBiggestRank() == CardRank.Ace)
+            {
+                rank = CardRank.Five;
+            }
+            else
+            {
+                rank = cards.GetBiggestRank();
+	        }
+            
             //no kicker needed, handcategory already tells hand strenght.
         }
 

@@ -15,7 +15,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
 
         public HumanController()
         {
-            semaphore = new System.Threading.Semaphore(1,1);
+            semaphore = new System.Threading.Semaphore(0, 1);
         }
 
         public void SetPlayer(Player player)
@@ -35,22 +35,35 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             return decision;
         }
 
+        public PlayerDecision MakeRevealCardDecision()
+        {
+            decision = null;
+            semaphore.WaitOne();
+            return decision;
+        }
+
         public void MakeBetDecision(int value)
         {
             decision = new BetDecision(player, value);
-            semaphore.Release();
+            semaphore.Release(1);
         }
 
         public void MakeFoldDecision()
         {
             decision = new FoldDecision(player);
-            semaphore.Release();
+            semaphore.Release(1);
         }
 
         public void MakeCallDecision()
         {
             decision = new CallDecision(player);
-            semaphore.Release();
+            semaphore.Release(1);
+        }
+
+        public void MakeShowCardsDecision()
+        {
+            decision = new ShowCardsDecision(player);
+            semaphore.Release(1);
         }
 
         public override string ToString()

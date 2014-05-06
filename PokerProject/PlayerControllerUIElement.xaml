@@ -5,12 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Height="160" Width="386">
     <Grid Margin="0,0,10,10">
-        <Button Name="CallButton" Content="Call" HorizontalAlignment="Left" Height="28" Margin="191,111,0,0" VerticalAlignment="Top" Width="81" Grid.Column="1" Click="CallPressed"/>
+        <Button Name="CallButton" Content="Call" HorizontalAlignment="Left" Height="28" Margin="234,111,0,0" VerticalAlignment="Top" Width="81" Click="CallPressed"/>
         <Button Name="FoldButton" Content="Fold" HorizontalAlignment="Left" Height="28" Margin="277,78,0,0" VerticalAlignment="Top" Width="81" Grid.Column="1" Click="FoldPressed"/>
         <Button Name="RaiseButton" Content="Raise" HorizontalAlignment="Left" Height="28" Margin="191,78,0,0" VerticalAlignment="Top" Width="81" Grid.Column="1" Click="RaisePressed"/>
-        <Button Name="CheckButton" Content="Check" HorizontalAlignment="Left" Height="28" Margin="277,111,0,0" VerticalAlignment="Top" Width="81" Grid.Column="1"/>
-        <Slider Name="BetSlider" HorizontalAlignment="Left" Height="25" Margin="46,81,0,0" VerticalAlignment="Top" Width="123" Grid.Column="1"/>
-        <TextBox Name="BetBox" HorizontalAlignment="Left" Height="28" Margin="63,111,0,0" TextWrapping="Wrap" Text="50" VerticalAlignment="Top" Width="70" Grid.Column="1"/>
+        <Button Name="ShowCardsButton" Content="Show cards" HorizontalAlignment="Left" Height="28" Margin="277,45,0,0" VerticalAlignment="Top" Width="81" Click="ShowPressed"/>
+        <Slider Name="BetSlider" HorizontalAlignment="Left" Height="25" Margin="46,81,0,0" VerticalAlignment="Top" Width="123" Grid.Column="1" ValueChanged="SliderChanged"/>
+        <TextBox Name="BetBox" HorizontalAlignment="Left" Height="28" Margin="63,111,0,0" TextWrapping="Wrap" Text="50" VerticalAlignment="Top" Width="70" Grid.Column="1" TextChanged="Validate"/>
 
     </Grid>
 </UserControl>

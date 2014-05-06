@@ -44,6 +44,8 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -79,6 +81,7 @@
     <Compile Include="GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NameGenerator.cs" />
     <Compile Include="PlayerControllerUIElement.xaml.cs">
       <DependentUpon>PlayerControllerUIElement.xaml</DependentUpon>
     </Compile>
@@ -114,6 +117,7 @@
     <Compile Include="PokerGame\PlayerClasses\Decisions\BetDecision.cs" />
     <Compile Include="PokerGame\PlayerClasses\Decisions\CallDecision.cs" />
     <Compile Include="PokerGame\PlayerClasses\Decisions\FoldDecision.cs" />
+    <Compile Include="PokerGame\PlayerClasses\Decisions\ShowCardsDecision.cs" />
     <Compile Include="PokerGame\PlayerClasses\PlayerAIs\HumanController.cs" />
     <Compile Include="PokerGame\PlayerClasses\Player.cs" />
     <Compile Include="PokerGame\CardClasses\PokerCard.cs" />

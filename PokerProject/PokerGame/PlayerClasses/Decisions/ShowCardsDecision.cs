@@ -6,21 +6,18 @@ using System.Threading.Tasks;
 
 namespace PokerProject.PokerGame.PlayerClasses.Decisions
 {
-    class CallDecision : PlayerDecision
+    class ShowCardsDecision :PlayerDecision
     {
         Player player;
-        int amount;
 
-        public CallDecision(Player player)
+        public ShowCardsDecision(Player player)
         {
             this.player = player;
-            Pot mainPot = PokerGame.Table.Instance.MainPot;
-            this.amount = (player.ChipCount > mainPot.GetAmountToCall(player)) ? mainPot.GetAmountToCall(player) : player.ChipCount;
         }
 
         public void ExecuteDecision()
         {
-            player.Bet(amount);
+            player.RevealCards = true;
         }
     }
 }

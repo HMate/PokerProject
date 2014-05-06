@@ -18,6 +18,7 @@ namespace PokerProject.PokerGame.PlayerClasses
         private string name;
         private PlayerController controller;
         private bool ingame = false;
+        private bool revealCards = false;
 
         public Player(string name, PlayerController controller)
         {
@@ -89,6 +90,11 @@ namespace PokerProject.PokerGame.PlayerClasses
             }
         }
 
+        public bool RevealCards { 
+            get { return revealCards; }
+            set { revealCards = value; }
+        }
+
         /*
          * This is the method where the palyer decides what to do when he comes in the game.
          * The PlayerController's job, to decide this, here we just make sure that its a legal move.
@@ -97,7 +103,7 @@ namespace PokerProject.PokerGame.PlayerClasses
         {
             bool legalMove = false;
 
-            while (!legalMove)
+            while (!legalMove && ChipCount != 0)
             {
                 try
                 {
@@ -124,7 +130,26 @@ namespace PokerProject.PokerGame.PlayerClasses
         private bool IsLegalMove()
         {
             Pot mainPot = Table.Instance.MainPot;
-            return (mainPot.BetThisTurn(this) == mainPot.LargestBet || ChipCount == 0 || IsIngame() == false);
+            return (mainPot.GetAmountToCall(this) == 0 || ChipCount == 0 || IsIngame() == false);
+        }
+
+        /*
+         * A player can decide to show his cards or not at the end of a turn.
+         * */
+        public void MakeRevealCardDecision()
+        {
+            try
+            {
+                PlayerDecision decision = controller.MakeRevealCardDecision();
+                decision.ExecuteDecision();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Problem during player " + name + "'s move!");
+                Console.WriteLine(e.Message + " - " + e.Data);
+                Console.WriteLine(e.StackTrace);
+                this.FoldCards();
+            }
         }
 
         /*Method for posting the blind at the start of a turn.
@@ -158,14 +183,9 @@ namespace PokerProject.PokerGame.PlayerClasses
         public void Bet(int amount)
         {
             Pot mainPot = Table.Instance.MainPot;
-            DecreaseChipCount(amount);
             mainPot.PlaceBet(this, amount);
+            DecreaseChipCount(amount);
             lastBet = amount;
-        }
-
-        public void BetUntil(int amount)
-        {
-
         }
 
         public void RedoLastBet()
@@ -203,11 +223,13 @@ namespace PokerProject.PokerGame.PlayerClasses
 
         public void DrawCard(CardDeck deck)
         {
+            revealCards = false;
             cards.Add(deck.DealOneCard());
         }
 
         public void DrawCard(PokerCard card)
         {
+            revealCards = false;
             cards.Add(card);
         }
 

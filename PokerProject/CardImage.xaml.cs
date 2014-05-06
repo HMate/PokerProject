@@ -47,11 +47,14 @@ namespace PokerProject
                 }
                 cardPosVerticalIndex = (int)card.Suite;
 
-                //deckImage.DecodePixelHeight = (int)ActualHeight;
-
-                CroppedBitmap cardImage = new CroppedBitmap(deckImage, new Int32Rect(cardPosHorizontalIndex * cardWidth, cardPosVerticalIndex * cardHeight, 225, 315));
+                CroppedBitmap cardImageSource = new CroppedBitmap(deckImage, new Int32Rect(cardPosHorizontalIndex * cardWidth, cardPosVerticalIndex * cardHeight, 225, 315));
+                CroppedBitmap tooltipImageSource = new CroppedBitmap(deckImage, new Int32Rect(cardPosHorizontalIndex * cardWidth, cardPosVerticalIndex * cardHeight, 225, 315));
             
-                image.Source = cardImage;
+                image.Source = cardImageSource;
+
+                Image tooltipImage = new Image();
+                tooltipImage.Source = tooltipImageSource;
+                ToolTip = tooltipImage;
             }
             ));
 
@@ -66,6 +69,8 @@ namespace PokerProject
                 backImage.DecodePixelHeight = 315;
                 CroppedBitmap cardImage = new CroppedBitmap(backImage, new Int32Rect(0, 0, 225, 315));
                 image.Source = backImage;
+
+                ToolTip = "Cardback";
             }
             ));
         }
@@ -75,6 +80,7 @@ namespace PokerProject
             this.Dispatcher.Invoke((Action)(() =>
             {
                 image.Source = null;
+                ToolTip = null;
             }
             ));
         }

@@ -66,11 +66,15 @@ namespace PokerProject.PokerGame.PlayerClasses
             }
 
             //if no player left in game, we don't have to set any positions. 
-            if (list.Count == 0)
+            if (list.Count < 2)
             {
                 return;
             }
 
+            if (list.Count <= listIndex)
+            {
+                listIndex = list.Count - 1;
+            }
             //Set the players position who comes after the deleted player.
             if (position.Equals("Dealer"))
             {

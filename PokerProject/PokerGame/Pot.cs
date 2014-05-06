@@ -12,16 +12,19 @@ namespace PokerProject.PokerGame
         private int prevLargestBet;
         private Player prevLargestBetter;
 
-        //stores the amount players have spent this turn
+        /// <summary>
+        /// Stores the amount players have spent this turn for each player.
+        /// </summary>
         private Dictionary<Player, int> playerBets;
-
-
 
         public Pot()
         {
             playerBets = new Dictionary<Player, int>();
         }
 
+        /// <summary>
+        /// Gets the total size of the current pot.
+        /// </summary>
         public int Size
         {
             get
@@ -35,6 +38,10 @@ namespace PokerProject.PokerGame
             }
         }
 
+        /// <summary>
+        /// Returns the biggest bet this turn.
+        /// A valid bet has to be at least this amount.
+        /// </summary>
         public int LargestBet
         {
             get
@@ -43,6 +50,10 @@ namespace PokerProject.PokerGame
             }
         }
 
+        /// <summary>
+        /// The amount of the biggest contribution to the pot in the turn.
+        /// Players have to put at least this amount to the pot to be eligible to win the pot.
+        /// </summary>
         public int AmountToBeEligibleForPot
         {
             get
@@ -60,9 +71,14 @@ namespace PokerProject.PokerGame
             }
         }
 
+        /// <summary>
+        /// A player can place the amount that he wants to bet in the pot with this method.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="betSize"></param>
         public void PlaceBet(Player player, int betSize)
         {
-            if (betSize < largestBet && GetAmountToCall(player) != betSize)
+            if (betSize < largestBet && GetAmountToCall(player) != betSize && betSize != player.ChipCount)
             {
                 throw new ArgumentException("Bet have to be at least the amount of the previous bet", "betSize");
             }
@@ -82,6 +98,13 @@ namespace PokerProject.PokerGame
             playerBets[player] = alreadyBet + betSize;
         }
 
+        /// <summary>
+        /// A player can remove moeny from the pot if he needs to.
+        /// If the money removed is the amount that was the largest bet during the last betting,
+        /// the largest bet will be setted back to the largest bet before that amount.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="betSize"></param>
         public void RemoveBet(Player player, int betSize)
         {
             if (player == prevLargestBetter && betSize == largestBet)
@@ -101,7 +124,12 @@ namespace PokerProject.PokerGame
             playerBets[player] = alreadyBet - betSize;
         }
 
-        public int BetThisTurn(Player player)
+        /// <summary>
+        /// Returns the amount a player contributed to the pot in this turn. 
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public int PlayerBetThisTurn(Player player)
         {
             int value = 0;
 
@@ -113,9 +141,14 @@ namespace PokerProject.PokerGame
             return value;
         }
 
+        /// <summary>
+        /// Returns the amount the given player have to place in the pot to be eligible for the pot.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
         public int GetAmountToCall(Player player)
         {
-            return AmountToBeEligibleForPot - BetThisTurn(player);
+            return AmountToBeEligibleForPot - PlayerBetThisTurn(player);
         }
 
         /// <summary>

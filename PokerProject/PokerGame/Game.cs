@@ -13,12 +13,14 @@ namespace PokerProject.PokerGame
         Table table;
         CardDeck deck;
         PlayerQueue players;
+        System.Threading.Semaphore semaphore;
 
         public Game()
         {
             table = Table.Instance;
             this.deck = new CardDeck();
             players = table.Players;
+            semaphore = new System.Threading.Semaphore(0, 1);
         }
 
         public void BindGameWindow(GameWindow window)
@@ -67,21 +69,21 @@ namespace PokerProject.PokerGame
             PlaceBlinds();
             BettingPhase();
 
-            if (!IsTurnEnd())
+            if (!IsOnlyOnePlayerActive())
             {
                 table.DealFlopCards(deck);
                 players.SetBettingOrder();
                 BettingPhase();
             }
 
-            if (!IsTurnEnd())
+            if (!IsOnlyOnePlayerActive())
             {
                 table.DealRiverCard(deck);
                 players.SetBettingOrder();
                 BettingPhase();
             }
 
-            if (!IsTurnEnd())
+            if (!IsOnlyOnePlayerActive())
             {
                 table.DealTurnCard(deck);
                 players.SetBettingOrder();
@@ -144,9 +146,9 @@ namespace PokerProject.PokerGame
          * */
         private void BettingPhase()
         {
-            while (players.HasNextPlayer())
+            while (players.HasNextPlayer() && IsOnlyOnePlayerActive() == false)
             {
-                int currentBet = table.MainPot.LargestBet;
+                int currentShare = table.MainPot.AmountToBeEligibleForPot;
 
                 Player player = players.GetNextPlayer();
                 if (player.IsIngame())
@@ -157,8 +159,8 @@ namespace PokerProject.PokerGame
                     player.MakeDecision();
                 }
 
-                int afterPlayerBet = table.MainPot.LargestBet;
-                if (afterPlayerBet > currentBet)
+                int afterPlayerShare = table.MainPot.AmountToBeEligibleForPot;
+                if (afterPlayerShare > currentShare)
                 {
                     //the current player will become the first in the order, but he shouldn't come again.
                     players.SetPlayerFirstInOrder(player);
@@ -170,7 +172,7 @@ namespace PokerProject.PokerGame
         /*
          * The turn ends when only one player left in game.
          * */
-        private bool IsTurnEnd()
+        private bool IsOnlyOnePlayerActive()
         {
             int activePlayers = 0;
             foreach (Player player in players.GetPlayersList())
@@ -185,14 +187,62 @@ namespace PokerProject.PokerGame
 
         private void EndTurn()
         {
-            GameWinnerEvaluator gwEvaluator = new GameWinnerEvaluator();
-            gwEvaluator.DetermineWinner();
 
             //Pay out the winner
-            Player winner = gwEvaluator.Winner;
+            List<Player> winners = new List<Player>();
+            if (IsOnlyOnePlayerActive() == false)
+            {
+                CardShowingPhase();
+            }
+            if (IsOnlyOnePlayerActive() == false)
+            {
+                GameWinnerEvaluator gwEvaluator = new GameWinnerEvaluator();
+                gwEvaluator.DetermineWinner();
+                if (gwEvaluator.IsTied())
+                {
+                    winners = gwEvaluator.GetTiedWinners();
+                    window.WriteMessage("The winner hand is " + gwEvaluator.WinnerHand.Category + " with the rank of " + gwEvaluator.WinnerHand.Rank);
+                    string tiedWinners = "";
+                    foreach (Player winner in winners)
+                    {
+                        tiedWinners = tiedWinners + " " + winner.Name;
+                    }
+                    window.WriteMessage("The winners are" + tiedWinners);
+                    
+                }
+                else
+                {
+                    winners.Add(gwEvaluator.Winner);
+                    window.WriteMessage("The winner is " + winners[0].Name + " with " + gwEvaluator.WinnerHand.Category + " with the rank of " + gwEvaluator.WinnerHand.Rank);
+                }
+                
+            }
+            else
+            {
+                foreach (Player player in players.GetPlayersList())
+                {
+                    if (player.IsIngame())
+                    {
+                        window.SetActivePlayerToShowCards(player);
+                        window.RefreshGameView();
+                        player.MakeRevealCardDecision();
+                        winners.Add(player);
+                    }
+                }
+            }
+            
             Pot mainPot = table.MainPot;
 
-            winner.IncreaseChipCount(mainPot.Size);
+            foreach (Player winner in winners)
+            {
+                winner.IncreaseChipCount(mainPot.Size);
+                window.WriteMessage(winner.Name + " won " + mainPot.Size + "$"); 
+            }
+
+            //Show the final state of the turn
+            window.RefreshGameView();
+            window.WaitForNextTurn();
+            semaphore.WaitOne();
 
             //Fold all cards
             foreach (Player player in players.GetPlayersList())
@@ -214,9 +264,32 @@ namespace PokerProject.PokerGame
             foreach (Player player in playersToRemove)
             {
                 players.DeletePlayer(player);
+                window.WriteMessage(player.Name + " left the game");
             }
         }
 
+        private void CardShowingPhase()
+        {
+            players.SetBettingOrder();
+
+            while (players.HasNextPlayer() && IsOnlyOnePlayerActive() == false)
+            {
+                Player player = players.GetNextPlayer();
+                if (player.IsIngame())
+                {
+                    window.SetActivePlayerToShowCards(player);
+                    window.RefreshGameView();
+
+                    player.MakeRevealCardDecision();
+                }
+            }
+        }
+
+
+        public void Continue()
+        {
+            semaphore.Release();
+        }
 
     }
 }

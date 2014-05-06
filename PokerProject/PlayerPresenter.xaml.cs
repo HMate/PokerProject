@@ -55,10 +55,19 @@ namespace PokerProject
                     Chips.Content = player.ChipCount;
                     if (player.IsIngame())
                     {
-                        foreach (CardImage image in Cards.Children)
+                        if (player.RevealCards)
                         {
-                            image.SetCardBack();
+                            PokerGame.CardClasses.CardList cards = player.ShowCards();
+                            ((CardImage)Cards.Children[0]).SetCard(cards[0]);
+                            ((CardImage)Cards.Children[1]).SetCard(cards[1]);
                         }
+                        else
+                        {
+                            foreach (CardImage image in Cards.Children)
+                            {
+                                image.SetCardBack();
+                            }
+                        }   
                     }
                     else
                     {
@@ -70,6 +79,14 @@ namespace PokerProject
                 }
             }
             ));
+        }
+
+        private void SetCards(Action action)
+        {
+            foreach (CardImage image in Cards.Children)
+            {
+                action();
+            }
         }
 
         public void DeletePlayer()

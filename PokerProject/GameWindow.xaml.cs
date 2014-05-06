@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 using PokerProject.PokerGame;
 using PokerProject.PokerGame.PlayerClasses;
 using PokerProject.PokerGame.CardClasses;
+using System.Windows.Automation.Provider;
+using System.Windows.Automation.Peers;
 
 namespace PokerProject
 {
@@ -41,7 +43,8 @@ namespace PokerProject
             if (gameThread == null)
             {
                 gameThread = new System.Threading.Thread(new System.Threading.ThreadStart(game.PlayTheGame));
-                gameThread.Start();   
+                gameThread.Start();
+                MessageBox.Items.Add("New game started.");
             }
         }
 
@@ -95,7 +98,8 @@ namespace PokerProject
         {
             this.Dispatcher.Invoke((Action)(() =>
             {
-                MainPotPresenter.Content = PokerGame.Table.Instance.MainPot.Size;
+                MainPotLabel.Content = PokerGame.Table.Instance.MainPot.Size;
+                MainPotMinimumBetLabel.Content = PokerGame.Table.Instance.MainPot.LargestBet;
             }
             ));
         }
@@ -144,11 +148,68 @@ namespace PokerProject
                 CardList list = activePlayer.ShowCards();
                 Card1.SetCard(list[0]);
                 Card2.SetCard(list[1]);
+                ActivePlayerLabel.Visibility = System.Windows.Visibility.Visible;
                 ActivePlayerLabel.Content = activePlayer.Name;
+                ToCallLabel.Visibility = System.Windows.Visibility.Visible;
                 ToCallLabel.Content = PokerGame.Table.Instance.MainPot.GetAmountToCall(activePlayer);
+                PlayerControlUI.Visibility = System.Windows.Visibility.Visible;
                 PlayerControlUI.SetPlayer(activePlayer);
             }
             ));
+        }
+
+        public void SetActivePlayerToShowCards(Player activePlayer)
+        {
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                CardList list = activePlayer.ShowCards();
+                Card1.SetCard(list[0]);
+                Card2.SetCard(list[1]);
+                ActivePlayerLabel.Visibility = System.Windows.Visibility.Visible;
+                ActivePlayerLabel.Content = activePlayer.Name;
+                ToCallLabel.Visibility = System.Windows.Visibility.Hidden;
+                PlayerControlUI.Visibility = System.Windows.Visibility.Visible;
+                PlayerControlUI.SetPlayerToShowCards(activePlayer);
+            }
+            ));
+        }
+
+        public void WriteMessage(string message)
+        {
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                MessageBox.Items.Add(message);
+
+                ListBoxAutomationPeer svAutomation = (ListBoxAutomationPeer)ScrollViewerAutomationPeer.CreatePeerForElement(MessageBox);
+                
+                IScrollProvider scrollInterface = (IScrollProvider)svAutomation.GetPattern(PatternInterface.Scroll);
+                System.Windows.Automation.ScrollAmount scrollVertical = System.Windows.Automation.ScrollAmount.LargeIncrement;
+                System.Windows.Automation.ScrollAmount scrollHorizontal = System.Windows.Automation.ScrollAmount.NoAmount;
+                //If the vertical scroller is not available, the operation cannot be performed, which will raise an exception. 
+                if (scrollInterface.VerticallyScrollable)
+                    scrollInterface.Scroll(scrollHorizontal, scrollVertical);
+            }
+            ));
+        }
+
+        public void WaitForNextTurn()
+        {
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                Card1.SetEmptyCard();
+                Card2.SetEmptyCard();
+                ActivePlayerLabel.Visibility = System.Windows.Visibility.Hidden;
+                ToCallLabel.Visibility = System.Windows.Visibility.Hidden;
+                NextTurnButton.Visibility = System.Windows.Visibility.Visible;
+                PlayerControlUI.Visibility = System.Windows.Visibility.Hidden;
+            }
+            ));
+        }
+
+        private void NextTurnClick(object sender, RoutedEventArgs e)
+        {
+            NextTurnButton.Visibility = System.Windows.Visibility.Hidden;
+            game.Continue();
         }
 
     }

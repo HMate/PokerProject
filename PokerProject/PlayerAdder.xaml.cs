@@ -20,14 +20,19 @@ namespace PokerProject
     /// </summary>
     public partial class PlayerAdder : UserControl
     {
+
+        private string defaultName;
+
         public PlayerAdder()
         {
             InitializeComponent();
+            defaultName = NameGenerator.GenerateName();
+            playerNameBox.Text = defaultName;
         }
 
         private void ResetDefaultName(object sender, RoutedEventArgs e)
         {
-            if (playerNameBox.Text =="Anonymous")
+            if (playerNameBox.Text == defaultName)
             {
                 playerNameBox.Text = "";
             }
