@@ -22,6 +22,7 @@ namespace PokerProject
             List<PlayerController> list = new List<PlayerController>();
 
             list.Add(new HumanController());
+            list.Add(new RandomAiController());
 
             return list;
         }

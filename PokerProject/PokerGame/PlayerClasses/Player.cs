@@ -182,17 +182,26 @@ namespace PokerProject.PokerGame.PlayerClasses
          * */
         public void Bet(int amount)
         {
-            Pot mainPot = Table.Instance.MainPot;
-            mainPot.PlaceBet(this, amount);
-            DecreaseChipCount(amount);
-            lastBet = amount;
+            try
+            {
+                Pot mainPot = Table.Instance.MainPot;
+                mainPot.PlaceBet(this, amount);
+                lastBet = amount;
+                DecreaseChipCount(amount);
+            }
+            catch (Exception)
+            {
+                if (lastBet != 0)
+                {
+                    RedoLastBet();
+                }
+            }
         }
 
         public void RedoLastBet()
         {
             Pot mainPot = Table.Instance.MainPot;
             mainPot.RemoveBet(this, lastBet);
-            IncreaseChipCount(lastBet);
             lastBet = 0;
         }
 
@@ -241,6 +250,7 @@ namespace PokerProject.PokerGame.PlayerClasses
         public void FoldCards()
         {
             cards.Clear();
+            revealCards = false;
             //When player folds, he also leaves the game, so forget his bets for this turn.
             SetIngame(false);
         }

@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
 
         <Label Name="PlayerName" Content="" Grid.Row="0" ClipToBounds="True" FontSize="14" FontFamily="Rockwell Extra Bold" HorizontalContentAlignment="Center"/>
-        <Label Name="Chips" Content="" Grid.Row="1" ClipToBounds="True" FontSize="14" FontFamily="Rockwell Extra Bold" HorizontalContentAlignment="Center"/>
+        <Label Name="Chips" Content="" ContentStringFormat="{}{0}$" Grid.Row="1" ClipToBounds="True" FontSize="14" FontFamily="Rockwell Extra Bold" HorizontalContentAlignment="Center"/>
         <WrapPanel Name="Cards" HorizontalAlignment="Left" Height="70" Grid.Row="2" VerticalAlignment="Top" Width="100">
             <local:CardImage Width="50"/>
             <local:CardImage Width="50"/>

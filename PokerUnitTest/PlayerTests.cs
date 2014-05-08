@@ -320,10 +320,8 @@ namespace PokerUnitTest
 
         /*
          * Testing if a player bets too much.
-         * Should throw an exception.
          * */
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void PlayerBetTooMuchTest()
         {
             Table table = Table.Instance;
@@ -333,18 +331,11 @@ namespace PokerUnitTest
             int startingChipCount = 100;
             int betAmount = 150;
             jack.ChipCount = startingChipCount;
-            try
-            {
-                jack.Bet(betAmount);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                //If player didn't have enough chips then the Pot size shouldn't change.
-                Assert.AreEqual(0, mainPot.Size);
-                Assert.AreEqual(100, jack.ChipCount);
-                //throw again as we shouldn't reach the part after the catch block
-                throw;
-            }
+
+            jack.Bet(betAmount);
+            //If player didn't have enough chips then the Pot size shouldn't change.
+            Assert.AreEqual(0, mainPot.Size);
+            Assert.AreEqual(100, jack.ChipCount);
             
         }
     }

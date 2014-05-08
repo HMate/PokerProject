@@ -53,7 +53,8 @@ namespace PokerProject
                 {
                     PlayerName.Content = player.Name;
                     Chips.Content = player.ChipCount;
-                    if (player.IsIngame())
+                    Chips.ToolTip = "Player contributed to pot with " + PokerGame.Table.Instance.MainPot.PlayerBetThisTurn(player) + "$"; 
+                    if (player.IsIngame() || player.RevealCards)
                     {
                         if (player.RevealCards)
                         {

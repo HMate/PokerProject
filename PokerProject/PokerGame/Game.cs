@@ -14,6 +14,7 @@ namespace PokerProject.PokerGame
         CardDeck deck;
         PlayerQueue players;
         System.Threading.Semaphore semaphore;
+        int turns;
 
         public Game()
         {
@@ -48,6 +49,7 @@ namespace PokerProject.PokerGame
             table.Positions.SetDealer(firstPlayer);
 
             table.SetBlind(50);
+            turns = 1;
         }
 
         /*
@@ -107,6 +109,7 @@ namespace PokerProject.PokerGame
             table.MainPot.Empty();
             deck.createNewPokerDeck();
             table.ResetCommunityCards();
+            window.WriteMessage(turns + ". turn started");
 
             //Set the next dealer for the turn.
             table.Positions.SetNextHandPositions();
@@ -167,6 +170,7 @@ namespace PokerProject.PokerGame
                     players.GetNextPlayer();
                 }
             }
+            table.MainPot.PayBackUnmatchedBets();
         }
 
         /*
@@ -187,57 +191,9 @@ namespace PokerProject.PokerGame
 
         private void EndTurn()
         {
-
-            //Pay out the winner
-            List<Player> winners = new List<Player>();
-            if (IsOnlyOnePlayerActive() == false)
-            {
-                CardShowingPhase();
-            }
-            if (IsOnlyOnePlayerActive() == false)
-            {
-                GameWinnerEvaluator gwEvaluator = new GameWinnerEvaluator();
-                gwEvaluator.DetermineWinner();
-                if (gwEvaluator.IsTied())
-                {
-                    winners = gwEvaluator.GetTiedWinners();
-                    window.WriteMessage("The winner hand is " + gwEvaluator.WinnerHand.Category + " with the rank of " + gwEvaluator.WinnerHand.Rank);
-                    string tiedWinners = "";
-                    foreach (Player winner in winners)
-                    {
-                        tiedWinners = tiedWinners + " " + winner.Name;
-                    }
-                    window.WriteMessage("The winners are" + tiedWinners);
-                    
-                }
-                else
-                {
-                    winners.Add(gwEvaluator.Winner);
-                    window.WriteMessage("The winner is " + winners[0].Name + " with " + gwEvaluator.WinnerHand.Category + " with the rank of " + gwEvaluator.WinnerHand.Rank);
-                }
-                
-            }
-            else
-            {
-                foreach (Player player in players.GetPlayersList())
-                {
-                    if (player.IsIngame())
-                    {
-                        window.SetActivePlayerToShowCards(player);
-                        window.RefreshGameView();
-                        player.MakeRevealCardDecision();
-                        winners.Add(player);
-                    }
-                }
-            }
-            
-            Pot mainPot = table.MainPot;
-
-            foreach (Player winner in winners)
-            {
-                winner.IncreaseChipCount(mainPot.Size);
-                window.WriteMessage(winner.Name + " won " + mainPot.Size + "$"); 
-            }
+            //Pay out the winners
+            CardShowingPhase();
+            DetermineAndPayOutWinners();
 
             //Show the final state of the turn
             window.RefreshGameView();
@@ -266,6 +222,7 @@ namespace PokerProject.PokerGame
                 players.DeletePlayer(player);
                 window.WriteMessage(player.Name + " left the game");
             }
+            turns++;
         }
 
         private void CardShowingPhase()
@@ -285,6 +242,73 @@ namespace PokerProject.PokerGame
             }
         }
 
+        private void DetermineAndPayOutWinners()
+        {
+            Pot mainPot = table.MainPot;
+            while (mainPot.Size > 0 && AtLeastOnePlayerActive())
+            {
+                List<Player> winners = new List<Player>();
+                if (IsOnlyOnePlayerActive() == false)
+                {
+                    GameWinnerEvaluator gwEvaluator = new GameWinnerEvaluator();
+                    gwEvaluator.DetermineWinner();
+                    if (gwEvaluator.IsTied())
+                    {
+                        winners = gwEvaluator.GetTiedWinners();
+                        window.WriteMessage("The winner hand is " + gwEvaluator.WinnerHand.Category + " with the rank of " + gwEvaluator.WinnerHand.Rank);
+                        string tiedWinners = "";
+                        foreach (Player winner in winners)
+                        {
+                            tiedWinners = tiedWinners + " " + winner.Name;
+                        }
+                        window.WriteMessage("The winners are" + tiedWinners);
+
+                    }
+                    else
+                    {
+                        winners.Add(gwEvaluator.Winner);
+                        window.WriteMessage("The winner is " + winners[0].Name + " with " + gwEvaluator.WinnerHand.Category + " ranked: " + gwEvaluator.WinnerHand.Rank);
+                    }
+
+                }
+                else
+                {
+                    foreach (Player player in players.GetPlayersList())
+                    {
+                        if (player.IsIngame())
+                        {
+                            winners.Add(player);
+                            window.WriteMessage("The winner is " + winners[0].Name);
+                        }
+                    }
+                }
+
+                int recieved = mainPot.PayOutPlayer(winners);
+                window.WriteMessage("Winners won " + recieved + "$");
+
+                foreach (Player winner in winners)
+                {
+                    if (mainPot.PlayerBetThisTurn(winner) == 0)
+                    {
+                        winner.SetIngame(false);
+                    }
+                }
+            }
+        }
+
+        private bool AtLeastOnePlayerActive()
+        {
+
+            int activePlayers = 0;
+            foreach (Player player in players.GetPlayersList())
+            {
+                if (player.IsIngame())
+                {
+                    activePlayers++;
+                }
+            }
+            return (activePlayers > 0) ? true : false;
+        }
 
         public void Continue()
         {

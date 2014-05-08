@@ -9,9 +9,11 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
 {
     public class HumanController : PlayerController
     {
-        Player player;
-        PlayerDecision decision;
-        System.Threading.Semaphore semaphore;
+        public event Action<string> InfoChanged;
+
+        private Player player;
+        private PlayerDecision decision;
+        private System.Threading.Semaphore semaphore;
 
         public HumanController()
         {
@@ -63,6 +65,12 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
         public void MakeShowCardsDecision()
         {
             decision = new ShowCardsDecision(player);
+            semaphore.Release(1);
+        }
+
+        public void ApproveDecision()
+        {
+            // this method shouldn't be called for human players!
             semaphore.Release(1);
         }
 

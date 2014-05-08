@@ -125,6 +125,110 @@ namespace PokerProject.PokerGame
         }
 
         /// <summary>
+        /// If a player placed in a bet, which amount wasn't matched, he should get back the part of that bet which wasn't matched.
+        /// </summary>
+        public void PayBackUnmatchedBets()
+        {
+            if (playerBets.Count == 0)
+            {
+                return;
+            }
+
+            bool mayHaveUnmatch = true;
+            while (mayHaveUnmatch)
+            {
+                Player leadingPlayer = null;
+                int leadingChipCount = 0;
+                foreach (KeyValuePair<Player, int> playerBet in playerBets)
+                {
+                    if (playerBet.Key.IsIngame())
+                    {
+                        if (playerBet.Value > leadingChipCount)
+                        {
+                            leadingPlayer = playerBet.Key;
+                            leadingChipCount = playerBet.Value;
+                        }
+                    }
+                }
+
+                Player secondPlayer = null;
+                int secondChipCount = 0;
+                foreach (KeyValuePair<Player, int> playerBet in playerBets)
+                {
+                    if (playerBet.Key.IsIngame() && playerBet.Key != leadingPlayer)
+                    {
+                        if (playerBet.Value > secondChipCount)
+                        {
+                            secondPlayer = playerBet.Key;
+                            secondChipCount = playerBet.Value;
+                        }
+                    }
+                }
+
+                if (secondChipCount != 0 && leadingChipCount > secondChipCount)
+                {
+                    int payback = leadingChipCount - secondChipCount;
+                    RemoveBet(leadingPlayer, payback);
+                    leadingPlayer.IncreaseChipCount(payback);
+                    mayHaveUnmatch = true;
+                }
+                else
+                {
+                    mayHaveUnmatch = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Players get paid according to how many they have contributed to the pot.
+        /// If there were a tie, players get the fraction of the pot.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="numberOfWinners"></param>
+        /// <returns></returns>
+        public int PayOutPlayer(List<Player> players)
+        {
+            int minPayout = AmountToBeEligibleForPot;
+            int remainder = 0;
+            int recievedChips = 0;
+
+            foreach (Player player in players)
+            {
+                int payout = PlayerBetThisTurn(player) / players.Count;
+                if (payout < minPayout)
+                {
+                    minPayout = payout;
+                    remainder = PlayerBetThisTurn(player) % players.Count;
+                }
+            }
+
+            foreach (Player player in players)
+            {
+                if (!playerBets.ContainsKey(player))
+                {
+                    throw new ArgumentException("Player is not among betters. He shouldn't get payed out", "player");
+                }
+
+                Dictionary<Player, int> playerBetsCopy = new Dictionary<Player, int>();
+
+                foreach (KeyValuePair<Player, int> playerBet in playerBets)
+                {
+                    int share = playerBet.Value;
+                    int playerRecieve = (share > minPayout) ? minPayout : share;
+                    int remainingChips = share - playerRecieve;
+                    remainingChips = (remainingChips <= remainder) ? 0 : remainingChips;
+                    playerBetsCopy[playerBet.Key] = remainingChips;
+                    player.IncreaseChipCount(playerRecieve);
+                    recievedChips += playerRecieve;
+                }
+
+                playerBets = playerBetsCopy;
+            }
+
+            return recievedChips;
+        }
+
+        /// <summary>
         /// Returns the amount a player contributed to the pot in this turn. 
         /// </summary>
         /// <param name="player"></param>

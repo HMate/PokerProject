@@ -35,34 +35,57 @@ namespace PokerProject
 
         public void SetPlayer(Player player)
         {
-            ShowCardsButton.Visibility = System.Windows.Visibility.Hidden;
-
-            BetSlider.Visibility = System.Windows.Visibility.Visible;
-            BetBox.Visibility = System.Windows.Visibility.Visible;
-            CallButton.Visibility = System.Windows.Visibility.Visible;
-            RaiseButton.Visibility = System.Windows.Visibility.Visible;
-
+            player.Controller.InfoChanged -= AddAiInfo;
             this.player = player;
-            Pot mainPot = PokerGame.Table.Instance.MainPot;
 
-            int callAmount = (player.ChipCount > mainPot.GetAmountToCall(player)) ? mainPot.GetAmountToCall(player) : player.ChipCount;
-            BetBox.Text = (callAmount).ToString();
-            if (callAmount > 0)
+            if (player.Controller is PokerGame.PlayerClasses.PlayerAIs.HumanController)
             {
-                CallButton.Content = "Call";
+                AiOKButton.Visibility = System.Windows.Visibility.Hidden;
+                AiInfoBox.Visibility = System.Windows.Visibility.Hidden;
+                ShowCardsButton.Visibility = System.Windows.Visibility.Hidden;
+
+                BetSlider.Visibility = System.Windows.Visibility.Visible;
+                BetBox.Visibility = System.Windows.Visibility.Visible;
+                CallButton.Visibility = System.Windows.Visibility.Visible;
+                RaiseButton.Visibility = System.Windows.Visibility.Visible;
+                FoldButton.Visibility = System.Windows.Visibility.Visible;
+
+                Pot mainPot = PokerGame.Table.Instance.MainPot;
+
+                int callAmount = (player.ChipCount > mainPot.GetAmountToCall(player)) ? mainPot.GetAmountToCall(player) : player.ChipCount;
+                BetBox.Text = (callAmount).ToString();
+                if (callAmount > 0)
+                {
+                    CallButton.Content = "Call";
+                }
+                else
+                {
+                    CallButton.Content = "Check";
+                }
+
+                BetSlider.Minimum = (player.ChipCount > callAmount) ? callAmount : player.ChipCount;
+                BetSlider.Maximum = player.ChipCount;
+                BetSlider.Value = (double)callAmount;
             }
             else
             {
-                CallButton.Content = "Check";
-            }
+                ShowCardsButton.Visibility = System.Windows.Visibility.Hidden;
+                BetSlider.Visibility = System.Windows.Visibility.Hidden;
+                BetBox.Visibility = System.Windows.Visibility.Hidden;
+                CallButton.Visibility = System.Windows.Visibility.Hidden;
+                RaiseButton.Visibility = System.Windows.Visibility.Hidden;
+                FoldButton.Visibility = System.Windows.Visibility.Hidden;
 
-            BetSlider.Minimum = (player.ChipCount > callAmount) ? callAmount : player.ChipCount;
-            BetSlider.Maximum = player.ChipCount;
-            BetSlider.Value = (double)callAmount;
+                AiOKButton.Visibility = System.Windows.Visibility.Visible;
+                AiInfoBox.Visibility = System.Windows.Visibility.Visible;
+                AiInfoBox.Items.Clear();
+                player.Controller.InfoChanged += AddAiInfo;
+            }
         }
 
         public void SetPlayerToShowCards(Player player)
         {
+            player.Controller.InfoChanged -= AddAiInfo;
             this.player = player;
 
             BetSlider.Visibility = System.Windows.Visibility.Hidden;
@@ -70,7 +93,24 @@ namespace PokerProject
             CallButton.Visibility = System.Windows.Visibility.Hidden;
             RaiseButton.Visibility = System.Windows.Visibility.Hidden;
 
-            ShowCardsButton.Visibility = System.Windows.Visibility.Visible;
+            if (player.Controller is PokerGame.PlayerClasses.PlayerAIs.HumanController )
+            {
+                AiOKButton.Visibility = System.Windows.Visibility.Hidden;
+                AiInfoBox.Visibility = System.Windows.Visibility.Hidden;
+
+                ShowCardsButton.Visibility = System.Windows.Visibility.Visible;
+                FoldButton.Visibility = System.Windows.Visibility.Visible;
+            }
+            else
+            {
+                ShowCardsButton.Visibility = System.Windows.Visibility.Hidden;
+                FoldButton.Visibility = System.Windows.Visibility.Hidden;
+
+                AiOKButton.Visibility = System.Windows.Visibility.Visible;
+                AiInfoBox.Visibility = System.Windows.Visibility.Visible;
+                AiInfoBox.Items.Clear();
+                player.Controller.InfoChanged += AddAiInfo;
+            }
         }
 
         private void RaisePressed(object sender, RoutedEventArgs e)
@@ -106,9 +146,18 @@ namespace PokerProject
             BetBox.Text = ((int)BetSlider.Value).ToString();
         }
 
-        private void ValidateBetBox(object sender, TextCompositionEventArgs e)
+        private void AiOKClicked(object sender, RoutedEventArgs e)
         {
-            
+            player.Controller.ApproveDecision();
+        }
+
+        private void AddAiInfo(string message)
+        {
+            Dispatcher.Invoke((Action)(() =>
+            {
+                AiInfoBox.Items.Add(message);
+            }
+            ));
         }
 
         private void Validate(object sender, TextChangedEventArgs e)
