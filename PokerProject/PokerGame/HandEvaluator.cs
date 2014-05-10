@@ -27,12 +27,12 @@ namespace PokerProject.PokerGame
         
         private void SaveHand(IList<PokerCard> cards)
         {
-            CardList checkedCards = new CardList(cards);
+            CardList evaluatedCards = new CardList(cards);
 
-            if (SavedCardsAreWorseThan(checkedCards))
+            if (SavedCardsAreWorseThan(evaluatedCards))
             {
-                savedCards = checkedCards;
-                savedHand = new PokerHand(checkedCards);
+                savedCards = evaluatedCards;
+                savedHand = new PokerHand(evaluatedCards);
             }
         }
 

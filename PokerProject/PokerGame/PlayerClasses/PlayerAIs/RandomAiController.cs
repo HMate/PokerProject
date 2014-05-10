@@ -7,34 +7,18 @@ using PokerProject.PokerGame.PlayerClasses.Decisions;
 
 namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
 {
-    class RandomAiController : PlayerController
+    class RandomAIController : AbstractAIController
     {
-        public event Action<string> InfoChanged;
 
-        private Player player;
         private PlayerDecision decision;
-        private System.Threading.Semaphore semaphore;
         private Random randomGenerator;
-        private List<string> infos;
 
-        public RandomAiController()
+        public RandomAIController()
         {
-            semaphore = new System.Threading.Semaphore(0, 1);
             randomGenerator = new Random();
-            infos = new List<string>();
         }
 
-        public void SetPlayer(Player player)
-        {
-            this.player = player;
-        }
-
-        public PlayerController Clone()
-        {
-            return new RandomAiController();
-        }
-
-        public PlayerDecision MakeDecision()
+        public override PlayerDecision MakeDecision()
         {
             decision = null;
             infos.Clear();
@@ -52,7 +36,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
                     int randBet = randomGenerator.Next(atLeast, atMax);
 
                     decision = new BetDecision(player, randBet);
-                    ChangeInfo("I bet " + randBet);
+                    AppendInfo("I bet " + randBet);
                 }
                 catch (Exception e)
                 {
@@ -64,14 +48,14 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             else if (rand < 66)
             {
                 decision = new FoldDecision(player);
-                ChangeInfo("I fold");
+                AppendInfo("I fold");
             }
             else
             {
                 try
                 {
                     decision = new CallDecision(player);
-                    ChangeInfo("I call");
+                    AppendInfo("I call");
                 }
                 catch (Exception e)
                 {
@@ -80,11 +64,16 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
                 }
             }
 
-            semaphore.WaitOne();
+            SendInfo();
+            if (!automated)
+            {
+                semaphore.WaitOne();  
+            }
+            
             return decision;
         }
 
-        public PlayerDecision MakeRevealCardDecision()
+        public override PlayerDecision MakeRevealCardDecision()
         {
             decision = null;
 
@@ -93,67 +82,30 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             if (rand < 50)
             {
                 decision = new FoldDecision(player);
-                ChangeInfo("I fold");
+                AppendInfo("I fold");
             }
             else
             {
                 decision = new ShowCardsDecision(player);
-                ChangeInfo("I show my cards");
+                AppendInfo("I show my cards");
             }
 
-            semaphore.WaitOne();
+            SendInfo();
+            if (!automated)
+            {
+                semaphore.WaitOne();
+            }
             return decision;
-        }
-
-        private void ChangeInfo(string message)
-        {
-            //infos.Add(message);
-            if (InfoChanged != null)
-            {
-                InfoChanged(message);
-            }
-        }
-
-        public void ApproveDecision()
-        {
-            try
-            {
-                semaphore.Release();
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e);
-                System.Console.WriteLine(e.StackTrace);
-            }
-        }
-
-        public void MakeBetDecision(int value)
-        {
-            //decision = new BetDecision(player, value);
-            //semaphore.Release(1);
-        }
-
-        public void MakeFoldDecision()
-        {
-            //decision = new FoldDecision(player);
-            //semaphore.Release(1);
-        }
-
-        public void MakeCallDecision()
-        {
-            //decision = new CallDecision(player);
-            //semaphore.Release(1);
-        }
-
-        public void MakeShowCardsDecision()
-        {
-            //decision = new ShowCardsDecision(player);
-            //semaphore.Release(1);
         }
 
         public override string ToString()
         {
             return "Random AI";
+        }
+
+        public override PlayerController Clone()
+        {
+            return new RandomAIController();
         }
     }
 }

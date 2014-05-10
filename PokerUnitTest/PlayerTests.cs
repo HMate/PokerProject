@@ -202,7 +202,7 @@ namespace PokerUnitTest
             SetTableForTest();
             Player testPlayer = GetPlayerAtPosition("Big Blind");
 
-            table.SetBlind(50);
+            table.SetBigBlind(50);
             testPlayer.ChipCount = 100;
             testPlayer.PostBlind();
             Assert.AreEqual(50, table.MainPot.Size);
@@ -218,7 +218,7 @@ namespace PokerUnitTest
             SetTableForTest();
             Player testPlayer = GetPlayerAtPosition("Small Blind");
 
-            table.SetBlind(200);
+            table.SetSmallBlind(100);
             testPlayer.ChipCount = 1000;
             testPlayer.PostBlind();
             Assert.AreEqual(100, table.MainPot.Size);
@@ -234,7 +234,7 @@ namespace PokerUnitTest
             SetTableForTest();
             Player testPlayer = GetPlayerAtPosition("Big Blind");
 
-            table.SetBlind(100);
+            table.SetBigBlind(100);
             testPlayer.ChipCount = 80;
             testPlayer.PostBlind();
             Assert.AreEqual(80, table.MainPot.Size);
@@ -250,7 +250,7 @@ namespace PokerUnitTest
             SetTableForTest();
             Player testPlayer = GetPlayerAtPosition("Big Blind");
 
-            table.SetBlind(150);
+            table.SetBigBlind(150);
             jack.ChipCount = 90;
             jack.PostBlind();
             Assert.AreEqual(90, table.MainPot.Size);

@@ -12,7 +12,7 @@
         <Slider Name="BetSlider" HorizontalAlignment="Left" Height="25" Margin="46,81,0,0" VerticalAlignment="Top" Width="123" Grid.Column="1" ValueChanged="SliderChanged"/>
         <TextBox Name="BetBox" HorizontalAlignment="Left" Height="28" Margin="63,111,0,0" TextWrapping="Wrap" Text="50" VerticalAlignment="Top" Width="70" Grid.Column="1" TextChanged="Validate"/>
         <Button Name="AiOKButton" Content="Ok" HorizontalAlignment="Left" Height="28" Margin="277,12,0,0" VerticalAlignment="Top" Width="81" Click="AiOKClicked"/>
-        <ListBox Name="AiInfoBox" HorizontalAlignment="Left" Height="129" Margin="35,10,0,0" VerticalAlignment="Top" Width="134" Visibility="Hidden"/>
+        <ListBox Name="AiInfoBox" HorizontalAlignment="Left" Height="129" Margin="10,10,0,0" VerticalAlignment="Top" Width="181" Visibility="Hidden"/>
 
     </Grid>
 </UserControl>

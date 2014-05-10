@@ -80,7 +80,11 @@ namespace PokerProject.PokerGame
         {
             if (betSize < largestBet && GetAmountToCall(player) != betSize && betSize != player.ChipCount)
             {
-                throw new ArgumentException("Bet have to be at least the amount of the previous bet", "betSize");
+                throw new ArgumentException("Bet has to be at least the amount of the previous bet", "betSize");
+            }
+            if (betSize < 0)
+            {
+                throw new ArgumentException("Bet has to be positive", "betSize");
             }
             if (largestBet <= betSize)
             {
@@ -107,6 +111,10 @@ namespace PokerProject.PokerGame
         /// <param name="betSize"></param>
         public void RemoveBet(Player player, int betSize)
         {
+            if (betSize < 0)
+            {
+                throw new ArgumentException("Bet has to be positive", "betSize");
+            }
             if (player == prevLargestBetter && betSize == largestBet)
             {
                 largestBet = prevLargestBet;

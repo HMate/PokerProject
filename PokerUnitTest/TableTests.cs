@@ -17,7 +17,7 @@ namespace PokerUnitTest
         {
             for (int i = 0; i < 500; i += 50)
             {
-                table.SetBlind(i);
+                table.SetBigBlind(i);
                 Assert.AreEqual(i, table.GetBigBlind());
             }
         }
@@ -30,9 +30,10 @@ namespace PokerUnitTest
         {
             for (int i = 0; i < 500; i += 50)
             {
-                table.SetBlind(i);
-                Assert.AreEqual(i/2, table.GetSmallBlind());
+                table.SetSmallBlind(i);
+                Assert.AreEqual(i, table.GetSmallBlind());
             }
+
         }
 
         /*
@@ -43,7 +44,7 @@ namespace PokerUnitTest
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void TableSetInvalidBlindTest()
         {
-            table.SetBlind(-20);
+            table.SetBigBlind(-20);
         }
 
         /*
@@ -52,7 +53,7 @@ namespace PokerUnitTest
         [TestMethod]
         public void TableResetBlindTest()
         {
-            table.SetBlind(50);
+            table.SetBigBlind(50);
             table.ResetBlind();
             Assert.AreEqual(0, table.GetBigBlind());
         }

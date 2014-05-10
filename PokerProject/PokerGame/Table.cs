@@ -15,7 +15,8 @@ namespace PokerProject.PokerGame
         private Pot mainPot;
         private PlayerQueue players;
         private PlayerPositions positions;
-        private int blindAmount;
+        private int bigBlind;
+        private int smallBlind;
 
         public static Table Instance
         {
@@ -91,23 +92,33 @@ namespace PokerProject.PokerGame
         }
 
 
-        public void SetBlind(int amount)
+        public void SetBigBlind(int amount)
         {
             if (amount < 0)
             {
                 throw new ArgumentOutOfRangeException("amount", amount, "Blind cannot be negative.");
             }
-            blindAmount = amount;
+            bigBlind = amount;
+        }
+
+
+        public void SetSmallBlind(int amount)
+        {
+            if (amount < 0)
+            {
+                throw new ArgumentOutOfRangeException("amount", amount, "Blind cannot be negative.");
+            }
+            smallBlind= amount;
         }
 
         public int GetBigBlind()
         {
-            return blindAmount;
+            return bigBlind;
         }
 
         public int GetSmallBlind()
         {
-            return blindAmount / 2;
+            return smallBlind;
         }
 
         /// <summary>
@@ -115,7 +126,8 @@ namespace PokerProject.PokerGame
         /// </summary>
         public void ResetBlind()
         {
-            blindAmount = 0;
+            smallBlind = 0;
+            bigBlind = 0;
         }
     }
 }

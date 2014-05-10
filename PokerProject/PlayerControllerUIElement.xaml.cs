@@ -119,26 +119,30 @@ namespace PokerProject
             {
                 int value = Convert.ToInt32(BetBox.Text);
                 player.Controller.MakeBetDecision(value);
+                HideEverything();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                System.Console.WriteLine(ex);
             }
         }
 
         private void FoldPressed(object sender, RoutedEventArgs e)
         {
             player.Controller.MakeFoldDecision();
+            HideEverything();
         }
 
         private void CallPressed(object sender, RoutedEventArgs e)
         {
             player.Controller.MakeCallDecision();
+            HideEverything();
         }
 
         private void ShowPressed(object sender, RoutedEventArgs e)
         {
             player.Controller.MakeShowCardsDecision();
+            HideEverything();
         }
 
         private void SliderChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -149,13 +153,17 @@ namespace PokerProject
         private void AiOKClicked(object sender, RoutedEventArgs e)
         {
             player.Controller.ApproveDecision();
+            HideEverything();
         }
 
-        private void AddAiInfo(string message)
+        private void AddAiInfo(List<string> messages)
         {
             Dispatcher.Invoke((Action)(() =>
             {
-                AiInfoBox.Items.Add(message);
+                foreach (string message in messages)
+                {
+                    AiInfoBox.Items.Add(message);
+                }
             }
             ));
         }
@@ -181,6 +189,17 @@ namespace PokerProject
                     BetBox.Text = minBet.ToString();
                 }
             }
+        }
+
+        private void HideEverything()
+        {
+            BetSlider.Visibility = System.Windows.Visibility.Hidden;
+            BetBox.Visibility = System.Windows.Visibility.Hidden;
+            CallButton.Visibility = System.Windows.Visibility.Hidden;
+            RaiseButton.Visibility = System.Windows.Visibility.Hidden;
+            FoldButton.Visibility = System.Windows.Visibility.Hidden;
+            AiOKButton.Visibility = System.Windows.Visibility.Hidden;
+            AiInfoBox.Visibility = System.Windows.Visibility.Hidden;
         }
     }
 }

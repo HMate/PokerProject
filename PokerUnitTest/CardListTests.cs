@@ -38,26 +38,7 @@ namespace PokerUnitTest
 
             for (int index = 0; index < 52; index++)
             {
-                Assert.AreEqual(referenceCards[index], list.ElementAt(index), "Different cards! reference card:{0}, {1} /nlist card: {2}, {3}"
-                    , referenceCards[index].Rank, referenceCards[index].Suite, list.ElementAt(index).Rank, list.ElementAt(index).Suite);
-            }
-        }
-
-        /*
-         * Only the copy of the cards are given to the list, not the card itself.
-         * */
-        [TestMethod]
-        public void ListDontContainReference()
-        {
-            PokerCard[] referenceCards = new PokerCard[52];
-            CreateReferenceCardsAndAddThemToList(referenceCards);
-
-            for (int index = 0; index < 52; index++)
-            {
-                Assert.AreEqual(referenceCards[index], list.ElementAt(index), "Different cards! reference card:{0}, {1} /nlist card: {2}, {3}"
-                    , referenceCards[index].Rank, referenceCards[index].Suite, list.ElementAt(index).Rank, list.ElementAt(index).Suite);
-
-                Assert.AreNotSame(referenceCards[index], list.ElementAt(index), "Cards have the same reference!");
+                CollectionAssert.Contains(list, referenceCards[index]);
             }
         }
 
@@ -72,13 +53,7 @@ namespace PokerUnitTest
             CardList secondList = new CardList(list);
 
             Assert.AreNotSame(list, secondList);
-            for (int index = 0; index < 52; index++)
-            {
-                Assert.AreEqual(secondList.ElementAt(index), list.ElementAt(index), "Different cards! reference card:{0}, {1} /nlist card: {2}, {3}"
-                    , secondList.ElementAt(index).Rank, secondList.ElementAt(index).Suite, list.ElementAt(index).Rank, list.ElementAt(index).Suite);
-
-                Assert.AreNotSame(secondList.ElementAt(index), list.ElementAt(index), "Cards have the same reference!");
-            }
+            CollectionAssert.AreEquivalent(list, secondList);
         }
 
         /*

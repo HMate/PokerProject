@@ -58,10 +58,23 @@ namespace PokerProject
                 }
             }
 
+            if (AutoAISwitch.IsChecked == true)
+            {
+                foreach (Player player in players.GetPlayersList())
+                {
+                    player.Controller.SetAutomated(true);
+                }
+            }
+
             this.Visibility = System.Windows.Visibility.Hidden;
             PokerGame.Game game = new PokerGame.Game();
 
             GameWindow gWindow = new GameWindow(game);
+
+            if (AutoTurnEndSwitch.IsChecked == true)
+            {
+                game.SetAutoTurnEnd(true);
+            }
 
             game.BindGameWindow(gWindow);
 

@@ -15,6 +15,7 @@ namespace PokerProject.PokerGame
         PlayerQueue players;
         System.Threading.Semaphore semaphore;
         int turns;
+        bool autoTurnEnd;
 
         public Game()
         {
@@ -22,6 +23,8 @@ namespace PokerProject.PokerGame
             this.deck = new CardDeck();
             players = table.Players;
             semaphore = new System.Threading.Semaphore(0, 1);
+            turns = 1;
+            autoTurnEnd = false;
         }
 
         public void BindGameWindow(GameWindow window)
@@ -38,6 +41,7 @@ namespace PokerProject.PokerGame
             while (GameIsGoing())
             {
                 MainGameTurn();
+                AdjustBlinds();
             }
             //EndGame?
         }
@@ -48,8 +52,17 @@ namespace PokerProject.PokerGame
             Player firstPlayer = players.GetFirstPlayer();
             table.Positions.SetDealer(firstPlayer);
 
-            table.SetBlind(50);
-            turns = 1;
+            table.SetBigBlind(50);
+            table.SetSmallBlind(25);
+        }
+
+        private void AdjustBlinds()
+        {
+            if (turns % 30 == 0)
+            {
+                table.SetBigBlind(table.GetBigBlind() + 50);
+                table.SetSmallBlind(table.GetSmallBlind() + 25);
+            }
         }
 
         /*
@@ -156,7 +169,10 @@ namespace PokerProject.PokerGame
                 Player player = players.GetNextPlayer();
                 if (player.IsIngame())
                 {
-                    window.SetActivePlayer(player);
+                    if (player.Controller.IsAutomated() == false)
+                    {
+                        window.SetActivePlayer(player);
+                    }
                     window.RefreshGameView();
 
                     player.MakeDecision();
@@ -193,12 +209,15 @@ namespace PokerProject.PokerGame
         {
             //Pay out the winners
             CardShowingPhase();
+            window.RefreshGameView();
             DetermineAndPayOutWinners();
 
             //Show the final state of the turn
-            window.RefreshGameView();
-            window.WaitForNextTurn();
-            semaphore.WaitOne();
+            if (!autoTurnEnd)
+            {
+                window.WaitForNextTurn();
+                semaphore.WaitOne(); 
+            }
 
             //Fold all cards
             foreach (Player player in players.GetPlayersList())
@@ -211,7 +230,7 @@ namespace PokerProject.PokerGame
             List<Player> playersToRemove = new List<Player>();
             foreach (Player player in players.GetPlayersList())
             {
-                if (player.ChipCount <= 0)
+                if (player.ChipCount < table.GetBigBlind())
                 {
                     playersToRemove.Add(player);
                 }
@@ -234,8 +253,11 @@ namespace PokerProject.PokerGame
                 Player player = players.GetNextPlayer();
                 if (player.IsIngame())
                 {
-                    window.SetActivePlayerToShowCards(player);
-                    window.RefreshGameView();
+                    if (player.Controller.IsAutomated() == false)
+                    {
+                        window.SetActivePlayerToShowCards(player);
+                        window.RefreshGameView(); 
+                    }
 
                     player.MakeRevealCardDecision();
                 }
@@ -313,6 +335,11 @@ namespace PokerProject.PokerGame
         public void Continue()
         {
             semaphore.Release();
+        }
+
+        public void SetAutoTurnEnd(bool enabled)
+        {
+            autoTurnEnd = enabled;
         }
 
     }

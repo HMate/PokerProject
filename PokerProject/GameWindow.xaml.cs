@@ -36,6 +36,11 @@ namespace PokerProject
             RefreshMainPot();
 
             Visibility = System.Windows.Visibility.Visible;
+            PlayerControlUI.Visibility = System.Windows.Visibility.Hidden;
+            Card1.Visibility = System.Windows.Visibility.Hidden;
+            Card2.Visibility = System.Windows.Visibility.Hidden;
+            ActivePlayerLabel.Visibility = System.Windows.Visibility.Hidden;
+            ToCallLabel.Visibility = System.Windows.Visibility.Hidden;
         }
 
         public void StartGame()
@@ -98,8 +103,10 @@ namespace PokerProject
         {
             this.Dispatcher.Invoke((Action)(() =>
             {
-                MainPotLabel.Content = PokerGame.Table.Instance.MainPot.Size;
-                MainPotMinimumBetLabel.Content = PokerGame.Table.Instance.MainPot.LargestBet;
+                PokerGame.Table table = PokerGame.Table.Instance;
+                MainPotLabel.Content = table.MainPot.Size;
+                MainPotMinimumBetLabel.Content = table.MainPot.LargestBet;
+                BlindsLabel.Content = string.Format("Blinds: {0}/{1}", table.GetSmallBlind(), table.GetBigBlind());
             }
             ));
         }
@@ -123,7 +130,7 @@ namespace PokerProject
         {
             this.Dispatcher.Invoke((Action)(() =>
             {
-                CardList list = PokerGame.Table.Instance.CommunityCards;
+                IList<PokerCard> list = PokerGame.Table.Instance.CommunityCards;
                 int index = 0;
                 foreach (CardImage card in CommunityCardsPanel.Children)
                 {
@@ -146,6 +153,8 @@ namespace PokerProject
             this.Dispatcher.Invoke((Action)( () =>
             {
                 CardList list = activePlayer.ShowCards();
+                Card1.Visibility = System.Windows.Visibility.Visible;
+                Card2.Visibility = System.Windows.Visibility.Visible;
                 Card1.SetCard(list[0]);
                 Card2.SetCard(list[1]);
                 ActivePlayerLabel.Visibility = System.Windows.Visibility.Visible;
@@ -163,6 +172,8 @@ namespace PokerProject
             this.Dispatcher.Invoke((Action)(() =>
             {
                 CardList list = activePlayer.ShowCards();
+                Card1.Visibility = System.Windows.Visibility.Visible;
+                Card2.Visibility = System.Windows.Visibility.Visible;
                 Card1.SetCard(list[0]);
                 Card2.SetCard(list[1]);
                 ActivePlayerLabel.Visibility = System.Windows.Visibility.Visible;

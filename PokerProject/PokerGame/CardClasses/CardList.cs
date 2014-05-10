@@ -42,6 +42,15 @@ namespace PokerProject.PokerGame.CardClasses
             base.Add(new PokerCard(card));
         }
 
+        public new void AddRange(CardList otherCards)
+        {
+            foreach (PokerCard card in otherCards)
+            {
+                this.Add(card);
+            }
+        }
+
+
         private bool ContainsThisCard(PokerCard card)
         {
             bool containCard = false;
@@ -54,41 +63,6 @@ namespace PokerProject.PokerGame.CardClasses
                 }
             }
             return containCard;
-        }
-
-        public override bool Equals(object obj)
-        {
-            CardList otherList = obj as CardList;
-            if (otherList == null) return false;
-            return this.Equals(otherList);
-        }
-
-        public bool Equals(CardList otherList)
-        {
-            if (Count != otherList.Count)
-            {
-                return false;
-            }
-            bool equal = true;
-            int index = 0;
-            while (equal && index < Count)
-            {
-                //if (! otherList.ElementAt(index).Equals(this.ElementAt(index)))
-                //{
-                //    equal = false;
-                //}
-                if (!this.ContainsThisCard(otherList.ElementAt(index)))
-                {
-                    equal = false;
-                }
-                if (!otherList.ContainsThisCard(this.ElementAt(index)))
-                {
-                    equal = false;
-                }
-                index++;
-            }
-
-            return equal;
         }
 
 
@@ -120,6 +94,53 @@ namespace PokerProject.PokerGame.CardClasses
             }
 
             return smallestRank;
+        }
+
+        public new void Sort()
+        {
+            this.Sort(PokerCard.GetCardComparer());
+        }
+
+        public override bool Equals(object obj)
+        {
+            CardList otherList = obj as CardList;
+            if (otherList == null) return false;
+            return this.Equals(otherList);
+        }
+
+        public bool Equals(CardList otherList)
+        {
+            if (Count != otherList.Count)
+            {
+                return false;
+            }
+            bool equal = true;
+            int index = 0;
+            while (equal && index < Count)
+            {
+                if (!this.ContainsThisCard(otherList.ElementAt(index)))
+                {
+                    equal = false;
+                }
+                if (!otherList.ContainsThisCard(this.ElementAt(index)))
+                {
+                    equal = false;
+                }
+                index++;
+            }
+
+            return equal;
+        }
+
+        public override int GetHashCode()
+        {
+            int rankHash = 0;
+            foreach (var item in this)
+            {
+                rankHash = rankHash * 31 + item.GetHashCode();
+            }
+
+            return rankHash;
         }
 
     }

@@ -9,7 +9,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
 {
     public class HumanController : PlayerController
     {
-        public event Action<string> InfoChanged;
+        public event Action<List<string>> InfoChanged;
 
         private Player player;
         private PlayerDecision decision;
@@ -23,6 +23,14 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
         public void SetPlayer(Player player)
         {
             this.player = player;
+        }
+
+        public void SetAutomated(bool enabled)
+        {}
+
+        public bool IsAutomated()
+        {
+            return false;
         }
 
         public PlayerController Clone()

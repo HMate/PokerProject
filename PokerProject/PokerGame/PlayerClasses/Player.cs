@@ -164,7 +164,7 @@ namespace PokerProject.PokerGame.PlayerClasses
 
             if (position.Equals("Small Blind"))
             {
-                blindAmount /= 2;
+                blindAmount = table.GetSmallBlind();
             }
             
             if (chips < blindAmount)
@@ -184,6 +184,7 @@ namespace PokerProject.PokerGame.PlayerClasses
         {
             try
             {
+                lastBet = 0;
                 Pot mainPot = Table.Instance.MainPot;
                 mainPot.PlaceBet(this, amount);
                 lastBet = amount;
@@ -242,9 +243,13 @@ namespace PokerProject.PokerGame.PlayerClasses
             cards.Add(card);
         }
 
+        /// <summary>
+        /// Returns the copy of the palyers cards.
+        /// </summary>
+        /// <returns></returns>
         public CardList ShowCards()
         {
-            return cards;
+            return new CardList(cards);
         }
 
         public void FoldCards()

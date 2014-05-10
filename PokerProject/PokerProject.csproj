@@ -111,6 +111,7 @@
     <Compile Include="PokerGame\CardClasses\CardDeckEmptyException.cs" />
     <Compile Include="PokerGame\CardClasses\CardRank.cs" />
     <Compile Include="PokerGame\CardClasses\CardSuite.cs" />
+    <Compile Include="PokerGame\CardClasses\StarterHand.cs" />
     <Compile Include="PokerGame\CombinatoricsUtilities.cs" />
     <Compile Include="PokerGame\GameWinnerEvaluator.cs" />
     <Compile Include="PokerGame\HandEvaluator.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="PokerGame\PlayerClasses\Decisions\CallDecision.cs" />
     <Compile Include="PokerGame\PlayerClasses\Decisions\FoldDecision.cs" />
     <Compile Include="PokerGame\PlayerClasses\Decisions\ShowCardsDecision.cs" />
+    <Compile Include="PokerGame\PlayerClasses\PlayerAIs\AbstractAIController.cs" />
     <Compile Include="PokerGame\PlayerClasses\PlayerAIs\RandomAiController.cs" />
     <Compile Include="PokerGame\PlayerClasses\PlayerAIs\HumanController.cs" />
     <Compile Include="PokerGame\PlayerClasses\Player.cs" />
@@ -125,6 +127,8 @@
     <Compile Include="PokerGame\Game.cs" />
     <Compile Include="PokerGame\PlayerClasses\PlayerAIs\PlayerController.cs" />
     <Compile Include="PokerGame\PlayerClasses\Decisions\PlayerDecision.cs" />
+    <Compile Include="PokerGame\PlayerClasses\PlayerAIs\SimpleAIController.cs" />
+    <Compile Include="PokerGame\PlayerClasses\PlayerAIs\StatisticalAIController.cs" />
     <Compile Include="PokerGame\PlayerClasses\PlayerQueue.cs" />
     <Compile Include="PokerGame\PokerHand.cs" />
     <Compile Include="PokerGame\Pot.cs" />
