@@ -43,8 +43,7 @@ namespace PokerProject
 
         private void StartGame(object sender, RoutedEventArgs e)
         {
-            PokerGame.Table table = PokerGame.Table.Instance;
-            PokerGame.PlayerClasses.PlayerQueue players = table.Players;
+            PokerGame.Game game = new PokerGame.Game();
             
             foreach (PlayerAdder pAdder in AdderPanel.Children)
             {
@@ -52,34 +51,47 @@ namespace PokerProject
                 {
                     Player player = new Player(pAdder.playerNameBox.Text);
                     player.Controller = (PlayerController)pAdder.playerControllerComboBox.SelectedItem;
-                    player.ChipCount = 2000;
 
-                    players.AddPlayer(player);
+                    game.AddPlayerToGame(player);
                 }
             }
 
             if (AutoAISwitch.IsChecked == true)
             {
-                foreach (Player player in players.GetPlayersList())
+                foreach (Player player in game.GetPlayerList())
                 {
                     player.Controller.SetAutomated(true);
                 }
             }
-
-            this.Visibility = System.Windows.Visibility.Hidden;
-            PokerGame.Game game = new PokerGame.Game();
-
-            GameWindow gWindow = new GameWindow(game);
 
             if (AutoTurnEndSwitch.IsChecked == true)
             {
                 game.SetAutoTurnEnd(true);
             }
 
-            game.BindGameWindow(gWindow);
+            int gameTurns = 1;
+            if (GameTurnsCheckBox.IsChecked == true)
+            {
+                try
+                {
+                    gameTurns = Convert.ToInt32(GameTurnsCounter.Text);
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+            }
 
-            gWindow.StartGame();
+            if (OutputFileCheckBox.IsChecked == true)
+            {
+                game.SetOutPutFile(OutputFileTextBox.Text);
+            }
 
+            GameWindow gWindow = new GameWindow(game);
+            gWindow.StartGame(gameTurns);
+            this.Visibility = System.Windows.Visibility.Hidden;
+
+            //After closing the game window, this window should appear again.
             gWindow.Closed += ReappearMainWindow;
         }
 

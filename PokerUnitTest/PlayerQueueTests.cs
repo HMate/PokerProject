@@ -55,13 +55,11 @@ namespace PokerUnitTest
 
             Assert.AreEqual(1, testedPlayerList.Count);
             Assert.AreEqual(jack.Name, testedPlayerList.ElementAt(0).Name);
-            Assert.AreNotSame(jack, testedPlayerList.ElementAt(0), "Players have the same reference");
         }
 
         [TestMethod]
         /*
-         * Tests that the players in the queue are matchin the players that we put into the queue,
-         * but their reference isnt the same. 
+         * Tests that the players in the queue are matchin the players that we put into the queue. 
          * */
         public void PlayerQueueAddPlayerListTest()
         {
@@ -72,7 +70,6 @@ namespace PokerUnitTest
             foreach (Player player in testPlayers)
             {
                 Assert.AreEqual(player.Name, testedPlayerList.ElementAt(index).Name);
-                Assert.AreNotSame(player, testedPlayerList.ElementAt(index), "Players have the same reference");
                 index++;
             }
         }

@@ -22,8 +22,16 @@
         </StackPanel>
         <Button Content="Start Game"  Margin="0,297,89,30" HorizontalAlignment="Right" MinWidth="199" Grid.Column="1" MinHeight="48" Grid.RowSpan="5" Width="200" Height="50" MaxWidth="200" MaxHeight="50" Click="StartGame"/>
         <StackPanel Grid.Column="1" HorizontalAlignment="Left" Height="255" Margin="74,25,0,0" VerticalAlignment="Top" Width="284">
-            <CheckBox Name="AutoAISwitch" Content="Automated AI"/>
-            <CheckBox Name="AutoTurnEndSwitch" Content="Auto Turn End"/>
+            <CheckBox Name="AutoAISwitch" Content="Automated AI" Height="20" VerticalAlignment="Center"/>
+            <CheckBox Name="AutoTurnEndSwitch" Content="Auto Turn End" Height="20" VerticalAlignment="Center"/>
+            <WrapPanel HorizontalAlignment="Left" Height="20" Width="274">
+                <CheckBox Name="GameTurnsCheckBox" Content="Games to play:" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                <TextBox Name="GameTurnsCounter" Text="10" Width="40" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            </WrapPanel>
+            <WrapPanel HorizontalAlignment="Left" Height="20" Width="274">
+                <CheckBox Name="OutputFileCheckBox" Content="Set output file:" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                <TextBox Name="OutputFileTextBox" Text="Default.txt" Width="100" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            </WrapPanel>
         </StackPanel>
 
     </Grid>

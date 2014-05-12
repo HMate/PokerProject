@@ -87,6 +87,7 @@ namespace PokerProject.PokerGame.PlayerClasses
             set
             {
                 controller = value;
+                controller.SetPlayer(this);
             }
         }
 

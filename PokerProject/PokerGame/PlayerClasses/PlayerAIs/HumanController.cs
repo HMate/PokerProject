@@ -26,7 +26,9 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
         }
 
         public void SetAutomated(bool enabled)
-        {}
+        {
+            //Human players shouldn't be automated.
+        }
 
         public bool IsAutomated()
         {

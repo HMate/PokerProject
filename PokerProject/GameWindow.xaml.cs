@@ -31,8 +31,8 @@ namespace PokerProject
         {
             InitializeComponent();
             this.game = game;
+            game.BindGameWindow(this);
 
-            AddPlayersToTable();
             RefreshMainPot();
 
             Visibility = System.Windows.Visibility.Visible;
@@ -43,13 +43,13 @@ namespace PokerProject
             ToCallLabel.Visibility = System.Windows.Visibility.Hidden;
         }
 
-        public void StartGame()
+        public void StartGame(int turns = 1)
         {
             if (gameThread == null)
             {
-                gameThread = new System.Threading.Thread(new System.Threading.ThreadStart(game.PlayTheGame));
+                AddPlayersToTable();
+                gameThread = new System.Threading.Thread( () => game.PlayTheGame(turns) );
                 gameThread.Start();
-                MessageBox.Items.Add("New game started.");
             }
         }
 
@@ -62,7 +62,7 @@ namespace PokerProject
                 children.MoveNext();
             }
 
-            foreach (Player player in PokerGame.Table.Instance.Players.GetPlayersList())
+            foreach (Player player in game.GetPlayerList())
             {
                 ((PlayerPresenter)children.Current).AddPlayer(player);
                 children.MoveNext();

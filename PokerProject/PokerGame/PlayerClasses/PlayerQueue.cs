@@ -23,14 +23,13 @@ namespace PokerProject.PokerGame.PlayerClasses
         }
 
         /*
-         * Adding players to the list.Makes a deep copy.
+         * Adding players to the list.
          * New players are automatically added to the queue as well.
          * */
         public void AddPlayer(Player player)
         {
-            Player newPlayer = new Player(player);
-            list.Add(newPlayer);
-            queue.Enqueue(newPlayer);
+            list.Add(player);
+            queue.Enqueue(player);
         }
 
         /*

@@ -4,26 +4,32 @@ using System.Linq;
 using System.Text;
 using PokerProject.PokerGame.PlayerClasses;
 using PokerProject.PokerGame.CardClasses;
+using System.IO;
 
 namespace PokerProject.PokerGame
 {
     public class Game
     {
-        GameWindow window;
-        Table table;
-        CardDeck deck;
-        PlayerQueue players;
-        System.Threading.Semaphore semaphore;
-        int turns;
-        bool autoTurnEnd;
+        private GameWindow window;
+        private System.Threading.Semaphore semaphore;
+        private Table table;
+        private CardDeck deck;
+        private PlayerQueue players;
+        private List<Player> startingPlayers;
+        string outputFileName;
+
+        private int turns;
+        private bool autoTurnEnd;
 
         public Game()
         {
+            semaphore = new System.Threading.Semaphore(0, 1);
             table = Table.Instance;
             this.deck = new CardDeck();
             players = table.Players;
-            semaphore = new System.Threading.Semaphore(0, 1);
-            turns = 1;
+            startingPlayers = new List<Player>();
+            outputFileName = "LastGame.txt";
+
             autoTurnEnd = false;
         }
 
@@ -32,18 +38,123 @@ namespace PokerProject.PokerGame
             this.window = window;
         }
 
-        /*
-         * 
-         * */
-        public void PlayTheGame()
+        /// <summary>
+        /// Continues the game if it waits at the end of a turn.
+        /// </summary>
+        public void Continue()
         {
+            semaphore.Release();
+        }
+
+        /// <summary>
+        /// Sets that the game should wait for a call to the method Continue() at the end of every turn.
+        /// </summary>
+        /// <param name="enabled"></param>
+        public void SetAutoTurnEnd(bool enabled)
+        {
+            autoTurnEnd = enabled;
+        }
+
+        /// <summary>
+        /// Players added by this method will be added to the game when it starts every time.
+        /// </summary>
+        /// <param name="player"></param>
+        public void AddPlayerToGame(Player player)
+        {
+            startingPlayers.Add(player);
+        }
+
+        /// <summary>
+        /// Gives back the players that are added to a game at the start of a new game.
+        /// </summary>
+        /// <returns></returns>
+        public List<Player> GetPlayerList()
+        {
+            return startingPlayers;
+        }
+
+        /// <summary>
+        /// Sets the target output file to the given file in the /stats directory.
+        /// </summary>
+        /// <param name="filename"></param>
+        public void SetOutPutFile(string filename)
+        {
+            outputFileName = filename;
+        }
+
+        /// <summary>
+        /// Starts the game. Restarts the game after it finishes the given number of times.
+        /// </summary>
+        /// <param name="turns"> The number of how many games would be played after each other.</param>
+        public void PlayTheGame(int gameRounds = 1)
+        {
+            List<string> toFile = new List<string>();
+            Dictionary<Player, int> winners = new Dictionary<Player, int>();
+
+            for (int round = 0; round < gameRounds; round++)
+            {
+                window.WriteMessage("New game started!");
+
+                GameMain();
+
+                Player winner = players.GetPlayersList()[0];
+                window.WriteMessage(winner.Name + " has won the game!");
+                window.WriteMessage("");
+
+                if (winners.ContainsKey(winner))
+                {
+                    winners[winner] += 1;
+                }
+                else
+                {
+                    winners.Add(winner, 1);
+                }
+                
+                toFile.Add(String.Format("Game {0}: Winner: {1}, Type: {2}", round, winner.Name, winner.Controller.ToString() ));
+            }
+
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"stats/" + outputFileName))
+            {
+                foreach (Player player in winners.Keys)
+                {
+                    string name = player.Name;
+                    string type = player.Controller.ToString();
+                    int roundsWon = winners[player];
+                    double wonPercent = ((double)winners[player]) * 100 / gameRounds;
+                    file.WriteLine(String.Format("{0}({1}) won {2} games ({3}%)", name, type, roundsWon, wonPercent));
+                }
+
+                file.WriteLine("");
+                file.WriteLine("Games:");
+                foreach (string line in toFile)
+                {
+                    file.WriteLine(line);
+                }
+            }
+        }
+
+        /// <summary>
+        /// The actual game happens here.
+        /// </summary>
+        private void GameMain()
+        {
+            SetupPlayers();
             SetupGame();
             while (GameIsGoing())
             {
                 MainGameTurn();
                 AdjustBlinds();
             }
-            //EndGame?
+        }
+
+        private void SetupPlayers()
+        {
+            players.Clear();
+            foreach (Player player in startingPlayers)
+            {
+                player.ChipCount = 2000;
+                players.AddPlayer(player);
+            }
         }
 
         private void SetupGame()
@@ -52,6 +163,7 @@ namespace PokerProject.PokerGame
             Player firstPlayer = players.GetFirstPlayer();
             table.Positions.SetDealer(firstPlayer);
 
+            turns = 1;
             table.SetBigBlind(50);
             table.SetSmallBlind(25);
         }
@@ -189,22 +301,6 @@ namespace PokerProject.PokerGame
             table.MainPot.PayBackUnmatchedBets();
         }
 
-        /*
-         * The turn ends when only one player left in game.
-         * */
-        private bool IsOnlyOnePlayerActive()
-        {
-            int activePlayers = 0;
-            foreach (Player player in players.GetPlayersList())
-            {
-                if (player.IsIngame())
-                {
-                    activePlayers++;
-                }
-            }
-            return (activePlayers < 2) ? true : false;
-        }
-
         private void EndTurn()
         {
             //Pay out the winners
@@ -226,21 +322,8 @@ namespace PokerProject.PokerGame
             }
 
             //Delete players who doesnt have money left
+            RemovePlayersFromGame();
 
-            List<Player> playersToRemove = new List<Player>();
-            foreach (Player player in players.GetPlayersList())
-            {
-                if (player.ChipCount < table.GetBigBlind())
-                {
-                    playersToRemove.Add(player);
-                }
-            }
-
-            foreach (Player player in playersToRemove)
-            {
-                players.DeletePlayer(player);
-                window.WriteMessage(player.Name + " left the game");
-            }
             turns++;
         }
 
@@ -318,6 +401,22 @@ namespace PokerProject.PokerGame
             }
         }
 
+        /*
+         * The turn ends when only one player left in game.
+         * */
+        private bool IsOnlyOnePlayerActive()
+        {
+            int activePlayers = 0;
+            foreach (Player player in players.GetPlayersList())
+            {
+                if (player.IsIngame())
+                {
+                    activePlayers++;
+                }
+            }
+            return (activePlayers < 2) ? true : false;
+        }
+
         private bool AtLeastOnePlayerActive()
         {
 
@@ -332,14 +431,22 @@ namespace PokerProject.PokerGame
             return (activePlayers > 0) ? true : false;
         }
 
-        public void Continue()
+        private void RemovePlayersFromGame()
         {
-            semaphore.Release();
-        }
+            List<Player> playersToRemove = new List<Player>();
+            foreach (Player player in players.GetPlayersList())
+            {
+                if (player.ChipCount < table.GetBigBlind())
+                {
+                    playersToRemove.Add(player);
+                }
+            }
 
-        public void SetAutoTurnEnd(bool enabled)
-        {
-            autoTurnEnd = enabled;
+            foreach (Player player in playersToRemove)
+            {
+                players.DeletePlayer(player);
+                window.WriteMessage(player.Name + " left the game");
+            }
         }
 
     }
