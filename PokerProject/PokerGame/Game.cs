@@ -93,7 +93,7 @@ namespace PokerProject.PokerGame
 
             for (int round = 0; round < gameRounds; round++)
             {
-                window.WriteMessage("New game started!");
+                window.WriteMessage(round+1 + ". game started!");
 
                 GameMain();
 
@@ -115,13 +115,23 @@ namespace PokerProject.PokerGame
 
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"stats/" + outputFileName))
             {
+                file.WriteLine("Players:");
+                foreach (Player player in startingPlayers)
+                {
+                    string name = player.Name;
+                    string type = player.Controller.ToString();
+                    file.WriteLine(String.Format("{0} ({1}) ", name, type));
+                }
+
+                file.WriteLine("");
+                file.WriteLine("Results:");
                 foreach (Player player in winners.Keys)
                 {
                     string name = player.Name;
                     string type = player.Controller.ToString();
                     int roundsWon = winners[player];
                     double wonPercent = ((double)winners[player]) * 100 / gameRounds;
-                    file.WriteLine(String.Format("{0}({1}) won {2} games ({3}%)", name, type, roundsWon, wonPercent));
+                    file.WriteLine(String.Format("{0} ({1}) won {2} games ({3}%)", name, type, roundsWon, wonPercent));
                 }
 
                 file.WriteLine("");

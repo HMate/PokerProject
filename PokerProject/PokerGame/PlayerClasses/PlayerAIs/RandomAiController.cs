@@ -9,8 +9,6 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
 {
     class RandomAIController : AbstractAIController
     {
-
-        private PlayerDecision decision;
         private Random randomGenerator;
 
         public RandomAIController()
@@ -18,18 +16,15 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             randomGenerator = new Random();
         }
 
-        public override PlayerDecision MakeDecision()
+        protected override void MakeAIDecision()
         {
-            decision = null;
-            infos.Clear();
-
             int rand = randomGenerator.Next(100);
 
             if (rand < 33)
             {
                 try
                 {
-                    int minBet = Table.Instance.MainPot.AmountToBeEligibleForPot;
+                    int minBet = Table.Instance.MainPot.AmountToBeEligibleForPot + Table.Instance.MainPot.LargestBet;
                     int atMax = player.ChipCount;
                     int atLeast = (player.ChipCount < minBet) ? player.ChipCount : minBet;
 
@@ -45,7 +40,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
                 }
                 
             }
-            else if (rand < 66)
+            else if (rand < 43)
             {
                 decision = new FoldDecision(player);
                 AppendInfo("I fold");
@@ -63,23 +58,13 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
                     System.Console.WriteLine(e.StackTrace);
                 }
             }
-
-            SendInfo();
-            if (!automated)
-            {
-                semaphore.WaitOne();  
-            }
-            
-            return decision;
         }
 
-        public override PlayerDecision MakeRevealCardDecision()
+        protected override void MakeRevealCardAIDecision()
         {
-            decision = null;
-
             int rand = randomGenerator.Next(100);
 
-            if (rand < 50)
+            if (rand < 0)
             {
                 decision = new FoldDecision(player);
                 AppendInfo("I fold");
@@ -89,13 +74,6 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
                 decision = new ShowCardsDecision(player);
                 AppendInfo("I show my cards");
             }
-
-            SendInfo();
-            if (!automated)
-            {
-                semaphore.WaitOne();
-            }
-            return decision;
         }
 
         public override string ToString()

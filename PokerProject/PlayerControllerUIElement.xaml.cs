@@ -18,7 +18,7 @@ using PokerProject.PokerGame.PlayerClasses;
 namespace PokerProject
 {
     /// <summary>
-    /// Interaction logic for HumanController.xaml
+    /// UI for controlling the current active player
     /// </summary>
     public partial class PlayerControllerUIElement : UserControl
     {
@@ -37,13 +37,10 @@ namespace PokerProject
         {
             player.Controller.InfoChanged -= AddAiInfo;
             this.player = player;
+            HideEverything();
 
             if (player.Controller is PokerGame.PlayerClasses.PlayerAIs.HumanController)
             {
-                AiOKButton.Visibility = System.Windows.Visibility.Hidden;
-                AiInfoBox.Visibility = System.Windows.Visibility.Hidden;
-                ShowCardsButton.Visibility = System.Windows.Visibility.Hidden;
-
                 BetSlider.Visibility = System.Windows.Visibility.Visible;
                 BetBox.Visibility = System.Windows.Visibility.Visible;
                 CallButton.Visibility = System.Windows.Visibility.Visible;
@@ -69,13 +66,6 @@ namespace PokerProject
             }
             else
             {
-                ShowCardsButton.Visibility = System.Windows.Visibility.Hidden;
-                BetSlider.Visibility = System.Windows.Visibility.Hidden;
-                BetBox.Visibility = System.Windows.Visibility.Hidden;
-                CallButton.Visibility = System.Windows.Visibility.Hidden;
-                RaiseButton.Visibility = System.Windows.Visibility.Hidden;
-                FoldButton.Visibility = System.Windows.Visibility.Hidden;
-
                 AiOKButton.Visibility = System.Windows.Visibility.Visible;
                 AiInfoBox.Visibility = System.Windows.Visibility.Visible;
                 AiInfoBox.Items.Clear();
@@ -87,25 +77,15 @@ namespace PokerProject
         {
             player.Controller.InfoChanged -= AddAiInfo;
             this.player = player;
-
-            BetSlider.Visibility = System.Windows.Visibility.Hidden;
-            BetBox.Visibility = System.Windows.Visibility.Hidden;
-            CallButton.Visibility = System.Windows.Visibility.Hidden;
-            RaiseButton.Visibility = System.Windows.Visibility.Hidden;
+            HideEverything();
 
             if (player.Controller is PokerGame.PlayerClasses.PlayerAIs.HumanController )
             {
-                AiOKButton.Visibility = System.Windows.Visibility.Hidden;
-                AiInfoBox.Visibility = System.Windows.Visibility.Hidden;
-
                 ShowCardsButton.Visibility = System.Windows.Visibility.Visible;
                 FoldButton.Visibility = System.Windows.Visibility.Visible;
             }
             else
             {
-                ShowCardsButton.Visibility = System.Windows.Visibility.Hidden;
-                FoldButton.Visibility = System.Windows.Visibility.Hidden;
-
                 AiOKButton.Visibility = System.Windows.Visibility.Visible;
                 AiInfoBox.Visibility = System.Windows.Visibility.Visible;
                 AiInfoBox.Items.Clear();
@@ -182,6 +162,10 @@ namespace PokerProject
                     if (bet > maxBet)
                     {
                         BetBox.Text = maxBet.ToString();
+                    } 
+                    if (bet < 0)
+                    {
+                        BetBox.Text = minBet.ToString();
                     }
                 }
                 catch (Exception)
@@ -193,6 +177,7 @@ namespace PokerProject
 
         private void HideEverything()
         {
+            ShowCardsButton.Visibility = System.Windows.Visibility.Hidden;
             BetSlider.Visibility = System.Windows.Visibility.Hidden;
             BetBox.Visibility = System.Windows.Visibility.Hidden;
             CallButton.Visibility = System.Windows.Visibility.Hidden;

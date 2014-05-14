@@ -42,7 +42,7 @@ namespace PokerProject.PokerGame.CardClasses
             base.Add(new PokerCard(card));
         }
 
-        public new void AddRange(CardList otherCards)
+        public void AddRange(CardList otherCards)
         {
             foreach (PokerCard card in otherCards)
             {

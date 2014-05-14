@@ -30,7 +30,7 @@
             </WrapPanel>
             <WrapPanel HorizontalAlignment="Left" Height="20" Width="274">
                 <CheckBox Name="OutputFileCheckBox" Content="Set output file:" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                <TextBox Name="OutputFileTextBox" Text="Default.txt" Width="100" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                <TextBox Name="OutputFileTextBox" Text="Default.txt" Width="157" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
             </WrapPanel>
         </StackPanel>
 

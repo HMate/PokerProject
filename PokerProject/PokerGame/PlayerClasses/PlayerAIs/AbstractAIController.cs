@@ -10,7 +10,8 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
     abstract class AbstractAIController : PlayerController
     {
         public event Action<List<string>> InfoChanged;
-
+        
+        protected PlayerDecision decision;
         protected Player player;
         protected System.Threading.Semaphore semaphore;
         protected List<string> infos;
@@ -37,6 +38,40 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
         {
             return automated;
         }
+
+        public PlayerDecision MakeDecision()
+        {
+            decision = null;
+            infos.Clear();
+
+            MakeAIDecision();
+
+            SendInfo();
+            if (!automated)
+            {
+                semaphore.WaitOne();  
+            }
+            return decision;
+        }
+
+        protected abstract void MakeAIDecision();
+
+        public PlayerDecision MakeRevealCardDecision()
+        {
+            decision = null;
+            infos.Clear();
+
+            MakeRevealCardAIDecision();
+            
+            SendInfo();
+            if (!automated)
+            {
+                semaphore.WaitOne();
+            }
+            return decision;
+        }
+
+        protected abstract void MakeRevealCardAIDecision();
 
         public void ApproveDecision()
         {
@@ -88,8 +123,6 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             //semaphore.Release(1);
         }
 
-        public abstract PlayerDecision MakeDecision();
-        public abstract PlayerDecision MakeRevealCardDecision();
         public abstract PlayerController Clone();
     }
 }

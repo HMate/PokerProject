@@ -9,47 +9,22 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
 {
     class SimpleAIController : AbstractAIController
     {
-        private PlayerDecision decision;
 
         public SimpleAIController()
         {
 
         }
 
-        public override PlayerDecision MakeDecision()
+        protected override void MakeAIDecision()
         {
-            decision = null;
-            infos.Clear();
-
-            //int minBet = Table.Instance.MainPot.AmountToBeEligibleForPot;
-            //int atMax = player.ChipCount;
-            //int atLeast = (player.ChipCount < minBet) ? player.ChipCount : minBet;
-                
             decision = new CallDecision(player);
             AppendInfo("I call");
-            SendInfo();
-
-            if (!automated)
-            {
-                semaphore.WaitOne();  
-            }
-            
-            return decision;
         }
 
-        public override PlayerDecision MakeRevealCardDecision()
+        protected override void MakeRevealCardAIDecision()
         {
-            decision = null;
-
             decision = new ShowCardsDecision(player);
             AppendInfo("I show my cards");
-            SendInfo();
-
-            if (!automated)
-            {
-                semaphore.WaitOne();
-            }
-            return decision;
         }
 
         public override string ToString()

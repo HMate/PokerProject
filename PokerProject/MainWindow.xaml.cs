@@ -56,18 +56,15 @@ namespace PokerProject
                 }
             }
 
-            if (AutoAISwitch.IsChecked == true)
+            bool automated = (bool)AutoAISwitch.IsChecked;
+            foreach (Player player in game.GetPlayerList())
             {
-                foreach (Player player in game.GetPlayerList())
-                {
-                    player.Controller.SetAutomated(true);
-                }
+                player.Controller.SetAutomated(automated);
             }
 
-            if (AutoTurnEndSwitch.IsChecked == true)
-            {
-                game.SetAutoTurnEnd(true);
-            }
+
+            bool autoTurnEnd = (bool)AutoTurnEndSwitch.IsChecked;
+            game.SetAutoTurnEnd(autoTurnEnd);
 
             int gameTurns = 1;
             if (GameTurnsCheckBox.IsChecked == true)
