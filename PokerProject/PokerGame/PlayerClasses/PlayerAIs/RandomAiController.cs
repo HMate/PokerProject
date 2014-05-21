@@ -20,7 +20,12 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
         {
             int rand = randomGenerator.Next(100);
 
-            if (rand < 33)
+            if (rand < 10)
+            {
+                decision = new FoldDecision(player);
+                AppendInfo("I fold");
+            }
+            else if (rand < 55)
             {
                 try
                 {
@@ -39,11 +44,6 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
                     System.Console.WriteLine(e.StackTrace);
                 }
                 
-            }
-            else if (rand < 43)
-            {
-                decision = new FoldDecision(player);
-                AppendInfo("I fold");
             }
             else
             {

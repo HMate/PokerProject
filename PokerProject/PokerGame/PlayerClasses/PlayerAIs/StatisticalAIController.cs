@@ -67,7 +67,20 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
 
         protected override void MakeAIDecision()
         {
-            if (table.CommunityCards.Count == 0)
+            bool everybodyInactive = true;
+            foreach (Player otherPlayer in table.Players.GetPlayersList())
+            {
+                if (everybodyInactive == true && otherPlayer.IsIngame() == true && otherPlayer.ChipCount > 0)
+                {
+                    everybodyInactive = false;
+                }
+            }
+
+            if (everybodyInactive && table.MainPot.GetAmountToCall(player) == 0)
+            {
+                decision = new CallDecision(player);
+            }
+            else if (table.CommunityCards.Count == 0)
             {
                 currentPhase = GamePhase.PreFlop;
                 CardList myCards = player.ShowCards();

@@ -163,7 +163,7 @@ namespace PokerProject.PokerGame
                 int secondChipCount = 0;
                 foreach (KeyValuePair<Player, int> playerBet in playerBets)
                 {
-                    if (playerBet.Key.IsIngame() && playerBet.Key != leadingPlayer)
+                    if (playerBet.Key != leadingPlayer)
                     {
                         if (playerBet.Value > secondChipCount)
                         {
