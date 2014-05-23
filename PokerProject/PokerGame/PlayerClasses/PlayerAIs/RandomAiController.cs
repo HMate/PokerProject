@@ -64,7 +64,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
         {
             int rand = randomGenerator.Next(100);
 
-            if (rand < 0)
+            if (rand < 10)
             {
                 decision = new FoldDecision(player);
                 AppendInfo("I fold");
