@@ -29,6 +29,9 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             Undecidable
         }
 
+        /// <summary>
+        /// Represents the phases of the game
+        /// </summary>
         public enum GamePhase
         {
             PreFlop,
@@ -40,24 +43,13 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
         static StatisticalAIController()
         {
             startingValues = new Dictionary<StarterHand, double>();
-            CardList allCards = GetHalfDeckWithoutGivenCards(new CardList());
-            HashSet<StarterHand> allStarters = new HashSet<StarterHand>();
 
-            CombinatoricsUtilities.GetCombinations<PokerCard>(allCards, startingCards =>
+            using (System.IO.FileStream file = new System.IO.FileStream(@"AIfiles/statisticalStartingHands.txt", System.IO.FileMode.Open, System.IO.FileAccess.Read))
             {
-                CardList startingHand = new CardList(startingCards);
-                startingHand.Sort();
-                allStarters.Add(new StarterHand(startingHand));
-            }
-            , 2, false);
-
-            foreach (StarterHand hand in allStarters)
-            {
-                double value = ApproximatedPlayabilityAgainstCategory(hand);
-                startingValues.Add(hand, value);
+                var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                startingValues = (Dictionary<StarterHand, double>)formatter.Deserialize(file);
             }
         }
-
         public StatisticalAIController()
         {
             table = Table.Instance;
@@ -190,33 +182,9 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             return handSoFar;
         }
 
-        //returns the playability value of a given starter hand
-        private static double ApproximatedPlayabilityAgainstCategory(StarterHand myHand)
-        {
-            //total: 24 choose 3
-            double totalCombinations = 2024;
-            double playablityCount = 0;
-            CardList cardDeck = GetHalfDeckWithoutGivenCards(myHand.GetExampleCards());
-
-            CombinatoricsUtilities.GetCombinations<PokerCard>(cardDeck, imaginaryCards =>
-            {
-                CardList imaginary5Card = new CardList();
-                imaginary5Card.AddRange(imaginaryCards);
-                imaginary5Card.AddRange(myHand.GetExampleCards());
-
-                PokerHand imaginaryHand = new PokerHand(imaginary5Card);
-
-                if (imaginaryHand.Category > PokerHand.HandCategory.HighCard)
-                {
-                    playablityCount += 1;
-                }
-
-            }, 3, false);
-
-            return playablityCount * 10 / totalCombinations;
-        }
-
-        //Fills probableCategories with probabilities about given hand with given number of missing cards 
+        /// <summary>
+        /// Fills probableCategories with probabilities about given hand with given number of missing cards 
+        /// </summary>
         private void CalculateMyCards(CardList handSoFar, int missingCards)
         {
             if (lastPhase == currentPhase)
@@ -287,7 +255,11 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             }
         }
 
-        //Gives the win/total with the given hand against somebody who gets 'enemyMissingCards' number of cards 
+        /// <summary>
+        /// Gives the win/total with the given hand against somebody who gets 'enemyMissingCards' number of cards 
+        /// </summary>
+        /// <param name="handSoFar"></param>
+        /// <param name="enemyMissingCards"></param>
         private void CalculateWinningChances(CardList handSoFar, int enemyMissingCards)
         {
             if (lastPhase == currentPhase)
@@ -432,22 +404,6 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
                 return HandStrength.Undecidable;
             }
             return HandStrength.Neutral;
-        }
-
-        private static CardList GetHalfDeckWithoutGivenCards(CardList myCards)
-        {
-            CardList cardDeck = GetFullDeckWithoutGivenCards(myCards);
-
-            CardList copy = new CardList(cardDeck);
-            foreach (PokerCard card in copy)
-            {
-                if (card.Suite != CardSuite.Diamonds && card.Suite != CardSuite.Clubs)
-                {
-                    cardDeck.Remove(card);
-                }
-            }
-
-            return cardDeck;
         }
 
         private static CardList GetFullDeckWithoutGivenCards(CardList myCards)

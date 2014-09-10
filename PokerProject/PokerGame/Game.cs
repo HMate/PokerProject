@@ -90,6 +90,7 @@ namespace PokerProject.PokerGame
         {
             List<string> toFile = new List<string>();
             Dictionary<Player, int> winners = new Dictionary<Player, int>();
+            DateTime startTime = DateTime.Now;
 
             for (int round = 0; round < gameRounds; round++)
             {
@@ -99,7 +100,7 @@ namespace PokerProject.PokerGame
 
                 Player winner = players.GetPlayersList()[0];
                 window.WriteMessage(winner.Name + " has won the game!");
-                window.WriteMessage("");
+                window.WriteMessage("-------------------");
 
                 if (winners.ContainsKey(winner))
                 {
@@ -115,6 +116,7 @@ namespace PokerProject.PokerGame
 
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"stats/" + outputFileName))
             {
+                file.WriteLine(String.Format("Date: {0}, Duration: {1}", DateTime.Now, DateTime.Now - startTime));
                 file.WriteLine("Players:");
                 foreach (Player player in startingPlayers)
                 {
@@ -157,6 +159,9 @@ namespace PokerProject.PokerGame
             }
         }
 
+        /// <summary>
+        /// Puts the players in game and gives them chips based on the startingPlayers variable
+        /// </summary>
         private void SetupPlayers()
         {
             players.Clear();
@@ -187,17 +192,17 @@ namespace PokerProject.PokerGame
             }
         }
 
-        /*
-         * If there's at least two players in game, the game is going on
-         * */
+        /// <summary>
+        /// If there's at least two players in game, the game is going on
+        /// </summary>
         private bool GameIsGoing()
         {
             return (players.Count() > 1);
         }
 
-        /*
-         * Main game states happen here
-         * */
+        /// <summary>
+        /// Main game states happen here
+        /// </summary>
         private void MainGameTurn()
         {
             SetupTurn();
@@ -230,9 +235,9 @@ namespace PokerProject.PokerGame
             EndTurn();
         }
 
-        /*
-         * Setting up for the turn.
-         * */
+        /// <summary>
+        /// Setting up for the turn.
+        /// </summary>
         private void SetupTurn()
         {
             //Put everybody back to the game
@@ -262,7 +267,6 @@ namespace PokerProject.PokerGame
                 player.DrawCard(deck);
                 player.DrawCard(deck);
             }
-
         }
 
         private void PlaceBlinds()
@@ -278,10 +282,10 @@ namespace PokerProject.PokerGame
 
         }
 
-        /*
-         * Every player who is still in play decides what he wants to do.
-         * If somebody raises, or bets, everybody else gets to decide again.
-         * */
+        /// <summary>
+        /// Every player who is still in play decides what he wants to do.
+        /// If somebody raises, or bets, everybody else gets to decide again.
+        /// </summary>
         private void BettingPhase()
         {
             while (players.HasNextPlayer() && IsOnlyOnePlayerActive() == false)
@@ -335,6 +339,7 @@ namespace PokerProject.PokerGame
             RemovePlayersFromGame();
 
             turns++;
+            window.WriteMessage("");
         }
 
         private void CardShowingPhase()
@@ -411,9 +416,9 @@ namespace PokerProject.PokerGame
             }
         }
 
-        /*
-         * The turn ends when only one player left in game.
-         * */
+        /// <summary>
+        /// The turn ends when only one player left in game.
+        /// </summary>
         private bool IsOnlyOnePlayerActive()
         {
             int activePlayers = 0;

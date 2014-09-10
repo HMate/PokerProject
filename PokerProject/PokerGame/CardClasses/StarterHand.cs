@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace PokerProject.PokerGame.CardClasses
 {
-    class StarterHand : IEquatable<StarterHand>
+    [Serializable]
+    public class StarterHand : IEquatable<StarterHand>
     {
         private CardRank rank1;
         private CardRank rank2;
@@ -66,6 +67,11 @@ namespace PokerProject.PokerGame.CardClasses
             if (rank1 != otherHand.rank1 || rank2 != otherHand.rank2 || offsuite != otherHand.offsuite)
                 return false;
             return true;
+        }
+
+        override public string ToString()
+        {
+            return String.Format("{0}\t{1}\t{2}", rank1.ToString(), rank2.ToString(), offsuite ? "o" : "s");
         }
     }
 }
