@@ -15,7 +15,6 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
         private Dictionary<PokerHand.HandCategory, int> probableCategories;
         private Dictionary<PokerHand, int> probablePokerHands;
         private HandStrength strength;
-        private GamePhase currentPhase;
         private GamePhase lastPhase;
 
         protected enum HandStrength
@@ -28,18 +27,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             VeryBad,
             Undecidable
         }
-
-        /// <summary>
-        /// Represents the phases of the game
-        /// </summary>
-        public enum GamePhase
-        {
-            PreFlop,
-            Flop,
-            Turn,
-            River
-        }
-
+        
         static StatisticalAIController()
         {
             startingValues = new Dictionary<StarterHand, double>();
@@ -50,6 +38,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
                 startingValues = (Dictionary<StarterHand, double>)formatter.Deserialize(file);
             }
         }
+
         public StatisticalAIController()
         {
             table = Table.Instance;
@@ -72,107 +61,111 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             {
                 decision = new CallDecision(player);
             }
-            else if (table.CommunityCards.Count == 0)
+            else if (table.CurrentGamePhase == GamePhase.PreFlop)
             {
-                currentPhase = GamePhase.PreFlop;
-                CardList myCards = player.ShowCards();
-                myCards.Sort();
-
-                double hcPlayability = startingValues[new StarterHand(myCards)];
-                AppendInfo("hc pbility: " + hcPlayability);
-                double better = 0;
-                foreach (var pair in startingValues)
+                MakePreFlopDecision();
+            }
+            else
+            {
+                if (table.CurrentGamePhase == GamePhase.Flop)
                 {
-                    if (pair.Value <= hcPlayability)
-                    {
-                        better += 1;
-                    }
+                    //opponent hands: 178365(47 choose 4),16215(47 choose 3) 1081(47 choose 2)
+                    DetermineChancesAndMakeDecision(2, 3);
                 }
-                double ratio = better / startingValues.Count;
-                AppendInfo("better/all: " + better + "/" + startingValues.Count);
-                AppendInfo("ratio: " + ratio);
-
-                if (ratio > 0.66)
+                else if (table.CurrentGamePhase == GamePhase.River)
                 {
-                    if (table.MainPot.GetAmountToCall(player) <= player.ChipCount/3)
-                    {
-                        decision = new CallDecision(player);
-                        AppendInfo("hand is good so i call");
-                    }
-                    else
-                    {
-                        decision = new FoldDecision(player);
-                        AppendInfo("have to call too much, so I fold");
-                    }
+                    //opponent hands: 15180(46 choose 3) 
+                    DetermineChancesAndMakeDecision(1, 3);
                 }
-                else if (ratio > 0.20)
+                else//Turn
                 {
-                    if (table.MainPot.GetAmountToCall(player) <= player.ChipCount / 10)
-                    {
-                        decision = new CallDecision(player);
-                        AppendInfo("hand is decent so i call");
-                    }
-                    else
-                    {
-                        decision = new FoldDecision(player);
-                        AppendInfo("hand not good enough to call, so I fold");
-                    }
+                    //opponent hands: 990(45 choose 2) 
+                    DetermineChancesAndMakeDecision(0, 2);
+                }
+            }
+            lastPhase = table.CurrentGamePhase;
+        }
+
+        #region PreFlop Decision
+        /// <summary>
+        /// Make a decison based on the starting values dictionary
+        /// </summary>
+        private void MakePreFlopDecision()
+        {
+            CardList myCards = player.ShowCards();
+            myCards.Sort();
+
+            double hcPlayability = startingValues[new StarterHand(myCards)];
+            AppendInfo("hc pbility: " + hcPlayability);
+            double better = 0;
+            foreach (var pair in startingValues)
+            {
+                if (pair.Value <= hcPlayability)
+                {
+                    better += 1;
+                }
+            }
+            double ratio = better / startingValues.Count;
+            AppendInfo("better/all: " + better + "/" + startingValues.Count);
+            AppendInfo("ratio: " + ratio);
+
+            if (ratio > 0.66)
+            {
+                if (table.MainPot.GetAmountToCall(player) <= player.ChipCount / 3)
+                {
+                    decision = new CallDecision(player);
+                    AppendInfo("hand is good so i call");
                 }
                 else
                 {
-                    if (table.MainPot.GetAmountToCall(player) <= player.ChipCount / 20)
-                    {
-                        decision = new CallDecision(player);
-                        AppendInfo("nobody raised so i call");
-                    }
-                    else
-                    {
-                        decision = new FoldDecision(player);
-                        AppendInfo("hand is bad, I fold");
-                    }
+                    decision = new FoldDecision(player);
+                    AppendInfo("have to call too much, so I fold");
+                }
+            }
+            else if (ratio > 0.20)
+            {
+                if (table.MainPot.GetAmountToCall(player) <= player.ChipCount / 10)
+                {
+                    decision = new CallDecision(player);
+                    AppendInfo("hand is decent so i call");
+                }
+                else
+                {
+                    decision = new FoldDecision(player);
+                    AppendInfo("hand not good enough to call, so I fold");
                 }
             }
             else
             {
-                if (table.CommunityCards.Count == 3)//Flop
+                if (table.MainPot.GetAmountToCall(player) <= player.ChipCount / 20)
                 {
-                    currentPhase = GamePhase.Flop;
-                    //determine what are the best hands i can get
-                    CardList handSoFar = MakeHandSoFar();
-                    CalculateMyCards(handSoFar, 2);
-
-                    //opponent hands: 178365(47 choose 4),16215(47 choose 3) 1081(47 choose 2)
-                    CalculateWinningChances(handSoFar, 3);
-
-                    DecisionByCardStrength();
+                    decision = new CallDecision(player);
+                    AppendInfo("nobody raised so i call");
                 }
-                else if (table.CommunityCards.Count == 4)//River
+                else
                 {
-                    currentPhase = GamePhase.River;
-                    //determine what are the best hands i can get
-                    CardList handSoFar = MakeHandSoFar();
-                    CalculateMyCards(handSoFar, 1);
-
-                    //opponent hands: 15180(46 choose 3) 
-                    CalculateWinningChances(handSoFar, 3);
-
-                    DecisionByCardStrength();
-                }
-                else//Turn
-                {
-                    currentPhase = GamePhase.Turn;
-                    //determine what are the best hands i can get
-                    CardList handSoFar = MakeHandSoFar();
-                    CalculateMyCards(handSoFar, 0);
-
-                    //opponent hands: 990(45 choose 2) 
-                    CalculateWinningChances(handSoFar, 2);
-
-                    DecisionByCardStrength();
+                    decision = new FoldDecision(player);
+                    AppendInfo("hand is bad, I fold");
                 }
             }
+        }
+        #endregion
 
-            lastPhase = currentPhase;
+        /// <summary>
+        /// Determine what are the best hands i can get.
+        /// Determine opponent hands.
+        /// Make decision based on theese hands.
+        /// </summary>
+        /// <param name="missingCards"></param>
+        /// <param name="enemyMissingCards"></param>
+        private void DetermineChancesAndMakeDecision(int missingCards, int enemyMissingCards)
+        {
+            CardList handSoFar = MakeHandSoFar();
+
+            CalculateMyCards(handSoFar, missingCards);
+            CalculateWinningChances(handSoFar, enemyMissingCards);
+
+            DecisionByCardStrength();
         }
 
         private CardList MakeHandSoFar()
@@ -182,12 +175,13 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             return handSoFar;
         }
 
+        # region My Cards
         /// <summary>
         /// Fills probableCategories with probabilities about given hand with given number of missing cards 
         /// </summary>
         private void CalculateMyCards(CardList handSoFar, int missingCards)
         {
-            if (lastPhase == currentPhase)
+            if (lastPhase == table.CurrentGamePhase)
             {
                 return;
             }
@@ -254,7 +248,9 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
                 probableCategories.Add(category, 1);
             }
         }
+        #endregion
 
+        #region Enemy Cards
         /// <summary>
         /// Gives the win/total with the given hand against somebody who gets 'enemyMissingCards' number of cards 
         /// </summary>
@@ -262,7 +258,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
         /// <param name="enemyMissingCards"></param>
         private void CalculateWinningChances(CardList handSoFar, int enemyMissingCards)
         {
-            if (lastPhase == currentPhase)
+            if (lastPhase == table.CurrentGamePhase)
             {
                 return;
             }
@@ -271,8 +267,9 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             double wins = 0;
             double ties = 0;
             double losses = 0;
-            CardList otherCards = GetFullDeckWithoutGivenCards(handSoFar);
-
+            //CardList otherCards = GetFullDeckWithoutGivenCards(handSoFar);
+            PokerCard[] otherCards = GetFullDeckWithoutGivenCards(handSoFar).ToArray();
+            
             CombinatoricsUtilities.GetCombinations<PokerCard>(otherCards, imaginaryCards =>
             {
                 CardList imaginary7Card = new CardList(table.CommunityCards);
@@ -321,55 +318,34 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             return;
         }
 
-        private void DecisionByCardStrength()
+        /// <summary>
+        /// Gives back a full deck without the given cards
+        /// </summary>
+        /// <param name="myCards">Cards to be left out from the deck</param>
+        /// <returns></returns>
+        private static CardList GetFullDeckWithoutGivenCards(CardList myCards)
         {
-            AppendInfo("Hand Strength: " + strength);
-            //Ideal
-            if (table.MainPot.GetAmountToCall(player) == 0)
+            CardList cardDeck = new CardList();
+            foreach (CardSuite suiteIndex in (CardSuite[])Enum.GetValues(typeof(CardSuite)))
             {
-                decision = new CallDecision(player);
-                AppendInfo("I call");
-            }
-            else if (strength== HandStrength.VeryGood)
-            {
-                //make random bet
-                Random randomGenerator = new Random();
-
-                int minBet = Table.Instance.MainPot.AmountToBeEligibleForPot + Table.Instance.MainPot.LargestBet;
-                int atMax = player.ChipCount;
-                int atLeast = (player.ChipCount < minBet) ? player.ChipCount : minBet;
-
-                int randBet = randomGenerator.Next(atLeast, atMax);
-                randBet = (int)Math.Round((randBet/100.0))*100;
-                if (randBet < atLeast)
+                foreach (CardRank rankIndex in (CardRank[])Enum.GetValues(typeof(CardRank)))
                 {
-                    randBet = atLeast;
+                    cardDeck.Add(new PokerCard(rankIndex, suiteIndex));
                 }
-                if (randBet > atMax)
-                {
-                    randBet = atMax;
-                }
+            }
 
-                decision = new BetDecision(player, randBet);
-                AppendInfo("I bet " + randBet);
-            }
-            else if ((strength == HandStrength.Bad || strength == HandStrength.VeryBad || strength == HandStrength.Undecidable) 
-                && table.MainPot.GetAmountToCall(player) > player.ChipCount / 10)
+            foreach (PokerCard card in myCards)
             {
-                decision = new FoldDecision(player);
-                AppendInfo("I fold");
+                cardDeck.Remove(card);
             }
-            else
-            {
-                decision = new CallDecision(player);
-                AppendInfo("I call");
-            }
+
+            return cardDeck;
         }
 
         private HandStrength EvaluteHandStrength(double wins, double ties, double losses)
         {
             double total = wins + ties + losses;
-            if ((wins + ties) > total * 0.70 )
+            if ((wins + ties) > total * 0.70)
             {
                 if (wins > (ties + losses))
                 {
@@ -405,24 +381,51 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             }
             return HandStrength.Neutral;
         }
+        #endregion
 
-        private static CardList GetFullDeckWithoutGivenCards(CardList myCards)
+        private void DecisionByCardStrength()
         {
-            CardList cardDeck = new CardList();
-            foreach (CardSuite suiteIndex in (CardSuite[])Enum.GetValues(typeof(CardSuite)))
+            AppendInfo("Hand Strength: " + strength);
+            //Defensive playstyle
+            if (table.MainPot.GetAmountToCall(player) == 0)
             {
-                foreach (CardRank rankIndex in (CardRank[])Enum.GetValues(typeof(CardRank)))
+                decision = new CallDecision(player);
+                AppendInfo("I call");
+            }
+            else if (strength == HandStrength.VeryGood)
+            {
+                //make random bet
+                Random randomGenerator = new Random();
+
+                int minBet = Table.Instance.MainPot.AmountToBeEligibleForPot + Table.Instance.MainPot.LargestBet;
+                int atMax = player.ChipCount;
+                int atLeast = (player.ChipCount < minBet) ? player.ChipCount : minBet;
+
+                int randBet = randomGenerator.Next(atLeast, atMax);
+                randBet = (int)Math.Round((randBet/100.0))*100;
+                if (randBet < atLeast)
                 {
-                    cardDeck.Add(new PokerCard(rankIndex, suiteIndex));
+                    randBet = atLeast;
                 }
-            }
+                if (randBet > atMax)
+                {
+                    randBet = atMax;
+                }
 
-            foreach (PokerCard card in myCards)
+                decision = new BetDecision(player, randBet);
+                AppendInfo("I bet " + randBet);
+            }
+            else if ((strength == HandStrength.Bad || strength == HandStrength.VeryBad || strength == HandStrength.Undecidable) 
+                && table.MainPot.GetAmountToCall(player) > player.ChipCount / 10)
             {
-                cardDeck.Remove(card);
+                decision = new FoldDecision(player);
+                AppendInfo("I fold");
             }
-
-            return cardDeck;
+            else
+            {
+                decision = new CallDecision(player);
+                AppendInfo("I call");
+            }
         }
 
         protected override void MakeRevealCardAIDecision()

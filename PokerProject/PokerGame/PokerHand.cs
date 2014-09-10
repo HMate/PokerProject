@@ -60,11 +60,11 @@ namespace PokerProject.PokerGame
             }
         }
 
-        public PokerHand(CardList cards)
+        public PokerHand(IList<PokerCard> cards)
         {
             kickers = new CardList();
             secondRank = 0;
-            SetPokerHand(cards);
+            SetPokerHand(cards.ToCardList());
         }
 
         private void SetPokerHand(CardList cards)

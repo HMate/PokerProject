@@ -121,6 +121,7 @@
     <Compile Include="PokerGame\CardClasses\CardSuite.cs" />
     <Compile Include="PokerGame\CardClasses\StarterHand.cs" />
     <Compile Include="PokerGame\CombinatoricsUtilities.cs" />
+    <Compile Include="PokerGame\GamePhase.cs" />
     <Compile Include="PokerGame\GameWinnerEvaluator.cs" />
     <Compile Include="PokerGame\HandEvaluator.cs" />
     <Compile Include="PokerGame\PlayerClasses\Decisions\BetDecision.cs" />

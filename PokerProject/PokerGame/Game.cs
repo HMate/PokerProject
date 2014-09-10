@@ -207,12 +207,14 @@ namespace PokerProject.PokerGame
         {
             SetupTurn();
 
+            table.CurrentGamePhase = GamePhase.PreFlop;
             players.SetBettingOrder();
             PlaceBlinds();
             BettingPhase();
 
             if (!IsOnlyOnePlayerActive())
             {
+                table.CurrentGamePhase = GamePhase.Flop;
                 table.DealFlopCards(deck);
                 players.SetBettingOrder();
                 BettingPhase();
@@ -220,6 +222,7 @@ namespace PokerProject.PokerGame
 
             if (!IsOnlyOnePlayerActive())
             {
+                table.CurrentGamePhase = GamePhase.River;
                 table.DealRiverCard(deck);
                 players.SetBettingOrder();
                 BettingPhase();
@@ -227,6 +230,7 @@ namespace PokerProject.PokerGame
 
             if (!IsOnlyOnePlayerActive())
             {
+                table.CurrentGamePhase = GamePhase.Turn;
                 table.DealTurnCard(deck);
                 players.SetBettingOrder();
                 BettingPhase();

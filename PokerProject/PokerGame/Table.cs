@@ -18,13 +18,7 @@ namespace PokerProject.PokerGame
         private int bigBlind;
         private int smallBlind;
 
-        public static Table Instance
-        {
-            get
-            {
-                return instance;
-            }
-        }
+        public static Table Instance { get { return instance; } }
 
         private Table()
         {
@@ -34,37 +28,15 @@ namespace PokerProject.PokerGame
             positions = new PlayerPositions();
         }
 
-        public CardList CommunityCards
-        {
-            get
-            {
-                return communityCards;
-            }
-        }
+        public CardList CommunityCards { get { return communityCards; } }
 
-        public Pot MainPot
-        {
-            get
-            {
-                return mainPot;
-            }
-        }
+        public Pot MainPot { get { return mainPot; } }
 
-        public PlayerQueue Players
-        {
-            get
-            {
-                return players;
-            }
-        }
+        public PlayerQueue Players { get { return players; } }
 
-        public PlayerPositions Positions
-        {
-            get
-            {
-                return positions;
-            }
-        }
+        public PlayerPositions Positions { get { return positions; } }
+
+        public GamePhase CurrentGamePhase { get; set;}
 
         /// <summary>
         /// Clears the community card pool.
@@ -108,7 +80,7 @@ namespace PokerProject.PokerGame
             {
                 throw new ArgumentOutOfRangeException("amount", amount, "Blind cannot be negative.");
             }
-            smallBlind= amount;
+            smallBlind = amount;
         }
 
         public int GetBigBlind()

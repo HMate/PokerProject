@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace PokerProject.PokerGame.CardClasses
 {
-    /*
-     * Clas for containing Cards in a Collection.
-     * Cannot contain the same card twice.
-     * */
+    /// <summary>
+    /// Class for containing PokerCards in a Collection.
+    /// Cannot contain the same card twice.
+    /// </summary>
     public class CardList : List<PokerCard>, IEquatable<CardList>
     {
 
@@ -50,8 +50,7 @@ namespace PokerProject.PokerGame.CardClasses
             }
         }
 
-
-        private bool ContainsThisCard(PokerCard card)
+        public bool ContainsThisCard(PokerCard card)
         {
             bool containCard = false;
             foreach (PokerCard listedCard in this/*cardList*/)
@@ -64,7 +63,6 @@ namespace PokerProject.PokerGame.CardClasses
             }
             return containCard;
         }
-
 
         public CardRank GetBiggestRank()
         {
@@ -143,5 +141,18 @@ namespace PokerProject.PokerGame.CardClasses
             return rankHash;
         }
 
+
+    }
+
+    public static class CardListHelper
+    {
+        public static CardList ToCardList(this IList<PokerCard> cards)
+        {
+            var retList = new CardList();
+
+            retList.AddRange(cards);
+
+            return retList;
+        }
     }
 }

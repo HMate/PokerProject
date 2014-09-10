@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PokerProject.PokerGame.CardClasses;
 using PokerProject.PokerGame;
+using System.Collections.Generic;
 
 namespace PokerUnitTest
 {
@@ -14,12 +15,12 @@ namespace PokerUnitTest
         {
             HandEvaluator evaluator = new HandEvaluator();
 
-            CardList cards = MakeCardList("6C,KH,7S,TD,9S,3C,2H");
+            IList<PokerCard> cards = MakeCardList("6C,KH,7S,TD,9S,3C,2H");
 
-            CardList expectedBestCards = MakeCardList("9S,7S,KH,6C,TD");
+            IList<PokerCard> expectedBestCards = MakeCardList("9S,7S,KH,6C,TD");
 
             evaluator.DetermineBestHand(cards);
-            CardList bestCards = evaluator.GetBestCards();
+            IList<PokerCard> bestCards = evaluator.GetBestCards();
             PokerHand bestHand = evaluator.GetBestHand();
 
             Assert.AreEqual(expectedBestCards, bestCards);
@@ -36,7 +37,7 @@ namespace PokerUnitTest
             CardList expectedBestCards = MakeCardList("2C,2H,7S,8S,KC");
             
             evaluator.DetermineBestHand(cards);
-            CardList bestCards = evaluator.GetBestCards();
+            CardList bestCards = evaluator.GetBestCards().ToCardList();
             PokerHand bestHand = evaluator.GetBestHand();
 
             Assert.AreEqual(expectedBestCards, bestCards);
@@ -53,7 +54,7 @@ namespace PokerUnitTest
             CardList expectedBestCards = MakeCardList("AC,AH,QS,QH,QC");
 
             evaluator.DetermineBestHand(cards);
-            CardList bestCards = evaluator.GetBestCards();
+            CardList bestCards = evaluator.GetBestCards().ToCardList();
             PokerHand bestHand = evaluator.GetBestHand();
 
             Assert.AreEqual(expectedBestCards, bestCards);

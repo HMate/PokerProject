@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace PokerProject.PokerGame.CardClasses
 {
     [Serializable]
-    public class StarterHand : IEquatable<StarterHand>
+    public struct StarterHand : IEquatable<StarterHand>
     {
         private CardRank rank1;
         private CardRank rank2;
@@ -56,14 +56,18 @@ namespace PokerProject.PokerGame.CardClasses
 
         public override bool Equals(object other)
         {
-            StarterHand otherHand = other as StarterHand;
-            if (otherHand == null) return false;
-            return this.Equals(otherHand);
+            if (other is StarterHand)
+            {
+                return this.Equals((StarterHand)other);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool Equals(StarterHand otherHand)
         {
-            if (otherHand == null) return false;
             if (rank1 != otherHand.rank1 || rank2 != otherHand.rank2 || offsuite != otherHand.offsuite)
                 return false;
             return true;
