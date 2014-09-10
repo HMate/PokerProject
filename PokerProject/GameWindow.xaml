@@ -2,21 +2,21 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:PokerProject" x:Class="PokerProject.GameWindow"
-        Title="GameWindow" Height="627.483" Width="789.511" ResizeMode="NoResize" Closing="OnClose">
+        Title="GameWindow" Height="627.483" Width="789.511" ResizeMode="CanResize" Closing="OnClose">
     <Grid Background="Black">
         <Grid.RowDefinitions>
             <RowDefinition Height="53*" />
             <RowDefinition Height="20*" />
         </Grid.RowDefinitions>
-        <Canvas Name="GameView" HorizontalAlignment="Left" Height="425" VerticalAlignment="Top" Width="784" Background="#FF68685D">
+        <Canvas Name="GameView" Background="#FF68685D">
 
-            <WrapPanel Name="CommunityCardsPanel" MinHeight="70" MinWidth="250" Height="112" Width="400" Canvas.Left="363" Canvas.Top="313" ItemWidth="80">
-                <local:CardImage HorizontalAlignment="Left" VerticalAlignment="Top" />
-                <local:CardImage HorizontalAlignment="Left" VerticalAlignment="Top" />
-                <local:CardImage HorizontalAlignment="Left" VerticalAlignment="Top" />
-                <local:CardImage HorizontalAlignment="Left" VerticalAlignment="Top" />
-                <local:CardImage HorizontalAlignment="Left" VerticalAlignment="Top" />
-            </WrapPanel>
+            <StackPanel Name="CommunityCardsPanel" MinHeight="70" MinWidth="250"  Canvas.Left="363" Canvas.Top="321" Orientation="Horizontal" Height="112">
+                <local:CardImage VerticalAlignment="Top" />
+                <local:CardImage VerticalAlignment="Top" />
+                <local:CardImage VerticalAlignment="Top" />
+                <local:CardImage VerticalAlignment="Top" />
+                <local:CardImage VerticalAlignment="Top" />
+            </StackPanel>
 
             <local:PlayerPresenter Canvas.Left="82" Canvas.Top="175" Panel.ZIndex="1"/>
             <local:PlayerPresenter Canvas.Left="82" Canvas.Top="36" Panel.ZIndex="1"/>
@@ -30,7 +30,7 @@
             <Ellipse Fill="#FF0EB20E" Height="220" Canvas.Left="121" Stroke="Black" Canvas.Top="46" Width="550" Panel.ZIndex="0"/>
             <Label Name="MainPotLabel" Content="10000000" ContentStringFormat="{}{0}$" Canvas.Left="337" Canvas.Top="130" Height="25" MinWidth="100" FontFamily="Rockwell Extra Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" Padding="5,0"/>
             <Label Name="MainPotMinimumBetLabel" Content="100" ContentStringFormat="{}min. bet: {0}$" Height="21" Width="100" Canvas.Left="347" Canvas.Top="156" Padding="0" FontFamily="Rockwell Extra Bold" FontSize="10"/>
-            <ListBox Name="MessageBox" Height="113" Canvas.Left="10" Canvas.Top="312" Width="337" Background="Beige" BorderThickness="5,5,5,1" BorderBrush="#FF2D333E" FontFamily="Segoe UI Semibold" Foreground="#FF898888"/>
+            <ListBox Name="MessageBox" Height="113" Canvas.Left="10" Canvas.Top="320" Width="337" Background="Beige" BorderThickness="5,5,5,5" BorderBrush="#FF2D333E" FontFamily="Segoe UI Semibold" Foreground="#FF898888"/>
             <Label Name="BlindsLabel"  Content="Hello" Height="26" Canvas.Left="8" Canvas.Top="10" MinWidth="107" FontFamily="Rockwell Extra Bold"/>
         </Canvas>
 
@@ -39,8 +39,8 @@
                 <ColumnDefinition Width="401*"/>
                 <ColumnDefinition Width="383*"/>
             </Grid.ColumnDefinitions>
-            <local:CardImage x:Name="Card1" HorizontalAlignment="Left" MinHeight="70" MinWidth="50" Height="140" Width="100" Margin="50,10,0,0" VerticalAlignment="Top" />
-            <local:CardImage x:Name="Card2" HorizontalAlignment="Left" MinHeight="70" MinWidth="50" Height="140" Width="100" Margin="150,10,0,0" VerticalAlignment="Top" />
+            <local:CardImage x:Name="Card1" MinHeight="70" MinWidth="50" Margin="50,10,0,14" HorizontalAlignment="Left" Width="100" />
+            <local:CardImage x:Name="Card2" MinHeight="70" MinWidth="50" Margin="150,10,0,14" HorizontalAlignment="Left" Width="100" />
             <Label Name="ActivePlayerLabel" Content="Label" ContentStringFormat="{}{0}'s Turn" HorizontalAlignment="Left" Height="26" Margin="269,10,0,0" VerticalAlignment="Top" Width="122"/>
             <Label Name="ToCallLabel" Content="Label" ContentStringFormat="{}{0} to Call" HorizontalAlignment="Left" Height="25" Margin="269,36,0,0" VerticalAlignment="Top" Width="94"/>
             <local:PlayerControllerUIElement x:Name="PlayerControlUI" Grid.Column="1" HorizontalAlignment="Left" Margin="0,4,-3,0" VerticalAlignment="Top"/>

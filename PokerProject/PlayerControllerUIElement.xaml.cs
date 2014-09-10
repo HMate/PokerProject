@@ -51,13 +51,14 @@ namespace PokerProject
 
                 int callAmount = (player.ChipCount > mainPot.GetAmountToCall(player)) ? mainPot.GetAmountToCall(player) : player.ChipCount;
                 BetBox.Text = (callAmount).ToString();
+                BetBox.Focus();
                 if (callAmount > 0)
                 {
-                    CallButton.Content = "Call";
+                    CallButton.Content = "_Call";
                 }
                 else
                 {
-                    CallButton.Content = "Check";
+                    CallButton.Content = "_Check";
                 }
 
                 BetSlider.Minimum = (player.ChipCount > callAmount) ? callAmount : player.ChipCount;
