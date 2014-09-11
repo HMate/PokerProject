@@ -10,12 +10,12 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
 {
     class StatisticalAIController : AbstractAIController
     {
-        private Table table;
-        private static Dictionary<StarterHand, double> startingValues;
-        private Dictionary<PokerHand.HandCategory, int> probableCategories;
-        private Dictionary<PokerHand, int> probablePokerHands;
-        private HandStrength strength;
-        private GamePhase lastPhase;
+        protected Table table;
+        protected static Dictionary<StarterHand, double> startingValues;
+        protected Dictionary<PokerHand.HandCategory, int> probableCategories;
+        protected Dictionary<PokerHand, int> probablePokerHands;
+        protected HandStrength handStrength;
+        protected GamePhase lastPhase;
 
         protected enum HandStrength
         {
@@ -46,6 +46,9 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             probablePokerHands = new Dictionary<PokerHand, int>();
         }
 
+        /// <summary>
+        /// Makes a decision about what to do in the current turn, based on statistical calculations
+        /// </summary>
         protected override void MakeAIDecision()
         {
             bool everybodyInactive = true;
@@ -90,7 +93,18 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
         /// <summary>
         /// Make a decison based on the starting values dictionary
         /// </summary>
-        private void MakePreFlopDecision()
+        protected void MakePreFlopDecision()
+        {
+            double ratio = ComputePreFlopPlayabilityRatio();
+
+            DecisionByRatio(ratio);
+        }
+
+        /// <summary>
+        /// Counts, how many starting hands are there, that has worse playability, than our hand.
+        /// </summary>
+        /// <returns>Percent of hands, which our hand beats</returns>
+        protected virtual double ComputePreFlopPlayabilityRatio()
         {
             CardList myCards = player.ShowCards();
             myCards.Sort();
@@ -109,6 +123,16 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             AppendInfo("better/all: " + better + "/" + startingValues.Count);
             AppendInfo("ratio: " + ratio);
 
+            return ratio;
+        }
+
+        /// <summary>
+        /// Decides what to do preFlop, based on the playabilityRatio
+        /// Plays defensively
+        /// </summary>
+        /// <param name="ratio"></param>
+        protected virtual void DecisionByRatio(double ratio)
+        {
             if (ratio > 0.66)
             {
                 if (table.MainPot.GetAmountToCall(player) <= player.ChipCount / 3)
@@ -122,7 +146,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
                     AppendInfo("have to call too much, so I fold");
                 }
             }
-            else if (ratio > 0.20)
+            else if (ratio > 0.33)
             {
                 if (table.MainPot.GetAmountToCall(player) <= player.ChipCount / 10)
                 {
@@ -158,7 +182,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
         /// </summary>
         /// <param name="missingCards"></param>
         /// <param name="enemyMissingCards"></param>
-        private void DetermineChancesAndMakeDecision(int missingCards, int enemyMissingCards)
+        protected void DetermineChancesAndMakeDecision(int missingCards, int enemyMissingCards)
         {
             CardList handSoFar = MakeHandSoFar();
 
@@ -168,7 +192,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             DecisionByCardStrength();
         }
 
-        private CardList MakeHandSoFar()
+        protected CardList MakeHandSoFar()
         {
             CardList handSoFar = player.ShowCards();
             handSoFar.AddRange(table.CommunityCards);
@@ -179,7 +203,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
         /// <summary>
         /// Fills probableCategories with probabilities about given hand with given number of missing cards 
         /// </summary>
-        private void CalculateMyCards(CardList handSoFar, int missingCards)
+        protected void CalculateMyCards(CardList handSoFar, int missingCards)
         {
             if (lastPhase == table.CurrentGamePhase)
             {
@@ -225,7 +249,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             }
         }
 
-        private void AddToProbablePokerHands(PokerHand hand)
+        protected void AddToProbablePokerHands(PokerHand hand)
         {
             if (probablePokerHands.ContainsKey(hand))
             {
@@ -237,7 +261,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             }
         }
 
-        private void AddToProbableCategories(PokerHand.HandCategory category)
+        protected void AddToProbableCategories(PokerHand.HandCategory category)
         {
             if (probableCategories.ContainsKey(category))
             {
@@ -256,7 +280,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
         /// </summary>
         /// <param name="handSoFar"></param>
         /// <param name="enemyMissingCards"></param>
-        private void CalculateWinningChances(CardList handSoFar, int enemyMissingCards)
+        protected void CalculateWinningChances(CardList handSoFar, int enemyMissingCards)
         {
             if (lastPhase == table.CurrentGamePhase)
             {
@@ -313,7 +337,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             }, enemyMissingCards, false);
 
             AppendInfo("win/tie/loss: " + wins +"/" + ties + "/" + losses);
-            strength = EvaluteHandStrength(wins, ties, losses);
+            handStrength = EvaluteHandStrength(wins, ties, losses);
 
             return;
         }
@@ -323,7 +347,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
         /// </summary>
         /// <param name="myCards">Cards to be left out from the deck</param>
         /// <returns></returns>
-        private static CardList GetFullDeckWithoutGivenCards(CardList myCards)
+        protected static CardList GetFullDeckWithoutGivenCards(CardList myCards)
         {
             CardList cardDeck = new CardList();
             foreach (CardSuite suiteIndex in (CardSuite[])Enum.GetValues(typeof(CardSuite)))
@@ -342,7 +366,7 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             return cardDeck;
         }
 
-        private HandStrength EvaluteHandStrength(double wins, double ties, double losses)
+        protected HandStrength EvaluteHandStrength(double wins, double ties, double losses)
         {
             double total = wins + ties + losses;
             if ((wins + ties) > total * 0.70)
@@ -383,39 +407,27 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
         }
         #endregion
 
-        private void DecisionByCardStrength()
+        #region Decisions
+        /// <summary>
+        /// Decides what to do in current turn, based on the HandStrength
+        /// Plays defensively
+        /// </summary>
+        protected virtual void DecisionByCardStrength()
         {
-            AppendInfo("Hand Strength: " + strength);
-            //Defensive playstyle
+            AppendInfo("Hand Strength: " + handStrength);
+            
             if (table.MainPot.GetAmountToCall(player) == 0)
             {
                 decision = new CallDecision(player);
                 AppendInfo("I call");
             }
-            else if (strength == HandStrength.VeryGood)
+            else if (handStrength == HandStrength.VeryGood)
             {
-                //make random bet
-                Random randomGenerator = new Random();
-
-                int minBet = Table.Instance.MainPot.AmountToBeEligibleForPot + Table.Instance.MainPot.LargestBet;
-                int atMax = player.ChipCount;
-                int atLeast = (player.ChipCount < minBet) ? player.ChipCount : minBet;
-
-                int randBet = randomGenerator.Next(atLeast, atMax);
-                randBet = (int)Math.Round((randBet/100.0))*100;
-                if (randBet < atLeast)
-                {
-                    randBet = atLeast;
-                }
-                if (randBet > atMax)
-                {
-                    randBet = atMax;
-                }
-
+                int randBet = MakeRandomBet();
                 decision = new BetDecision(player, randBet);
                 AppendInfo("I bet " + randBet);
             }
-            else if ((strength == HandStrength.Bad || strength == HandStrength.VeryBad || strength == HandStrength.Undecidable) 
+            else if ((handStrength == HandStrength.Bad || handStrength == HandStrength.VeryBad || handStrength == HandStrength.Undecidable) 
                 && table.MainPot.GetAmountToCall(player) > player.ChipCount / 10)
             {
                 decision = new FoldDecision(player);
@@ -427,6 +439,30 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
                 AppendInfo("I call");
             }
         }
+
+        protected int MakeRandomBet()
+        {
+            Random randomGenerator = new Random();
+
+            int minBet = Table.Instance.MainPot.AmountToBeEligibleForPot + Table.Instance.MainPot.LargestBet;
+            int maxBet = player.ChipCount;
+            int atLeastBet = (player.ChipCount < minBet) ? player.ChipCount : minBet;
+
+            int randBet = randomGenerator.Next(atLeastBet, maxBet);
+            randBet = (int)Math.Round((randBet / 100.0)) * 100;
+            if (randBet < atLeastBet)
+            {
+                randBet = atLeastBet;
+            }
+            if (randBet > maxBet)
+            {
+                randBet = maxBet;
+            }
+
+            return randBet;
+        }
+
+        #endregion
 
         protected override void MakeRevealCardAIDecision()
         {

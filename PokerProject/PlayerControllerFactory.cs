@@ -25,6 +25,7 @@ namespace PokerProject
             list.Add(new RandomAIController());
             list.Add(new SimpleAIController());
             list.Add(new StatisticalAIController());
+            list.Add(new AggressiveStatisticalAIController());
 
             return list;
         }

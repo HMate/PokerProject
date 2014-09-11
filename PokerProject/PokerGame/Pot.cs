@@ -23,7 +23,12 @@ namespace PokerProject.PokerGame
         }
 
         /// <summary>
-        /// Gets the total size of the current pot.
+        /// Gets and sets the total nemuber of chips in the game
+        /// </summary>
+        public int TotalSize { get; set; }
+
+        /// <summary>
+        /// Gets the size of the current pot.
         /// </summary>
         public int Size
         {

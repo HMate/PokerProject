@@ -10,6 +10,8 @@ namespace PokerProject.PokerGame
 {
     public class Game
     {
+        private const int startingChips = 2000;
+
         private GameWindow window;
         private System.Threading.Semaphore semaphore;
         private Table table;
@@ -150,13 +152,26 @@ namespace PokerProject.PokerGame
         /// </summary>
         private void GameMain()
         {
-            SetupPlayers();
             SetupGame();
             while (GameIsGoing())
             {
                 MainGameTurn();
                 AdjustBlinds();
             }
+        }
+
+        private void SetupGame()
+        {
+            SetupPlayers();
+
+            //Have to decide who is the first dealer.
+            Player firstPlayer = players.GetFirstPlayer();
+            table.Positions.SetDealer(firstPlayer);
+
+            turns = 1;
+            table.SetBigBlind(50);
+            table.SetSmallBlind(25);
+            table.MainPot.TotalSize = players.Count() * startingChips;
         }
 
         /// <summary>
@@ -167,20 +182,9 @@ namespace PokerProject.PokerGame
             players.Clear();
             foreach (Player player in startingPlayers)
             {
-                player.ChipCount = 2000;
+                player.ChipCount = startingChips;
                 players.AddPlayer(player);
             }
-        }
-
-        private void SetupGame()
-        {
-            //Have to decide who is the first dealer.
-            Player firstPlayer = players.GetFirstPlayer();
-            table.Positions.SetDealer(firstPlayer);
-
-            turns = 1;
-            table.SetBigBlind(50);
-            table.SetSmallBlind(25);
         }
 
         private void AdjustBlinds()
