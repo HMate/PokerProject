@@ -93,12 +93,17 @@ namespace PokerProject.PokerGame
             List<string> toFile = new List<string>();
             Dictionary<Player, int> winners = new Dictionary<Player, int>();
             DateTime startTime = DateTime.Now;
+            List<TimeSpan> roundTimes = new List<TimeSpan>();
 
             for (int round = 0; round < gameRounds; round++)
             {
                 window.WriteMessage(round+1 + ". game started!");
+                DateTime roundStartTime = DateTime.Now;
 
                 GameMain();
+
+                TimeSpan roundTime = DateTime.Now - roundStartTime;
+                roundTimes.Add(roundTime);
 
                 Player winner = players.GetPlayersList()[0];
                 window.WriteMessage(winner.Name + " has won the game!");
@@ -112,13 +117,22 @@ namespace PokerProject.PokerGame
                 {
                     winners.Add(winner, 1);
                 }
-                
-                toFile.Add(String.Format("Game {0}: Winner: {1}, Type: {2}", round, winner.Name, winner.Controller.ToString() ));
+
+                toFile.Add(String.Format("Game {0}:", round + 1, winner.Name, winner.Controller.ToString()));
+                toFile.Add(String.Format("\tWinner: {0,40}", winner.Name, winner.Controller.ToString()));
+                toFile.Add(String.Format("\tType: {0,42}", winner.Controller.ToString()));
+                toFile.Add(String.Format("\tGame time: {0,37}", roundTime.ToString("hh\\:mm\\:ss\\.ff")));
             }
+
+            
+
+            long averageTicks = Convert.ToInt64(roundTimes.Average(timeSpan => timeSpan.Ticks));
+            TimeSpan avarageRoundTime = new TimeSpan(averageTicks);
 
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"stats/" + outputFileName))
             {
                 file.WriteLine(String.Format("Date: {0}, Duration: {1}", DateTime.Now, DateTime.Now - startTime));
+                file.WriteLine(String.Format("Avarage game time: {0}", avarageRoundTime));
                 file.WriteLine("Players:");
                 foreach (Player player in startingPlayers)
                 {
@@ -139,7 +153,7 @@ namespace PokerProject.PokerGame
                 }
 
                 file.WriteLine("");
-                file.WriteLine("Games:");
+                file.WriteLine("-------Games-------");
                 foreach (string line in toFile)
                 {
                     file.WriteLine(line);

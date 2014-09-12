@@ -54,9 +54,10 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
             bool everybodyInactive = true;
             foreach (Player otherPlayer in table.Players.GetPlayersList())
             {
-                if (everybodyInactive == true && otherPlayer.IsIngame() == true && otherPlayer.ChipCount > 0)
+                if (otherPlayer != player && otherPlayer.IsIngame() == true && otherPlayer.ChipCount > 0)
                 {
                     everybodyInactive = false;
+                    break;
                 }
             }
 

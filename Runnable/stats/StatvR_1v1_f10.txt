@@ -1,0 +1,19 @@
+Players:
+Mária (Random AI) 
+Petra (Statistical AI) 
+
+Results:
+Petra (Statistical AI) won 7 games (70%)
+Mária (Random AI) won 3 games (30%)
+
+Games:
+Game 0: Winner: Petra, Type: Statistical AI
+Game 1: Winner: Petra, Type: Statistical AI
+Game 2: Winner: Mária, Type: Random AI
+Game 3: Winner: Mária, Type: Random AI
+Game 4: Winner: Mária, Type: Random AI
+Game 5: Winner: Petra, Type: Statistical AI
+Game 6: Winner: Petra, Type: Statistical AI
+Game 7: Winner: Petra, Type: Statistical AI
+Game 8: Winner: Petra, Type: Statistical AI
+Game 9: Winner: Petra, Type: Statistical AI

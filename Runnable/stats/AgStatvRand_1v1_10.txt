@@ -1,0 +1,20 @@
+Date: 2014.09.11. 18:17:06, Duration: 00:05:53.4966325
+Players:
+Krisztián (Aggressive Statistical AI) 
+Ferenc (Random AI) 
+
+Results:
+Krisztián (Aggressive Statistical AI) won 6 games (60%)
+Ferenc (Random AI) won 4 games (40%)
+
+Games:
+Game 0: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 1: Winner: Ferenc, Type: Random AI
+Game 2: Winner: Ferenc, Type: Random AI
+Game 3: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 4: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 5: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 6: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 7: Winner: Ferenc, Type: Random AI
+Game 8: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 9: Winner: Ferenc, Type: Random AI

@@ -1,0 +1,110 @@
+Date: 2014.09.11. 19:23:54, Duration: 01:04:51.8775784
+Players:
+Krisztián (Aggressive Statistical AI) 
+Ferenc (Random AI) 
+
+Results:
+Ferenc (Random AI) won 40 games (40%)
+Krisztián (Aggressive Statistical AI) won 60 games (60%)
+
+Games:
+Game 0: Winner: Ferenc, Type: Random AI
+Game 1: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 2: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 3: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 4: Winner: Ferenc, Type: Random AI
+Game 5: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 6: Winner: Ferenc, Type: Random AI
+Game 7: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 8: Winner: Ferenc, Type: Random AI
+Game 9: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 10: Winner: Ferenc, Type: Random AI
+Game 11: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 12: Winner: Ferenc, Type: Random AI
+Game 13: Winner: Ferenc, Type: Random AI
+Game 14: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 15: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 16: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 17: Winner: Ferenc, Type: Random AI
+Game 18: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 19: Winner: Ferenc, Type: Random AI
+Game 20: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 21: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 22: Winner: Ferenc, Type: Random AI
+Game 23: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 24: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 25: Winner: Ferenc, Type: Random AI
+Game 26: Winner: Ferenc, Type: Random AI
+Game 27: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 28: Winner: Ferenc, Type: Random AI
+Game 29: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 30: Winner: Ferenc, Type: Random AI
+Game 31: Winner: Ferenc, Type: Random AI
+Game 32: Winner: Ferenc, Type: Random AI
+Game 33: Winner: Ferenc, Type: Random AI
+Game 34: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 35: Winner: Ferenc, Type: Random AI
+Game 36: Winner: Ferenc, Type: Random AI
+Game 37: Winner: Ferenc, Type: Random AI
+Game 38: Winner: Ferenc, Type: Random AI
+Game 39: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 40: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 41: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 42: Winner: Ferenc, Type: Random AI
+Game 43: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 44: Winner: Ferenc, Type: Random AI
+Game 45: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 46: Winner: Ferenc, Type: Random AI
+Game 47: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 48: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 49: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 50: Winner: Ferenc, Type: Random AI
+Game 51: Winner: Ferenc, Type: Random AI
+Game 52: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 53: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 54: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 55: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 56: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 57: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 58: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 59: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 60: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 61: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 62: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 63: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 64: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 65: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 66: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 67: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 68: Winner: Ferenc, Type: Random AI
+Game 69: Winner: Ferenc, Type: Random AI
+Game 70: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 71: Winner: Ferenc, Type: Random AI
+Game 72: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 73: Winner: Ferenc, Type: Random AI
+Game 74: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 75: Winner: Ferenc, Type: Random AI
+Game 76: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 77: Winner: Ferenc, Type: Random AI
+Game 78: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 79: Winner: Ferenc, Type: Random AI
+Game 80: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 81: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 82: Winner: Ferenc, Type: Random AI
+Game 83: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 84: Winner: Ferenc, Type: Random AI
+Game 85: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 86: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 87: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 88: Winner: Ferenc, Type: Random AI
+Game 89: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 90: Winner: Ferenc, Type: Random AI
+Game 91: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 92: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 93: Winner: Ferenc, Type: Random AI
+Game 94: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 95: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 96: Winner: Ferenc, Type: Random AI
+Game 97: Winner: Ferenc, Type: Random AI
+Game 98: Winner: Krisztián, Type: Aggressive Statistical AI
+Game 99: Winner: Krisztián, Type: Aggressive Statistical AI

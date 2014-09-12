@@ -1,0 +1,19 @@
+Players:
+Győző (Random AI) 
+Ádám (Statistical AI) 
+
+Results:
+Ádám (Statistical AI) won 8 games (80%)
+Győző (Random AI) won 2 games (20%)
+
+Games:
+Game 0: Winner: Ádám, Type: Statistical AI
+Game 1: Winner: Győző, Type: Random AI
+Game 2: Winner: Ádám, Type: Statistical AI
+Game 3: Winner: Ádám, Type: Statistical AI
+Game 4: Winner: Ádám, Type: Statistical AI
+Game 5: Winner: Ádám, Type: Statistical AI
+Game 6: Winner: Ádám, Type: Statistical AI
+Game 7: Winner: Ádám, Type: Statistical AI
+Game 8: Winner: Ádám, Type: Statistical AI
+Game 9: Winner: Győző, Type: Random AI

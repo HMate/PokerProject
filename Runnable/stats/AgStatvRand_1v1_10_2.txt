@@ -1,0 +1,51 @@
+Date: 2014.09.12. 11:24:06, Duration: 00:05:17.6851149
+Avarage game time: 00:00:31.7665114
+Players:
+Máté (Random AI) 
+Teréz (Aggressive Statistical AI) 
+
+Results:
+Teréz (Aggressive Statistical AI) won 9 games (90%)
+Máté (Random AI) won 1 games (10%)
+
+-------Games-------
+Game 1:
+	Winner:                                    Teréz
+	Type:                  Aggressive Statistical AI
+	Game time:                           00:00:10.98
+Game 2:
+	Winner:                                     Máté
+	Type:                                  Random AI
+	Game time:                           00:00:04.17
+Game 3:
+	Winner:                                    Teréz
+	Type:                  Aggressive Statistical AI
+	Game time:                           00:00:00.06
+Game 4:
+	Winner:                                    Teréz
+	Type:                  Aggressive Statistical AI
+	Game time:                           00:00:16.27
+Game 5:
+	Winner:                                    Teréz
+	Type:                  Aggressive Statistical AI
+	Game time:                           00:00:06.71
+Game 6:
+	Winner:                                    Teréz
+	Type:                  Aggressive Statistical AI
+	Game time:                           00:00:51.35
+Game 7:
+	Winner:                                    Teréz
+	Type:                  Aggressive Statistical AI
+	Game time:                           00:01:41.94
+Game 8:
+	Winner:                                    Teréz
+	Type:                  Aggressive Statistical AI
+	Game time:                           00:00:28.70
+Game 9:
+	Winner:                                    Teréz
+	Type:                  Aggressive Statistical AI
+	Game time:                           00:00:12.59
+Game 10:
+	Winner:                                    Teréz
+	Type:                  Aggressive Statistical AI
+	Game time:                           00:01:24.87

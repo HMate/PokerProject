@@ -1,0 +1,30 @@
+Date: 2014.09.11. 22:53:38, Duration: 03:23:34.2446149
+Players:
+Teodóra (Aggressive Statistical AI) 
+Aladár (Statistical AI) 
+
+Results:
+Aladár (Statistical AI) won 12 games (60%)
+Teodóra (Aggressive Statistical AI) won 8 games (40%)
+
+Games:
+Game 0: Winner: Aladár, Type: Statistical AI
+Game 1: Winner: Teodóra, Type: Aggressive Statistical AI
+Game 2: Winner: Teodóra, Type: Aggressive Statistical AI
+Game 3: Winner: Teodóra, Type: Aggressive Statistical AI
+Game 4: Winner: Aladár, Type: Statistical AI
+Game 5: Winner: Aladár, Type: Statistical AI
+Game 6: Winner: Teodóra, Type: Aggressive Statistical AI
+Game 7: Winner: Aladár, Type: Statistical AI
+Game 8: Winner: Aladár, Type: Statistical AI
+Game 9: Winner: Teodóra, Type: Aggressive Statistical AI
+Game 10: Winner: Teodóra, Type: Aggressive Statistical AI
+Game 11: Winner: Aladár, Type: Statistical AI
+Game 12: Winner: Aladár, Type: Statistical AI
+Game 13: Winner: Aladár, Type: Statistical AI
+Game 14: Winner: Aladár, Type: Statistical AI
+Game 15: Winner: Teodóra, Type: Aggressive Statistical AI
+Game 16: Winner: Aladár, Type: Statistical AI
+Game 17: Winner: Aladár, Type: Statistical AI
+Game 18: Winner: Teodóra, Type: Aggressive Statistical AI
+Game 19: Winner: Aladár, Type: Statistical AI
