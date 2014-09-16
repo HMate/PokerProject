@@ -76,12 +76,12 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
                     //opponent hands: 178365(47 choose 4),16215(47 choose 3) 1081(47 choose 2)
                     DetermineChancesAndMakeDecision(2, 3);
                 }
-                else if (table.CurrentGamePhase == GamePhase.River)
+                else if (table.CurrentGamePhase == GamePhase.Turn)
                 {
                     //opponent hands: 15180(46 choose 3) 
                     DetermineChancesAndMakeDecision(1, 3);
                 }
-                else//Turn
+                else//River
                 {
                     //opponent hands: 990(45 choose 2) 
                     DetermineChancesAndMakeDecision(0, 2);

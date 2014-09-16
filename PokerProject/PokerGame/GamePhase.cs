@@ -13,7 +13,7 @@ namespace PokerProject.PokerGame
     {
         PreFlop,
         Flop,
-        River,
-        Turn
+        Turn,
+        River
     }
 }

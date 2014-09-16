@@ -240,16 +240,16 @@ namespace PokerProject.PokerGame
 
             if (!IsOnlyOnePlayerActive())
             {
-                table.CurrentGamePhase = GamePhase.River;
-                table.DealRiverCard(deck);
+                table.CurrentGamePhase = GamePhase.Turn;
+                table.DealTurnCard(deck);
                 players.SetBettingOrder();
                 BettingPhase();
             }
 
             if (!IsOnlyOnePlayerActive())
             {
-                table.CurrentGamePhase = GamePhase.Turn;
-                table.DealTurnCard(deck);
+                table.CurrentGamePhase = GamePhase.River;
+                table.DealRiverCard(deck);
                 players.SetBettingOrder();
                 BettingPhase();
             }
