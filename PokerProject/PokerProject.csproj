@@ -130,6 +130,9 @@
     <Compile Include="PokerGame\PlayerClasses\Decisions\ShowCardsDecision.cs" />
     <Compile Include="PokerGame\PlayerClasses\PlayerAIs\AbstractAIController.cs" />
     <Compile Include="PokerGame\PlayerClasses\PlayerAIs\AggressiveStatisticalAIController.cs" />
+    <Compile Include="PokerGame\AI Utilities\HandChances.cs" />
+    <Compile Include="PokerGame\PlayerClasses\PlayerAIs\StatisticalMathAIController.cs" />
+    <Compile Include="PokerGame\PlayerClasses\PlayerAIs\StatisticalAI2Controller.cs" />
     <Compile Include="PokerGame\PlayerClasses\PlayerAIs\RandomAiController.cs" />
     <Compile Include="PokerGame\PlayerClasses\PlayerAIs\HumanController.cs" />
     <Compile Include="PokerGame\PlayerClasses\Player.cs" />

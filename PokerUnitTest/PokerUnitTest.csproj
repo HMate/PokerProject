@@ -67,6 +67,7 @@
     <Compile Include="TableTests.cs" />
     <Compile Include="HandEvaluatorTests.cs" />
     <Compile Include="HandTests.cs" />
+    <Compile Include="HandChancesTest.cs" />
     <Compile Include="WinnerEvaluatorTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -89,6 +89,8 @@ namespace PokerProject.PokerGame.PlayerClasses.PlayerAIs
         protected void AppendInfo(string message)
         {
             infos.Add(message);
+            SendInfo();
+            infos.Clear();
         }
 
         protected void SendInfo()
