@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PokerProject.PokerGame.AI_Utilities;
 using PokerProject.PokerGame.CardClasses;
 using System.Collections.Generic;
+using PokerProject.PokerGame;
 
 namespace PokerUnitTest
 {
@@ -30,9 +31,10 @@ namespace PokerUnitTest
             CardList communityCards = MakeCardList("AS,DH,5H,7C,TD");
 
             double chance = HandChances.Pair(holeCards, communityCards);
+            double realChance = RealPairChance(holeCards, communityCards);
 
             //(15C1)*(30C1)/(45C2) = 0,454545
-            Assert.AreEqual(0.45454545D, chance, 0.000001); 
+            Assert.AreEqual(realChance, chance, 0.000001); 
         }
 
         [TestMethod]
@@ -43,9 +45,10 @@ namespace PokerUnitTest
             CardList communityCards = MakeCardList("AS,DH,5H,7C,TD");
 
             double chance = HandChances.Pair(holeCards, communityCards);
+            double realChance = RealPairChance(holeCards, communityCards);
 
             //(14C1)*(31C1)/(45C2) = 0,43838383
-            Assert.AreEqual(0.43838383D, chance, 0.000001);
+            Assert.AreEqual(realChance, chance, 0.000001);
         }
 
         [TestMethod]
@@ -56,9 +59,51 @@ namespace PokerUnitTest
             CardList communityCards = MakeCardList("AS,2H,KD,7C,TD");
 
             double chance = HandChances.Pair(holeCards, communityCards);
+            double realChance = RealPairChance(holeCards, communityCards);
 
             //(13C1)*(32C1)/(45C2) = 0,4202020
-            Assert.AreEqual(0.4202020D, chance, 0.000001);
+            Assert.AreEqual(realChance, chance, 0.000001);
+        }
+
+        [TestMethod]
+        public void ChanceOfPairWithPairInHandTest()
+        {
+
+            CardList holeCards = MakeCardList("AC,AH");
+            CardList communityCards = MakeCardList("JS,2H,KD,7C,TD");
+
+            double chance = HandChances.Pair(holeCards, communityCards);
+            double realChance = RealPairChance(holeCards, communityCards);
+
+            //(13C1)*(32C1)/(45C2) = 0,4202020
+            Assert.AreEqual(realChance, chance, 0.000001);
+        }
+
+        [TestMethod]
+        public void ChanceOfPairWith3KnownCardsTest()
+        {
+
+            CardList holeCards = MakeCardList("AC,AH");
+            CardList communityCards = MakeCardList("AS,2H,KD,7C,TD");
+
+            double chance = HandChances.Pair(holeCards, communityCards);
+            double realChance = RealPairChance(holeCards, communityCards);
+
+            //(13C1)*(32C1)/(45C2) = 0,4202020
+            Assert.AreEqual(realChance, chance, 0.000001);
+        }
+
+        [TestMethod]
+        public void ChanceOfPairWith3KnownCardsSpeedTest()
+        {
+
+            CardList holeCards = MakeCardList("AC,AH");
+            CardList communityCards = MakeCardList("AS,2H,KD,7C,TD");
+
+            double chance = HandChances.Pair(holeCards, communityCards);
+
+            //(13C1)*(32C1) + 8*(4C2) /(45C2) = 0,4686868
+            Assert.AreEqual(0.4686868D, chance, 0.000001);
         }
         #endregion
 
@@ -114,6 +159,51 @@ namespace PokerUnitTest
                 list.Add(new PokerCard(rank, suite));
             }
             return list;
+        }
+
+        double RealPairChance(CardList holeCards, CardList communityCards)
+        {
+            HandEvaluator evaluator = new HandEvaluator();
+            CardList knownCards = new CardList(communityCards);
+            knownCards.AddRange(holeCards);
+            int pairs = 0;
+            int total = 0;
+            CardList possibleOpponentCards = GetFullDeckWithoutGivenCards(knownCards);
+            CombinatoricsUtilities.GetCombinations<PokerCard>(possibleOpponentCards, opponentCards =>
+            {
+                CardList opponent7Card = new CardList(communityCards);
+                opponent7Card.AddRange(opponentCards);
+                evaluator.DetermineBestHand(opponent7Card);
+
+                PokerHand opponentHand = evaluator.GetBestHand();
+
+                if (opponentHand.Category.Equals(PokerHand.HandCategory.Pair))
+                {
+                    pairs += 1;
+                }
+                total++;
+            }, 2, false);
+
+            return (double)pairs / total;
+        }
+
+        protected CardList GetFullDeckWithoutGivenCards(CardList myCards)
+        {
+            CardList cardDeck = new CardList();
+            foreach (CardSuite suiteIndex in (CardSuite[])Enum.GetValues(typeof(CardSuite)))
+            {
+                foreach (CardRank rankIndex in (CardRank[])Enum.GetValues(typeof(CardRank)))
+                {
+                    cardDeck.Add(new PokerCard(rankIndex, suiteIndex));
+                }
+            }
+
+            foreach (PokerCard card in myCards)
+            {
+                cardDeck.Remove(card);
+            }
+
+            return cardDeck;
         }
     }
 }

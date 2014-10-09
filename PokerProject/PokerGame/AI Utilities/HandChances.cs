@@ -45,11 +45,15 @@ namespace PokerProject.PokerGame.AI_Utilities
                 }
             }
 
-
-            //TODO: Not counting when opponent has a pair in his hand
+            int unseenRanks = 6 + knownPairCards;
+            int onceSeenRanks = 2 - knownPairCards;
+            int twiceSeenRanks = (holeCards[0].Rank == holeCards[1].Rank && knownPairCards == 0) ? 1 : 0;
 
             possiblePairCards = possiblePairCards - knownPairCards;
-            return (possiblePairCards * Combinations(possibleCards - possiblePairCards, unknownCards - 1)) / Combinations(possibleCards, unknownCards);
+            double pairWithCommunityCards = (possiblePairCards * Combinations(possibleCards - possiblePairCards, unknownCards - 1));
+            double pairInOpponentHand = unseenRanks * 6 + (onceSeenRanks * 3) + twiceSeenRanks;
+            double total = Combinations(possibleCards, unknownCards);
+            return (pairWithCommunityCards + pairInOpponentHand)/ total;
         }
                 
         public static double Combinations(int n, int k)
