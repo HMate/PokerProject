@@ -100,6 +100,7 @@
     <Compile Include="PlayerPresenter.xaml.cs">
       <DependentUpon>PlayerPresenter.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PokerGame\AI Utilities\Matrix.cs" />
     <Compile Include="PokerGame\CardClasses\CardList.cs" />
     <Compile Include="PokerGame\CardClasses\CardDeck.cs" />
     <Compile Include="MainWindow.xaml.cs">
