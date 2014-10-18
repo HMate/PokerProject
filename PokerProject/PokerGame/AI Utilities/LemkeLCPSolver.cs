@@ -26,7 +26,6 @@ namespace PokerProject.PokerGame.AI_Utilities
         public void SetVector(Vector v)
         {
             q = v;
-            solutionLength = v.Length;
         }
 
         /// <summary>
@@ -42,15 +41,10 @@ namespace PokerProject.PokerGame.AI_Utilities
                 return zTrivial;
             }
 
-            Matrix W = new Matrix(solutionLength);
-            Vector z0 = new Vector(solutionLength);
-            for (int i = 0; i < solutionLength; i++)
-            {
-                z0[i] = -1;
-            }
-            table = W.AppendToRight(-1 * M).AppendToRight(z0).AppendToRight(q);
+            table = CreateLemkeTable();
             int tableLength = table.ColumnCount;
 
+            solutionLength = q.Length;
             basisSet = new int[solutionLength];
             for (int i = 0; i < solutionLength; i++)
             {
@@ -65,6 +59,7 @@ namespace PokerProject.PokerGame.AI_Utilities
             decimal pivotValue = table[pivotRow][pivotColumn];
             int oldBasis = basisSet[pivotRow];
             int cycles = 0;
+            Write(cycles);
 
             // other steps
             while (oldBasis != z0ColumnIndex)
@@ -134,12 +129,6 @@ namespace PokerProject.PokerGame.AI_Utilities
             }
         }
 
-        private int GetComplementary(int index)
-        {
-            if (index > solutionLength - 1) return index - solutionLength;
-            else return index + solutionLength;
-        }
-
         private bool CheckTrivialSolution()
         {
             bool trivial = true;
@@ -156,11 +145,12 @@ namespace PokerProject.PokerGame.AI_Utilities
 
         private Matrix CreateLemkeTable()
         {
+            solutionLength = q.Length;
             Matrix W = new Matrix(solutionLength);
             Vector z0 = new Vector(solutionLength);
             for (int i = 0; i < solutionLength; i++)
             {
-                z0[i] = -1;
+                z0[i] = -10;
             }
             return W.AppendToRight(-1 * M).AppendToRight(z0).AppendToRight(q);
         }
@@ -193,6 +183,12 @@ namespace PokerProject.PokerGame.AI_Utilities
             return oldBasis;
         }
 
+        private int GetComplementary(int index)
+        {
+            if (index > solutionLength - 1) return index - solutionLength;
+            else return index + solutionLength;
+        }
+
         private int GetNewPivotRow(int pivotColumn, int qColumnIndex)
         {
             int index = -1;
@@ -202,12 +198,7 @@ namespace PokerProject.PokerGame.AI_Utilities
                 if (table[i][pivotColumn] > 0)
                 {
                     decimal currentQ = table[i][qColumnIndex] / table[i][pivotColumn];
-                    if (minValue == null)
-                    {
-                        index = i;
-                        minValue = currentQ;
-                    }
-                    else if (minValue > currentQ)
+                    if (minValue == null || minValue > currentQ)
                     {
                         index = i;
                         minValue = currentQ;

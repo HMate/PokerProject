@@ -11,12 +11,12 @@ namespace PokerUnitTest
         public void LemkeTest()
         {
             LemkeLCPSolver solver = new LemkeLCPSolver();
-            Matrix M = new Matrix(new decimal [14, 14] {{ 0,  0,  0,  0,  0,  0,  1, -1, -1,  1,  0,  0,  0,  0}
-                                                       ,{ 0,  0,  0,  0, -2, -2,  0,  1,  0, -1,  0,  0,  0,  0}
-                                                       ,{ 0,  0,  0,  0, -8, -3,  0,  1,  0, -1,  0,  0,  0,  0}
-                                                       ,{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1, -1, -1,  1}
-                                                       ,{ 0, -6,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0, -1}
-                                                       ,{ 0, -6, -9,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0, -1}
+            Matrix M = new Matrix(new decimal [14, 14] {{ 0,  0,  0,  9,  9,  9,  1, -1, -1,  1,  0,  0,  0,  0}
+                                                       ,{ 0,  0,  0,  7,  9,  9,  0,  1,  0, -1,  0,  0,  0,  0}
+                                                       ,{ 0,  0,  0,  9,  1,  6,  0,  1,  0, -1,  0,  0,  0,  0}
+                                                       ,{ 9,  3,  9,  0,  0,  0,  0,  0,  0,  0,  1, -1, -1,  1}
+                                                       ,{ 9,  9,  9,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0, -1}
+                                                       ,{ 9,  9,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0, -1}
                                                        ,{-1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}
                                                        ,{ 1, -1, -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}
                                                        ,{ 1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}
@@ -27,7 +27,15 @@ namespace PokerUnitTest
                                                        ,{ 0,  0,  0, -1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0}});
             solver.SetConstraitMatrix(M);
             Vector q = new Vector(0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 1, 0, -1, 0);
-            solver.SetVector(q);
+            decimal eps = 0.01M;
+            decimal epsVal = eps;
+            Vector epsVec = new Vector(14);
+            for (int i = 0; i < 14; i++)
+            {
+                epsVec[i] = epsVal;
+                epsVal = epsVal * eps;
+            }
+            solver.SetVector(q + epsVec);
 
             Vector z = solver.ComputeSolution();
 

@@ -123,7 +123,7 @@ namespace PokerProject.PokerGame.AI_Utilities
 
         private static decimal RoundToWholeNumber(decimal d)
         {
-            decimal diff = 0.000000001M;
+            decimal diff = 0.00000000001M;
             if (d - Math.Floor(d) < diff) return Math.Floor(d);
             if (Math.Ceiling(d) - d < diff) return Math.Ceiling(d);
             return d;
@@ -139,7 +139,7 @@ namespace PokerProject.PokerGame.AI_Utilities
         public bool Equals(Vector v2)
         {
             if (this.Length != v2.Length) return false;
-            decimal difference = 0.0000001M;
+            decimal difference = 0.000000001M;
             for (int i = 0; i < Length; i++)
             {
                 if (Math.Abs(this[i] - v2[i]) > difference)
