@@ -8,7 +8,24 @@ namespace PokerUnitTest
     public class LCPSolverTests
     {
         [TestMethod]
-        public void LemkeTest()
+        public void LemkeTest1()
+        {
+            LemkeLCPSolver solver = new LemkeLCPSolver();
+            Matrix M = new Matrix(new decimal[4, 4] {{ 0,  0, -1,  -1}
+                                                    ,{ 0,  0,  1,  -2}
+                                                    ,{ 1, -1,  2,  -2}
+                                                    ,{ 1,  2, -2,  4}});
+            solver.SetConstraitMatrix(M);
+            Vector q = new Vector(2, 2, -2, -6);
+            solver.SetVector(q);
+
+            Vector z = solver.ComputeSolution();
+
+            Assert.AreEqual(new Vector(2.8m, 0, 0.8m, 1.2m), z, String.Format("x=[{0}, {1}, {2}, {3}]", z[0], z[1], z[2], z[3]));
+        }
+
+        [TestMethod]
+        public void LemkeTest2()
         {
             LemkeLCPSolver solver = new LemkeLCPSolver();
             Matrix M = new Matrix(new decimal [14, 14] {{ 0,  0,  0,  9,  9,  9,  1, -1, -1,  1,  0,  0,  0,  0}
