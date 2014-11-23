@@ -39,15 +39,7 @@ namespace PokerProject.PokerGame
         {
             this.window = window;
         }
-
-        /// <summary>
-        /// Continues the game if it waits at the end of a turn.
-        /// </summary>
-        public void Continue()
-        {
-            semaphore.Release();
-        }
-
+        
         /// <summary>
         /// Sets that the game should wait for a call to the method Continue() at the end of every turn.
         /// </summary>
@@ -362,6 +354,14 @@ namespace PokerProject.PokerGame
 
             turns++;
             window.WriteMessage("");
+        }
+
+        /// <summary>
+        /// Continues the game if it waits at the end of a turn.
+        /// </summary>
+        public void Continue()
+        {
+            semaphore.Release();
         }
 
         private void CardShowingPhase()
